@@ -26,7 +26,6 @@
             padding-bottom: 60px;
         }
 
-        /* 상단 고정 헤더 & 검색 영역 */
         header {
             position: sticky;
             top: 0;
@@ -67,7 +66,6 @@
             box-shadow: 0 0 8px rgba(255, 107, 129, 0.4);
         }
 
-        /* 필터 버튼 */
         .filter-group {
             display: flex;
             gap: 8px;
@@ -91,7 +89,6 @@
             border-color: var(--primary-color);
         }
 
-        /* 본문 사전 카드 목록 */
         main {
             max-width: 800px;
             margin: 24px auto;
@@ -198,13 +195,10 @@
     </header>
 
     <main>
-        <div class="dictionary-list" id="dictionaryList">
-            <!-- 자바스크립트로 카드가 자동 생성됩니다 -->
-        </div>
+        <div class="dictionary-list" id="dictionaryList"></div>
     </main>
 
     <script>
-        // 사전 데이터베이스
         const dictionaryData = [
             {
                 word: "가도 돼? / 다녀와",
@@ -512,7 +506,7 @@
                 risk: "🟡 주의",
                 category: "카톡/연락",
                 direct: "취침 시간 확인.",
-                contextual: "나한테 잘 자라고 톡 하고 나서 딴짓(게임, 인스타, 유튜브) 하다 늦게 잤는지 감시 중이다.",
+                contextual: "나한테 잘 자라고 톡 하고 나서 딴짓(게임, 인스타, 유튜브) 하다 늦게 잤인지 감시 중이다.",
                 example: "여: '어제 몇 시에 잤어?' ➔ 남: '나 새벽 3시 넘어서 잤나?' (결과: '나한테 잘 자라매?')",
                 solution: "'자기랑 톡 마치고 바로 누워서 금방 잠들었지!'처럼 칼같은 신뢰 주기."
             },
@@ -652,7 +646,7 @@
                 risk: "💣 지뢰",
                 category: "연애 초기/갈등",
                 direct: "타 여성 대상 동일 행동 여부 확인.",
-                contextual: "너 플러팅(매력 어필)이 너무 자연스러운데, 혹시 바람둥이나 선수 아니냐?",
+                contextual: "너 플러팅(매력 어필)이 너무 자연스러운 데, 혹시 바람둥이나 선수 아니냐?",
                 example: "여: '오빠 딴 여자한테도 다 이렇게 다정해?' ➔ 남: '어 나 원래 다정한 편임' (결과: 어장관리남 낙인)",
                 solution: "눈을 똑바로 보며 '너한테만 이러는 거야. 다른 사람들한테는 안 그래'라며 확신 주기."
             },
@@ -762,7 +756,7 @@
                 risk: "💣 지뢰",
                 category: "카톡/싸움",
                 direct: "모바일 메시지 수신 거부.",
-                contextual: "톡으로는 성의가 안 느껴지니 지금 전화하거나 만나러 와서 진심을 보여라.",
+                contextual: "톡로는 성의가 안 느껴지니 지금 전화하거나 만나러 와서 진심을 보여라.",
                 example: "여: '그만하자 톡' ➔ 남: '응 잘 자~' (결과: 다음 날 블록 상태)",
                 solution: "즉시 전화 통화를 연결하거나, 안 받으면 음성 메모/장문 편지로 성의 표출."
             },
@@ -954,23 +948,22 @@
                 direct: "비밀 유무 확인.",
                 contextual: "이미 증거 잡았거나 의심스러운 상황이 있으니, 더 큰 벌을 받기 전에 스스로 솔직하게 말해라.",
                 example: "여: '너 나한테 숨기는 거 없지?' ➔ 남: '어 없어!' (결과: 증거 사진 등판하며 파국)",
-                solution: "양심에 걸리는 지점(남몰래 한 게임 결제, 여사친 연락 등)을 빠르게 복기하고 자수하기."
+                solution: "지난 24시간 동안의 행동을 빠르게 복기하고 양심에 걸리는 부분을 자수하기."
             },
             {
-                word: "그냥 너(오빠) 생각나서 사봤어",
+                word: "그냥 너 생각나서 사봤어",
                 pos: "선물 전달문",
                 risk: "🟢 안전",
                 category: "일상/선물",
                 direct: "대가 없는 소소한 선물 전달.",
-                contextual: "일상 속에서도 늘 너(오빠)를 생각하고 있다. 격하게 기뻐해 주고 고마움을 표현해라.",
-                example: "여: '지나가다 너(오빠) 생각나서 사 왔어' ➔ 남: '어 쓸데없이 이런 걸 왜 사?' (결과: T 남성의 대참사)",
+                contextual: "일상 속에서도 늘 너를 생각하고 있다. 격하게 기뻐해 주고 고마움을 표현해라.",
+                example: "여: '지나가다 오빠 생각나서 사 왔어' ➔ 남: '어 쓸데없이 이런 걸 왜 사?' (결과: T 남성의 대참사)",
                 solution: "'대박... 내 생각 해준 게 너무 감동이다! 평생 아껴서 잘 쓸게!'라며 오버하며 기뻐하기."
             }
         ];
 
         let currentRisk = 'ALL';
 
-        // 사전 카드 출력 함수
         function renderDictionary(data) {
             const listEl = document.getElementById('dictionaryList');
             listEl.innerHTML = '';
@@ -1012,7 +1005,6 @@
             });
         }
 
-        // 필터링 및 검색 함수
         function filterData() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
 
@@ -1029,7 +1021,6 @@
             renderDictionary(filtered);
         }
 
-        // 위험도 버튼 클릭 처리
         function filterRisk(risk) {
             currentRisk = risk;
             document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -1041,10 +1032,7 @@
             filterData();
         }
 
-        // 이벤트 리스너 등록
         document.getElementById('searchInput').addEventListener('input', filterData);
-
-        // 초기 로드
         renderDictionary(dictionaryData);
     </script>
 </body>
