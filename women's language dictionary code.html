@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여자어 대사전 (Women's Language Dictionary)</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --primary-color: #ff6b81;
+            --border-color: #e9ecef;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 60px;
+        }
+
+        /* 상단 고정 헤더 & 검색 영역 */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 20px 16px;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 30px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            box-shadow: 0 0 8px rgba(255, 107, 129, 0.4);
+        }
+
+        /* 필터 버튼 */
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            border: 1px solid var(--border-color);
+            background: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        /* 본문 사전 카드 목록 */
+        main {
+            max-width: 800px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        .dictionary-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 8px;
+        }
+
+        .word-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .badge-safe { background: #e6f4ea; color: #137333; }
+        .badge-warn { background: #fef7e0; color: #b06000; }
+        .badge-danger { background: #fce8e6; color: #c5221f; }
+        .badge-bomb { background: #202124; color: #ffffff; }
+
+        .meta-info {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+
+        .desc-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        .example-box {
+            background: var(--bg-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 14px;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .no-result {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1>📖 여자어 대사전</h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="단어, 상황(예: 카톡, 싸움), 뜻을 검색해보세요...">
+            </div>
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filterRisk('ALL')">전체보기</button>
+                <button class="filter-btn" onclick="filterRisk('🟢 안전')">🟢 안전</button>
+                <button class="filter-btn" onclick="filterRisk('🟡 주의')">🟡 주의</button>
+                <button class="filter-btn" onclick="filterRisk('🔴 경보')">🔴 경보</button>
+                <button class="filter-btn" onclick="filterRisk('💣 지뢰')">💣 지뢰</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="dictionary-list" id="dictionaryList">
+            <!-- 자바스크립트로 카드가 자동 생성됩니다 -->
+        </div>
+    </main>
+
+    <script>
+        // 사전 데이터베이스
+        const dictionaryData = [
+            {
+                word: "가도 돼? / 다녀와",
+                pos: "허락형 구어체",
+                risk: "🔴 경보",
+                category: "갈등/싸움, 일상",
+                direct: "너의 외출이나 활동을 허가하겠다.",
+                contextual: "가면 진짜 뒤진다. 내 기분이 안 좋으니 눈치껏 취소하거나 귀가 시간을 대폭 앞당겨라.",
+                example: "여: '응, 다녀와~' ➔ 남: '오예 고마워! 늦게 들어갈게!' (결과: 자정 이후 폭풍전야)",
+                solution: "'아니다, 네가 더 중요하지. 일찍 들어가서 통화하자'로 타협."
+            },
+            {
+                word: "거봐 / 내가 뭐랬어",
+                pos: "감탄사적 관용구",
+                risk: "🟡 주의",
+                category: "일상, 갈등",
+                direct: "내 예측이 정확했음을 확인시키는 말.",
+                contextual: "내 직관과 조언은 항상 맞으니, 변명하지 말고 즉시 수긍하고 반성해라.",
+                example: "여: '거기 맛없을 것 같다고 했잖아.' ➔ 남: '아니 블로그 리뷰는 다 좋았단 말이야...' (결과: 논쟁 격화)",
+                solution: "'그러게, 역시 자기 말이 맞았네!'로 100% 인정 및 칭찬."
+            },
+            {
+                word: "그냥",
+                pos: "부사",
+                risk: "🔴 경보",
+                category: "갈등/싸움",
+                direct: "아무런 이유나 조건 없이.",
+                contextual: "이유가 명확히 있지만, 지금 설명하기엔 네가 내 서운함을 전혀 이해하지 못하고 있어 답답하다.",
+                example: "남: '무슨 일 있어?' ➔ 여: '그냥.' (결과: 냉기류 강화)",
+                solution: "'그냥이 아닌 것 같은데, 내가 실수한 거 있으면 알려줘'라며 진정성 보이기."
+            },
+            {
+                word: "그냥 해본 말이야",
+                pos: "관용구",
+                risk: "🟡 주의",
+                category: "쇼핑/기념일, 데이트",
+                direct: "특별한 의도 없이 내뱉은 말.",
+                contextual: "사실 굉장히 원하거나 관심이 있지만, 욕심내어 보이기 싫어서 던져본 간보기용 진심.",
+                example: "여: '이 가방 되게 편해 보인다... 아냐, 그냥 해본 말이야.' ➔ 남: '그래? 넘어가지 뭐.' (결과: 서운함 스택 +1)",
+                solution: "메모장에 기록해 두었다가 깜짝 선물로 활용하는 센스 발휘."
+            },
+            {
+                word: "글쎄",
+                pos: "부사",
+                risk: "🟡 주의",
+                category: "데이트/일상",
+                direct: "확답을 내리기 어려움.",
+                contextual: "나는 이미 거절이나 다른 답을 정했으나, 네가 눈치껏 맞추길 바란다.",
+                example: "남: '오늘 저녁에 순댓국 먹으러 갈까?' ➔ 여: '글쎄...' (결과: 가서 한 입도 안 먹음)",
+                solution: "깔끔한 파스타나 일식 쪽으로 분위기가 다른 선택지 2~3개 재제시."
+            },
+            {
+                word: "귀여운데?",
+                pos: "감탄사/형용사",
+                risk: "🟢 안전",
+                category: "쇼핑, 연애 초기",
+                direct: "대상이 귀엽다.",
+                contextual: "(물건) 사달라/갖고 싶다. (남성) 호감과 무해함을 동시에 느꼈다.",
+                example: "여: '이 인형 귀여운데?' ➔ 남: '그러게. 가자.' (결과: 아쉬움 남음)",
+                solution: "물건이라면 가격 확인 후 선물하거나, 자신을 향한 말이라면 기분 좋게 웃기."
+            },
+            {
+                word: "괜찮아",
+                pos: "형용사적 구어체",
+                risk: "💣 지뢰",
+                category: "갈등/싸움, 일상",
+                direct: "상태가 양호함.",
+                contextual: "전혀 안 괜찮고 서운하지만, 지금 네가 뭘 잘못했는지 스스로 복기하길 바라는 중.",
+                example: "남: '나 오늘 조금 늦을 것 같은데 괜찮아?' ➔ 여: '응, 괜찮아.' (결과: 도착 후 썰렁한 분위기)",
+                solution: "'안 괜찮을 텐데 미안해. 최대한 서둘러서 갈게!'라며 미안함 표출."
+            },
+            {
+                word: "나 오늘 달라진 거 없어?",
+                pos: "의문문",
+                risk: "💣 지뢰",
+                category: "데이트/일상",
+                direct: "오늘 내 외모나 차림새 중 변경된 요소가 있는지 질문.",
+                contextual: "네 관찰력과 나에 대한 애정도를 테스트하겠다.",
+                example: "여: '나 오늘 달라진 거 없어?' ➔ 남: '살 빠졌어?' (결과: '관심 없지?' 맹공격)",
+                solution: "머리, 네일, 귀걸이 등 상체 위주로 스캔 후 구체적인 후보 제시."
+            },
+            {
+                word: "나 살쪄서 그렇지?",
+                pos: "답정너형 의문문",
+                risk: "💣 지뢰",
+                category: "일상/쇼핑",
+                direct: "체중 증가 여부에 대한 객관적 확인 요청.",
+                contextual: "절대 아니라고 강력하게 부정해라. 내 자존감을 채워라.",
+                example: "여: '이 옷 부해 보이지? 나 살쪄서 그렇지?' ➔ 남: '약간?' (결과: 그날 식사 거부)",
+                solution: "0.1초의 망설임도 없이 '살이 어디 쪘다고 그래, 옷 핏이 이상한 거네!' 라며 옷 탓하기."
+            },
+            {
+                word: "나 신경 쓰지 말고 놀아",
+                pos: "명령형 관용구",
+                risk: "🔴 경보",
+                category: "갈등/유흥",
+                direct: "나에 대한 걱정을 접고 편하게 즐겨라.",
+                contextual: "진짜 신경 안 쓰고 재밌게 놀면 우리의 관계는 여기서 끝이다.",
+                example: "여: '나 신경 쓰지 말고 재밌게 놀아~' ➔ 남: '응 고마워! 폰 두고 놀게!' (결과: 다음 날 냉전)",
+                solution: "주기적으로 사진 첨부 연락을 남기며 '어떻게 신경을 안 써'라고 말하기."
+            },
+            {
+                word: "나 화 안 났는데?",
+                pos: "평서문 (반어법)",
+                risk: "💣 지뢰",
+                category: "갈등/싸움",
+                direct: "분노 상태가 아님.",
+                contextual: "화가 머리끝까지 났으나 지성인처럼 참는 중이다.",
+                example: "남: '화났어?' ➔ 여: '아닌데? 나 화 안 났는데?' (결과: 폭풍전야)",
+                solution: "'내가 아까 눈치 없게 굴어서 미안해. 풀어주려면 어떻게 해야 할까?'라며 낮게 엎드리기."
+            },
+            {
+                word: "됐어",
+                pos: "종결어미/감탄사",
+                risk: "💣 지뢰",
+                category: "갈등/싸움",
+                direct: "요구사항이 충족되었거나 상황이 마무리됨.",
+                contextual: "너와의 대화를 포기했다. 최고 수준의 경계 발령.",
+                example: "남: '커피 사 올까?' ➔ 여: '됐어.' ➔ 남: '오케이 안 사 올게!' (결과: 파국)",
+                solution: "'됐어'는 정성을 보여 달라는 신호. 좋아하는 디저트 사 오기 등 행동으로 풀기."
+            },
+            {
+                word: "뭐가 미안한데?",
+                pos: "역질문",
+                risk: "💣 지뢰",
+                category: "갈등/싸움",
+                direct: "사과의 구체적 사유에 대한 질문.",
+                contextual: "네 죄목을 육하원칙에 따라 서술형으로 입증해 봐라.",
+                example: "남: '미안해 내가 잘못했어' ➔ 여: '뭐가 미안한데?' ➔ 남: '그냥 다 미안해...' (결과: '영혼 없다' 폭발)",
+                solution: "사건과 상대방이 느꼈을 감정 공감을 포함하여 구체적으로 답변하기."
+            },
+            {
+                word: "뭐 먹을까? (아무거나)",
+                pos: "의문문",
+                risk: "💣 지뢰",
+                category: "데이트/식사",
+                direct: "메뉴 선정을 상대방에게 위임함.",
+                contextual: "내 머릿속에 있는 3가지 후보 중 하나를 눈치껏 맞춰라.",
+                example: "여: '난 아무거나!' ➔ 남: '그럼 국밥 콜?' (결과: '이 더운 날 무슨 국밥이야...')",
+                solution: "파스타, 일식 덮밥, 샐러드 등 분위기 깔끔한 옵션 2~3개 제안."
+            },
+            {
+                word: "솔직히 말해봐",
+                pos: "유도형 명령문",
+                risk: "💣 지뢰",
+                category: "갈등/청문회",
+                direct: "거짓 없이 진실만을 서술하라는 요청.",
+                contextual: "솔직하게 말하면 진짜 죽는다. 자백을 유도하기 위한 함정이다.",
+                example: "여: '솔직히 말하면 화 안 낼게' ➔ 남: '사실 그 여사친이 예쁘긴 하더라고' (결과: 즉각 처형)",
+                solution: "상대가 듣고 싶어 하는 정답('자기밖에 안 보여')을 일관되게 주장하기."
+            },
+            {
+                word: "혼자 있고 싶어",
+                pos: "상태 선언문",
+                risk: "💣 지뢰",
+                category: "갈등/감정",
+                direct: "고독과 개인 시간을 원함.",
+                contextual: "혼자 두면 '진짜 혼자 두네?' 하고 더 서운해진다. 당장 옆에 붙어서 달래줘라.",
+                example: "여: '그냥 혼자 있고 싶어.' ➔ 남: '그래 푹 쉬어~' (결과: 이별 통보)",
+                solution: "'혼자 두고 싶지 않아. 옆에 있을 테니까 편할 때 얘기해'라며 곁 지키기."
+            }
+        ];
+
+        let currentRisk = 'ALL';
+
+        // 사전 카드 출력 함수
+        function renderDictionary(data) {
+            const listEl = document.getElementById('dictionaryList');
+            listEl.innerHTML = '';
+
+            if (data.length === 0) {
+                listEl.innerHTML = '<div class="no-result">검색 결과가 없습니다. 🤔</div>';
+                return;
+            }
+
+            data.forEach(item => {
+                let badgeClass = 'badge-safe';
+                if (item.risk.includes('주의')) badgeClass = 'badge-warn';
+                if (item.risk.includes('경보')) badgeClass = 'badge-danger';
+                if (item.risk.includes('지뢰')) badgeClass = 'badge-bomb';
+
+                const cardHtml = `
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="word-title">${item.word}</span>
+                            <span class="badge ${badgeClass}">${item.risk}</span>
+                        </div>
+                        <div class="meta-info">[${item.pos}] | 카테고리: ${item.category}</div>
+                        
+                        <div class="section-title">1. 직역 (Direct)</div>
+                        <div class="desc-text">${item.direct}</div>
+
+                        <div class="section-title">2. 의역 (Contextual)</div>
+                        <div class="desc-text"><strong>${item.contextual}</strong></div>
+
+                        <div class="example-box">
+                            <strong>💬 실전 용례:</strong> ${item.example}
+                        </div>
+
+                        <div class="section-title">💡 권장 대처법</div>
+                        <div class="desc-text">${item.solution}</div>
+                    </div>
+                `;
+                listEl.innerHTML += cardHtml;
+            });
+        }
+
+        // 필터링 및 검색 함수
+        function filterData() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            const filtered = dictionaryData.filter(item => {
+                const matchesRisk = (currentRisk === 'ALL') || item.risk.includes(currentRisk.replace(/🟢|🟡|🔴|💣|\s/g, ''));
+                const matchesQuery = item.word.toLowerCase().includes(query) ||
+                                     item.direct.toLowerCase().includes(query) ||
+                                     item.contextual.toLowerCase().includes(query) ||
+                                     item.category.toLowerCase().includes(query);
+
+                return matchesRisk && matchesQuery;
+            });
+
+            renderDictionary(filtered);
+        }
+
+        // 위험도 버튼 클릭 처리
+        function filterRisk(risk) {
+            currentRisk = risk;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.includes(risk) || (risk === 'ALL' && btn.innerText === '전체보기')) {
+                    btn.classList.add('active');
+                }
+            });
+            filterData();
+        }
+
+        // 이벤트 리스너 등록
+        document.getElementById('searchInput').addEventListener('input', filterData);
+
+        // 초기 로드
+        renderDictionary(dictionaryData);
+    </script>
+</body>
+</html>
