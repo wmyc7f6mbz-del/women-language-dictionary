@@ -49,7 +49,6 @@
             cursor: pointer;
         }
 
-        /* 메인 버튼 그룹 (랜덤, 퀴즈) */
         .action-group {
             display: flex;
             gap: 10px;
@@ -174,7 +173,6 @@
         }
         .share-btn:active { background: #e9ecef; }
 
-        /* 모달 팝업 (랜덤 추출용) */
         .modal {
             display: none;
             position: fixed;
@@ -205,7 +203,6 @@
             color: #888;
         }
 
-        /* 퀴즈 모드 전용 스타일 */
         #quizView {
             display: none;
             background: #fff;
@@ -224,6 +221,7 @@
             text-align: left;
             font-size: 0.9rem;
             cursor: pointer;
+            line-height: 1.3;
         }
         .quiz-opt-btn:hover { background: #e7f5ff; border-color: var(--secondary-color); }
         .quiz-result { font-weight: bold; margin-bottom: 12px; font-size: 1rem; }
@@ -235,10 +233,9 @@
         <div class="header-container">
             <h1 onclick="showDictionaryView()">📖 여자어 대사전</h1>
             
-            <!-- 랜덤 / 퀴즈 버튼 -->
             <div class="action-group">
                 <button class="action-btn random-btn" onclick="openRandomModal()">🎲 랜덤 추출</button>
-                <button class="action-btn quiz-btn" onclick="startQuizMode()">🚨 위기탈출 퀴즈</button>
+                <button class="action-btn quiz-btn" onclick="startQuizMode()">🚨 위기탈출 퀴즈 (매운맛)</button>
             </div>
 
             <div class="search-box" id="searchBoxArea">
@@ -256,13 +253,11 @@
     </header>
 
     <main>
-        <!-- 사전 리스트 뷰 -->
         <div class="dictionary-list" id="dictionaryList"></div>
 
-        <!-- 퀴즈 뷰 -->
         <div id="quizView">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <span style="color: var(--secondary-color); font-weight: bold;">🚨 실전 위기탈출 퀴즈</span>
+                <span style="color: var(--secondary-color); font-weight: bold;">🚨 실전 위기탈출 퀴즈 (고난도)</span>
                 <button onclick="showDictionaryView()" style="border: none; background: none; color: #888; cursor: pointer;">✕ 사전으로 돌아가기</button>
             </div>
             <div class="quiz-question" id="quizQuestion"></div>
@@ -272,7 +267,6 @@
         </div>
     </main>
 
-    <!-- 랜덤 추출 모달 팝업 -->
     <div class="modal" id="randomModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeRandomModal()">&times;</span>
@@ -312,7 +306,7 @@
                 direct: "아무런 이유나 조건 없이.",
                 contextual: "이유가 명확히 있지만, 지금 설명하기엔 네가 내 서운함을 전혀 이해하지 못하고 있어 답답하다.",
                 example: "남: '무슨 일 있어?' ➔ 여: '그냥.' (결과: 냉기류 강화)",
-                solution: "'그냥이 아닌 것 같은데, 내가 실수한 거 있으면 알려줘'라며 진정성 보이기."
+                solution: "'그냥이 아닌 것 같은데, 내가 실수한 거 있으면 알려줘'라며 진성성 보이기."
             },
             {
                 word: "그냥 해본 말이야",
@@ -1567,7 +1561,6 @@
             filterData();
         }
 
-        /* --- 1. 공유 기능 --- */
         function shareCard(encodedText) {
             const text = decodeURIComponent(encodedText) + window.location.href;
             if (navigator.clipboard) {
@@ -1579,7 +1572,6 @@
             }
         }
 
-        /* --- 2. 랜덤 모달 기능 --- */
         function openRandomModal() {
             renderRandomCard();
             document.getElementById('randomModal').style.display = 'flex';
@@ -1595,7 +1587,7 @@
             document.getElementById('randomCardContent').innerHTML = createCardHtml(randomItem);
         }
 
-        /* --- 3. 퀴즈 기능 --- */
+        /* --- 🔥 고난도 퀴즈 엔진 (카테고리 유사 오답 + T형 대참사 발언 믹스) --- */
         let currentQuizAnswer = "";
 
         function startQuizMode() {
@@ -1613,28 +1605,67 @@
             document.getElementById('filterBtnArea').style.display = 'block';
         }
 
+        function extractMaleFailResponse(exampleStr) {
+            // "남: '...' (결과:" 에서 괄호 안 대답 추출
+            const match = exampleStr.match(/남:\s*['"]([^'"]+)['"]/);
+            if (match && match[1]) {
+                return `"(현실 남성 반응)" ${match[1]}`;
+            }
+            return null;
+        }
+
         function generateQuiz() {
             document.getElementById('quizResult').innerHTML = "";
             document.getElementById('nextQuizBtn').style.display = "none";
 
-            // 정답용 1개 임의 선택
+            // 정답용 문제 1개 추출
             const correctIndex = Math.floor(Math.random() * dictionaryData.length);
             const quizItem = dictionaryData[correctIndex];
             currentQuizAnswer = quizItem.solution;
 
-            // 문제 세팅
-            document.getElementById('quizQuestion').innerHTML = `Q. 여친이 <span style="color:var(--primary-color);">"${quizItem.word}"</span> 라고 말했을 때 올바른 행동/대처법은?`;
+            document.getElementById('quizQuestion').innerHTML = `Q. 여친이 <span style="color:var(--primary-color);">"${quizItem.word}"</span> 라고 했을 때 올바른 대처법은?`;
 
-            // 오답 보기 3개 추출
             let options = [quizItem.solution];
-            while (options.length < 4) {
-                const rand = dictionaryData[Math.floor(Math.random() * dictionaryData.length)].solution;
-                if (!options.includes(rand)) {
-                    options.push(rand);
+
+            // 1. 해당 문제의 '실전 용례 속 남자의 실수 발언'을 1순위 오답으로 추가
+            const failResp = extractMaleFailResponse(quizItem.example);
+            if (failResp) {
+                options.push(failResp);
+            }
+
+            // 2. 같은 카테고리를 공유하는 항목들의 대처법(Solution) 및 오답 발언 추출
+            const mainCategory = quizItem.category.split(',')[0].trim();
+            const sameCatItems = dictionaryData.filter(d => d.word !== quizItem.word && d.category.includes(mainCategory));
+
+            // 유사 카테고리 항목 무작위 섞기
+            sameCatItems.sort(() => Math.random() - 0.5);
+
+            for (let item of sameCatItems) {
+                if (options.length >= 4) break;
+
+                // 타 항목의 솔루션 추가
+                if (!options.includes(item.solution)) {
+                    options.push(item.solution);
+                }
+
+                // 타 항목의 남성 대참사 발언 추가
+                if (options.length < 4) {
+                    const otherFail = extractMaleFailResponse(item.example);
+                    if (otherFail && !options.includes(otherFail)) {
+                        options.push(otherFail);
+                    }
                 }
             }
 
-            // 보기 섞기
+            // 3. 만약 카테고리 매칭 모자라면 전체 데이터에서 보충
+            while (options.length < 4) {
+                const randItem = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
+                if (!options.includes(randItem.solution)) {
+                    options.push(randItem.solution);
+                }
+            }
+
+            // 4. 보기 무작위 섞기
             options.sort(() => Math.random() - 0.5);
 
             const optionsEl = document.getElementById('quizOptions');
@@ -1642,7 +1673,7 @@
             options.forEach((optText, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'quiz-opt-btn';
-                btn.innerHTML = `${i + 1}. ${optText}`;
+                btn.innerHTML = `<strong>${i + 1}.</strong> ${optText}`;
                 btn.onclick = () => checkQuizAnswer(optText, quizItem);
                 optionsEl.appendChild(btn);
             });
@@ -1654,15 +1685,14 @@
             btns.forEach(b => b.disabled = true);
 
             if (selectedOpt === currentQuizAnswer) {
-                resultEl.innerHTML = "🎉 <span style='color:#137333;'>정답입니다! 생존 확률 +100%!</span>";
+                resultEl.innerHTML = "🎉 <span style='color:#137333;'>정답입니다! 완벽한 연애 지능(EQ) 보유자시군요! 생존 확정!</span>";
             } else {
-                resultEl.innerHTML = `❌ <span style='color:#c5221f;'>오답입니다! (사망)</span><br><small style='color:#666; font-weight:normal;'>💡 정답: ${quizItem.solution}</small>`;
+                resultEl.innerHTML = `❌ <span style='color:#c5221f;'>오답입니다! (경고: 현실 싸움 발발 위험)</span><br><small style='color:#666; font-weight:normal;'>💡 정답: ${quizItem.solution}</small>`;
             }
 
             document.getElementById('nextQuizBtn').style.display = "block";
         }
 
-        // 초기화
         document.getElementById('searchInput').addEventListener('input', filterData);
         renderDictionary(dictionaryData);
     </script>
