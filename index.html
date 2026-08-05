@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>여자어 대사전 (Women's Language Dictionary)</title>
+    <title>여자어 대사전 (120선)</title>
     <style>
         :root {
             --bg-color: #f8f9fa;
             --card-bg: #ffffff;
             --text-color: #333333;
             --primary-color: #ff6b81;
+            --secondary-color: #4a90e2;
             --border-color: #e9ecef;
         }
 
@@ -31,7 +32,7 @@
             top: 0;
             background-color: var(--card-bg);
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            padding: 20px 16px;
+            padding: 16px;
             z-index: 100;
         }
 
@@ -44,8 +45,32 @@
             font-size: 1.5rem;
             color: var(--primary-color);
             text-align: center;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
         }
+
+        /* 메인 버튼 그룹 (랜덤, 퀴즈) */
+        .action-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .action-btn {
+            background: #f1f3f5;
+            border: 1px solid #ced4da;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn.random-btn { background: #ffe3e8; color: var(--primary-color); border-color: #ffc9c9; }
+        .action-btn.quiz-btn { background: #e7f5ff; color: var(--secondary-color); border-color: #a5d8ff; }
+        .action-btn:hover { transform: scale(1.03); }
 
         .search-box {
             position: relative;
@@ -54,21 +79,16 @@
 
         .search-box input {
             width: 100%;
-            padding: 14px 20px;
+            padding: 12px 20px;
             font-size: 1rem;
             border: 2px solid var(--primary-color);
             border-radius: 30px;
             outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .search-box input:focus {
-            box-shadow: 0 0 8px rgba(255, 107, 129, 0.4);
         }
 
         .filter-group {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
             flex-wrap: wrap;
         }
@@ -76,11 +96,10 @@
         .filter-btn {
             border: 1px solid var(--border-color);
             background: #fff;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: background 0.2s;
         }
 
         .filter-btn.active {
@@ -91,7 +110,7 @@
 
         main {
             max-width: 800px;
-            margin: 24px auto;
+            margin: 20px auto;
             padding: 0 16px;
         }
 
@@ -107,84 +126,126 @@
             padding: 20px;
             border: 1px solid var(--border-color);
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            transition: transform 0.2s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
+            position: relative;
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             border-bottom: 2px solid var(--bg-color);
             padding-bottom: 8px;
         }
 
-        .word-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-        }
-
-        .badge {
-            font-size: 0.8rem;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: bold;
-        }
-
+        .word-title { font-size: 1.2rem; font-weight: bold; }
+        .badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
         .badge-safe { background: #e6f4ea; color: #137333; }
         .badge-warn { background: #fef7e0; color: #b06000; }
         .badge-danger { background: #fce8e6; color: #c5221f; }
         .badge-bomb { background: #202124; color: #ffffff; }
 
-        .meta-info {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 12px;
-        }
-
-        .section-title {
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: var(--primary-color);
-            margin-top: 10px;
-            margin-bottom: 4px;
-        }
-
-        .desc-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #444;
-        }
+        .meta-info { font-size: 0.8rem; color: #666; margin-bottom: 10px; }
+        .section-title { font-weight: bold; font-size: 0.85rem; color: var(--primary-color); margin-top: 8px; }
+        .desc-text { font-size: 0.9rem; line-height: 1.4; color: #444; }
 
         .example-box {
             background: var(--bg-color);
             border-left: 4px solid var(--primary-color);
-            padding: 10px 14px;
+            padding: 8px 12px;
             margin-top: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border-radius: 0 8px 8px 0;
         }
 
-        .no-result {
-            text-align: center;
-            padding: 40px;
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #f1f3f5;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: #495057;
+            cursor: pointer;
+            margin-top: 12px;
+            float: right;
+        }
+        .share-btn:active { background: #e9ecef; }
+
+        /* 모달 팝업 (랜덤 추출용) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 12px; right: 16px;
+            font-size: 1.5rem;
+            cursor: pointer;
             color: #888;
         }
+
+        /* 퀴즈 모드 전용 스타일 */
+        #quizView {
+            display: none;
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .quiz-question { font-size: 1.1rem; font-weight: bold; margin-bottom: 16px; line-height: 1.4; }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .quiz-opt-btn {
+            padding: 12px 16px;
+            border: 1px solid #ced4da;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .quiz-opt-btn:hover { background: #e7f5ff; border-color: var(--secondary-color); }
+        .quiz-result { font-weight: bold; margin-bottom: 12px; font-size: 1rem; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="header-container">
-            <h1>📖 여자어 대사전 (120선)</h1>
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="단어, 상황(예: 인스타, 카톡), 뜻을 검색해보세요...">
+            <h1 onclick="showDictionaryView()">📖 여자어 대사전</h1>
+            
+            <!-- 랜덤 / 퀴즈 버튼 -->
+            <div class="action-group">
+                <button class="action-btn random-btn" onclick="openRandomModal()">🎲 랜덤 추출</button>
+                <button class="action-btn quiz-btn" onclick="startQuizMode()">🚨 위기탈출 퀴즈</button>
             </div>
-            <div class="filter-group">
+
+            <div class="search-box" id="searchBoxArea">
+                <input type="text" id="searchInput" placeholder="단어, 상황(인스타, 카톡 등), 뜻 검색...">
+            </div>
+            
+            <div class="filter-group" id="filterBtnArea">
                 <button class="filter-btn active" onclick="filterRisk('ALL')">전체보기</button>
                 <button class="filter-btn" onclick="filterRisk('🟢 안전')">🟢 안전</button>
                 <button class="filter-btn" onclick="filterRisk('🟡 주의')">🟡 주의</button>
@@ -195,8 +256,31 @@
     </header>
 
     <main>
+        <!-- 사전 리스트 뷰 -->
         <div class="dictionary-list" id="dictionaryList"></div>
+
+        <!-- 퀴즈 뷰 -->
+        <div id="quizView">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <span style="color: var(--secondary-color); font-weight: bold;">🚨 실전 위기탈출 퀴즈</span>
+                <button onclick="showDictionaryView()" style="border: none; background: none; color: #888; cursor: pointer;">✕ 사전으로 돌아가기</button>
+            </div>
+            <div class="quiz-question" id="quizQuestion"></div>
+            <div class="quiz-options" id="quizOptions"></div>
+            <div class="quiz-result" id="quizResult"></div>
+            <button id="nextQuizBtn" class="action-btn quiz-btn" style="width: 100%; display: none;" onclick="generateQuiz()">다음 문제 풀기 ➔</button>
+        </div>
     </main>
+
+    <!-- 랜덤 추출 모달 팝업 -->
+    <div class="modal" id="randomModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeRandomModal()">&times;</span>
+            <div style="color: var(--primary-color); font-weight: bold; margin-bottom: 12px;">🎲 오늘의 랜덤 여자어</div>
+            <div id="randomCardContent"></div>
+            <button class="action-btn random-btn" style="width: 100%; margin-top: 16px;" onclick="renderRandomCard()">🔄 다른 단어 뽑기</button>
+        </div>
+    </div>
 
     <script>
         const dictionaryData = [
@@ -1200,7 +1284,6 @@
                 example: "여: '됐어, 그냥 다 내 잘못이지 뭐~' ➔ 남: '알면 다음부터 그러지 마' (결과: 파국 및 이별 수순)",
                 solution: "'자기가 왜 잘못이야, 100% 내 잘못이고 내가 눈치 없었어'라며 사과."
             },
-            // --- 최신 SNS/유튜브/MZ 밈 추가 20선 (101~120번) ---
             {
                 word: "T야?",
                 pos: "성향 판단 질문",
@@ -1405,44 +1488,55 @@
 
         let currentRisk = 'ALL';
 
+        function getBadgeClass(risk) {
+            if (risk.includes('주의')) return 'badge-warn';
+            if (risk.includes('경보')) return 'badge-danger';
+            if (risk.includes('지뢰')) return 'badge-bomb';
+            return 'badge-safe';
+        }
+
+        function createCardHtml(item) {
+            const badgeClass = getBadgeClass(item.risk);
+            const shareText = `[여자어 사전] "${item.word}"\n- 실제 의미: ${item.contextual}\n👉 사전 구경하기: `;
+
+            return `
+                <div class="card">
+                    <div class="card-header">
+                        <span class="word-title">${item.word}</span>
+                        <span class="badge ${badgeClass}">${item.risk}</span>
+                    </div>
+                    <div class="meta-info">[${item.pos}] | 카테고리: ${item.category}</div>
+                    
+                    <div class="section-title">1. 직역 (Direct)</div>
+                    <div class="desc-text">${item.direct}</div>
+
+                    <div class="section-title">2. 의역 (Contextual)</div>
+                    <div class="desc-text"><strong>${item.contextual}</strong></div>
+
+                    <div class="example-box">
+                        <strong>💬 실전 용례:</strong> ${item.example}
+                    </div>
+
+                    <div class="section-title">💡 권장 대처법</div>
+                    <div class="desc-text">${item.solution}</div>
+
+                    <button class="share-btn" onclick="shareCard('${encodeURIComponent(shareText)}')">📤 공유하기</button>
+                    <div style="clear: both;"></div>
+                </div>
+            `;
+        }
+
         function renderDictionary(data) {
             const listEl = document.getElementById('dictionaryList');
             listEl.innerHTML = '';
 
             if (data.length === 0) {
-                listEl.innerHTML = '<div class="no-result">검색 결과가 없습니다. 🤔</div>';
+                listEl.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">검색 결과가 없습니다. 🤔</div>';
                 return;
             }
 
             data.forEach(item => {
-                let badgeClass = 'badge-safe';
-                if (item.risk.includes('주의')) badgeClass = 'badge-warn';
-                if (item.risk.includes('경보')) badgeClass = 'badge-danger';
-                if (item.risk.includes('지뢰')) badgeClass = 'badge-bomb';
-
-                const cardHtml = `
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="word-title">${item.word}</span>
-                            <span class="badge ${badgeClass}">${item.risk}</span>
-                        </div>
-                        <div class="meta-info">[${item.pos}] | 카테고리: ${item.category}</div>
-                        
-                        <div class="section-title">1. 직역 (Direct)</div>
-                        <div class="desc-text">${item.direct}</div>
-
-                        <div class="section-title">2. 의역 (Contextual)</div>
-                        <div class="desc-text"><strong>${item.contextual}</strong></div>
-
-                        <div class="example-box">
-                            <strong>💬 실전 용례:</strong> ${item.example}
-                        </div>
-
-                        <div class="section-title">💡 권장 대처법</div>
-                        <div class="desc-text">${item.solution}</div>
-                    </div>
-                `;
-                listEl.innerHTML += cardHtml;
+                listEl.innerHTML += createCardHtml(item);
             });
         }
 
@@ -1473,6 +1567,102 @@
             filterData();
         }
 
+        /* --- 1. 공유 기능 --- */
+        function shareCard(encodedText) {
+            const text = decodeURIComponent(encodedText) + window.location.href;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('클립보드에 복사되었습니다! 카톡이나 SNS에 붙여넣어 공유해보세요! 📤');
+                });
+            } else {
+                alert('주소: ' + window.location.href);
+            }
+        }
+
+        /* --- 2. 랜덤 모달 기능 --- */
+        function openRandomModal() {
+            renderRandomCard();
+            document.getElementById('randomModal').style.display = 'flex';
+        }
+
+        function closeRandomModal() {
+            document.getElementById('randomModal').style.display = 'none';
+        }
+
+        function renderRandomCard() {
+            const randomIndex = Math.floor(Math.random() * dictionaryData.length);
+            const randomItem = dictionaryData[randomIndex];
+            document.getElementById('randomCardContent').innerHTML = createCardHtml(randomItem);
+        }
+
+        /* --- 3. 퀴즈 기능 --- */
+        let currentQuizAnswer = "";
+
+        function startQuizMode() {
+            document.getElementById('dictionaryList').style.display = 'none';
+            document.getElementById('searchBoxArea').style.display = 'none';
+            document.getElementById('filterBtnArea').style.display = 'none';
+            document.getElementById('quizView').style.display = 'block';
+            generateQuiz();
+        }
+
+        function showDictionaryView() {
+            document.getElementById('quizView').style.display = 'none';
+            document.getElementById('dictionaryList').style.display = 'flex';
+            document.getElementById('searchBoxArea').style.display = 'block';
+            document.getElementById('filterBtnArea').style.display = 'block';
+        }
+
+        function generateQuiz() {
+            document.getElementById('quizResult').innerHTML = "";
+            document.getElementById('nextQuizBtn').style.display = "none";
+
+            // 정답용 1개 임의 선택
+            const correctIndex = Math.floor(Math.random() * dictionaryData.length);
+            const quizItem = dictionaryData[correctIndex];
+            currentQuizAnswer = quizItem.solution;
+
+            // 문제 세팅
+            document.getElementById('quizQuestion').innerHTML = `Q. 여친이 <span style="color:var(--primary-color);">"${quizItem.word}"</span> 라고 말했을 때 올바른 행동/대처법은?`;
+
+            // 오답 보기 3개 추출
+            let options = [quizItem.solution];
+            while (options.length < 4) {
+                const rand = dictionaryData[Math.floor(Math.random() * dictionaryData.length)].solution;
+                if (!options.includes(rand)) {
+                    options.push(rand);
+                }
+            }
+
+            // 보기 섞기
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsEl = document.getElementById('quizOptions');
+            optionsEl.innerHTML = "";
+            options.forEach((optText, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-opt-btn';
+                btn.innerHTML = `${i + 1}. ${optText}`;
+                btn.onclick = () => checkQuizAnswer(optText, quizItem);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selectedOpt, quizItem) {
+            const resultEl = document.getElementById('quizResult');
+            const btns = document.querySelectorAll('.quiz-opt-btn');
+            btns.forEach(b => b.disabled = true);
+
+            if (selectedOpt === currentQuizAnswer) {
+                resultEl.innerHTML = "🎉 <span style='color:#137333;'>정답입니다! 생존 확률 +100%!</span>";
+            } else {
+                resultEl.innerHTML = `❌ <span style='color:#c5221f;'>오답입니다! (사망)</span><br><small style='color:#666; font-weight:normal;'>💡 정답: ${quizItem.solution}</small>`;
+            }
+
+            document.getElementById('nextQuizBtn').style.display = "block";
+        }
+
+        // 초기화
         document.getElementById('searchInput').addEventListener('input', filterData);
         renderDictionary(dictionaryData);
     </script>
