@@ -107,6 +107,33 @@
             border-color: var(--primary-color);
         }
 
+        /* 📢 광고 영역 통합 스타일 */
+        .ad-container {
+            background-color: #f1f3f5;
+            border: 1px dashed #ced4da;
+            border-radius: 12px;
+            text-align: center;
+            padding: 15px;
+            margin: 16px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            color: #868e96;
+            font-size: 0.85rem;
+        }
+
+        .ad-container.top-ad {
+            max-width: 800px;
+            margin: 16px auto 0;
+        }
+
+        .ad-container.bottom-ad {
+            max-width: 800px;
+            margin: 20px auto 0;
+        }
+
         main {
             max-width: 800px;
             margin: 20px auto;
@@ -252,6 +279,12 @@
         </div>
     </header>
 
+    <!-- 📢 [광고 영역 1] 상단 광고 배너 -->
+    <div class="ad-container top-ad">
+        <!-- Google AdSense 스크립트 코드 입력 위치 -->
+        <span>📢 [광고 영역] 상단 배너 광고 공간</span>
+    </div>
+
     <main>
         <div class="dictionary-list" id="dictionaryList"></div>
 
@@ -266,6 +299,12 @@
             <button id="nextQuizBtn" class="action-btn quiz-btn" style="width: 100%; display: none;" onclick="generateQuiz()">다음 문제 풀기 ➔</button>
         </div>
     </main>
+
+    <!-- 📢 [광고 영역 3] 하단 광고 배너 -->
+    <div class="ad-container bottom-ad">
+        <!-- Google AdSense 스크립트 코드 입력 위치 -->
+        <span>📢 [광고 영역] 하단 배너 광고 공간</span>
+    </div>
 
     <div class="modal" id="randomModal">
         <div class="modal-content">
@@ -295,7 +334,7 @@
                 category: "일상, 갈등",
                 direct: "내 예측이 정확했음을 확인시키는 말.",
                 contextual: "내 직관과 조언은 항상 맞으니, 변명하지 말고 즉시 수긍하고 반성해라.",
-                example: "여: '거기 맛없을 것 같다고 했잖아.' ➔ 남: '아니 블로그 리뷰는 다 좋았단 말이야...' (결과: 논쟁 격화)",
+                example: "여: '거기 맛없을 것 같다고했잖아.' ➔ 남: '아니 블로그 리뷰는 다 좋았단 말이야...' (결과: 논쟁 격화)",
                 solution: "'그러게, 역시 자기 말이 맞았네!'로 100% 인정 및 칭찬."
             },
             {
@@ -765,7 +804,7 @@
                 category: "데이트/일상",
                 direct: "상대의 피로도 파악.",
                 contextual: "나랑 있는 게 지루하거나 귀찮은 거냐? 아니면 진짜 피곤한 거냐?",
-                example: "여: '오빠 오늘따라 피곤해 보이네?' ➔ 남: '어 나 사실 집 가고 싶음' (결과: 즉시 집으로 귀가 당함)",
+                example: "여: '오빠 오늘따라 피곤해 보이네?' ➔ 남: '어 나 사실 집 가고 싶음' (결과: 즉시 귀가 당함)",
                 solution: "'아니야! 자기가 너무 예뻐서 눈을 못 떼서 그래, 피곤함 다 달아났다!'로 받아치기."
             },
             {
@@ -1964,7 +2003,7 @@
                 risk: "🟡 주의",
                 category: "갈등/소통",
                 direct: "발언 기억 이행률 미흡 지적.",
-                contextual: "지나가는 말로 했던 내 취향이나 약속 기억 못 해서 서운하니까 정성껏 사과하고 기억해라.",
+                contextual: "지나가는 말로했던 내 취향이나 약속 기억 못 해서 서운하니까 정성껏 사과하고 기억해라.",
                 example: "여: '너 내가 한 말 또 잊었지?' ➔ 남: '사람이 깜빡할 수도 있지!' (결과: 서운함 스택 폭발)",
                 solution: "'미안해! 내가 꼼꼼히 챙겼어야 했는데 칠칠치 못했네, 메모장에 적어두고 꼭 기억할게'라며 진정성 보이기."
             },
@@ -2445,7 +2484,7 @@
                 category: "선물/성의",
                 direct: "증정 물품 배치 장소 질의.",
                 contextual: "내가 준 정성을 방치하거나 소홀히 다루고 있는지 감시 중이다. 소중히 잘 쓰고 있다고 증명해라.",
-                example: "여: '내가 사준 지갑 어디 뒀어?' ➔ 남: '어 서랍 어딘가에 있겠지?' (결과: 대폭발 및 서운함)",
+                example: "여: '내가 사준 지갑 어디 뒀어?' ➔ 남: '어? 집에 있겠지?' (결과: 대폭발 및 서운함)",
                 solution: "'당연히 내 매일 들고 다니는 가방 안에 제일 소중하게 모셔뒀지! 자기 정성인데 늘 고마워'라며 증거 제시."
             },
             {
@@ -2456,7 +2495,7 @@
                 direct: "휴일 여가 일정 정체성 관찰 지적.",
                 contextual: "데이트가 성의 없어지고 지루해졌으니까 네가 먼저 신선하고 예쁜 코스를 짜서 리드해라.",
                 example: "여: '요즘 데이트 다 똑같네~' ➔ 남: '밥 먹고 카페 가는 게 다 그렇지 뭐' (결과: '성의 진짜 없다')",
-                solution: "'내가 요즘 유행하는 신상 맛집이랑 야외 데이트 코스를 못 찾았네 미안해! 이번 주말은 내가 대박 코스 짜올게'라며 리드."
+                solution: "'내가 요즘 세심하지 못했네 미안해! 이번 주말은 내가 인스타 핫플 예약 다 해뒀으니까 몸만 와!'라며 리드."
             },
             {
                 word: "나 오늘 회사 상사가 진짜 몰상식하게 굴었잖아",
@@ -2488,7 +2527,6 @@
                 example: "여: '수고했어 내 꿈꿔! ❤️' ➔ 남: '응 너도 수고했어' (결과: 밋밋함에 서운)",
                 solution: "'자기 응원 덕분에 오늘 피로가 싹 풀린다! 나도 꿈에서 자기 만나러 갈게, 세상에서 제일 사랑해 ❤️'라며 애정 표현."
             },
-            // --- 오늘 새로 추가된 대단원 완결 30선 (271~300번) ---
             {
                 word: "우리 이번 명절에 각자 집으로 가는 거지?",
                 pos: "명절/가족 눈치 질문",
@@ -2831,6 +2869,16 @@
             `;
         }
 
+        // 📢 [광고 영역 2] 리스트 중간 인피드(In-Feed) 광고 생성 함수
+        function createInFeedAdHtml() {
+            return `
+                <div class="ad-container">
+                    <!-- Google AdSense 인피드 광고 스크립트 위치 -->
+                    <span>📢 [광고 영역] 리스트 중간 피드 광고 공간 (10개 간격)</span>
+                </div>
+            `;
+        }
+
         function renderDictionary(data) {
             const listEl = document.getElementById('dictionaryList');
             listEl.innerHTML = '';
@@ -2840,8 +2888,12 @@
                 return;
             }
 
-            data.forEach(item => {
+            // 💡 [수정 완료] 카드가 10개 누적될 때마다 리스트 중간 광고 삽입
+            data.forEach((item, index) => {
                 listEl.innerHTML += createCardHtml(item);
+                if ((index + 1) % 10 === 0 && index !== data.length - 1) {
+                    listEl.innerHTML += createInFeedAdHtml();
+                }
             });
         }
 
