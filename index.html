@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>여자어 대사전 (300선 완결판)</title>
+    <title>여자어 대사전 (Multilingual Edition)</title>
     <style>
         :root {
             --bg-color: #f8f9fa;
@@ -39,6 +39,31 @@
         .header-container {
             max-width: 800px;
             margin: 0 auto;
+        }
+
+        /* 🌐 언어 선택 바 스타일 */
+        .lang-switch-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .lang-btn {
+            background: #fff;
+            border: 1px solid #ced4da;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .lang-btn.active {
+            background: #333;
+            color: #fff;
+            border-color: #333;
         }
 
         h1 {
@@ -107,9 +132,6 @@
             border-color: var(--primary-color);
         }
 
-        /* -----------------------------------
-           📢 광고 전용 스타일 (AD STYLES)
-        ----------------------------------- */
         .ad-container {
             background: #e9ecef;
             border: 1px dashed #adb5bd;
@@ -124,37 +146,18 @@
             text-align: center;
             margin: 16px auto;
             overflow: hidden;
-            position: relative;
         }
 
         .ad-label {
             font-size: 0.7rem;
             color: #adb5bd;
-            text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 4px;
         }
 
-        /* 상단 배너 광고 스타일 */
-        .ad-header-banner {
-            max-width: 800px;
-            height: 90px;
-            margin-bottom: 12px;
-        }
-
-        /* 인피드(리스트 중간) 광고 스타일 */
-        .ad-infeed-banner {
-            width: 100%;
-            height: 120px;
-            background: #f1f3f5;
-        }
-
-        /* 하단 배너 광고 스타일 */
-        .ad-footer-banner {
-            max-width: 800px;
-            height: 100px;
-            margin-top: 24px;
-        }
+        .ad-header-banner { max-width: 800px; height: 90px; margin-bottom: 12px; }
+        .ad-infeed-banner { width: 100%; height: 120px; background: #f1f3f5; }
+        .ad-footer-banner { max-width: 800px; height: 100px; margin-top: 24px; }
 
         main {
             max-width: 800px;
@@ -174,7 +177,6 @@
             padding: 20px;
             border: 1px solid var(--border-color);
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            position: relative;
         }
 
         .card-header {
@@ -220,7 +222,6 @@
             margin-top: 12px;
             float: right;
         }
-        .share-btn:active { background: #e9ecef; }
 
         .modal {
             display: none;
@@ -244,13 +245,7 @@
             position: relative;
         }
 
-        .close-btn {
-            position: absolute;
-            top: 12px; right: 16px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #888;
-        }
+        .close-btn { position: absolute; top: 12px; right: 16px; font-size: 1.5rem; cursor: pointer; color: #888; }
 
         #quizView {
             display: none;
@@ -280,30 +275,36 @@
 
     <header>
         <div class="header-container">
-            <h1 onclick="showDictionaryView()">📖 여자어 대사전 (300선 완결)</h1>
-            
-            <div class="action-group">
-                <button class="action-btn random-btn" onclick="openRandomModal()">🎲 랜덤 추출</button>
-                <button class="action-btn quiz-btn" onclick="startQuizMode()">🚨 위기탈출 퀴즈 (매운맛)</button>
+            <!-- 🌐 언어 선택 스위처 -->
+            <div class="lang-switch-group">
+                <button class="lang-btn active" onclick="switchLanguage('KR')">🇰🇷 KR</button>
+                <button class="lang-btn" onclick="switchLanguage('EN')">🇺🇸 EN</button>
+                <button class="lang-btn" onclick="switchLanguage('JP')">🇯🇵 JP</button>
             </div>
 
-            <!-- 📢 [광고 구역 1] 상단 헤더 배너 -->
+            <h1 id="uiTitle" onclick="showDictionaryView()">📖 여자어 대사전</h1>
+            
+            <div class="action-group">
+                <button class="action-btn random-btn" id="btnRandom" onclick="openRandomModal()">🎲 랜덤 추출</button>
+                <button class="action-btn quiz-btn" id="btnQuiz" onclick="startQuizMode()">🚨 위기탈출 퀴즈</button>
+            </div>
+
+            <!-- 📢 상단 배너 광고 -->
             <div class="ad-container ad-header-banner">
                 <span class="ad-label">ADVERTISEMENT</span>
-                <!-- 나중에 구글 애드센스 / 카카오 애드핏 코드를 여기에 넣으세요 -->
                 <span>📢 광고 영역 (상단 배너)</span>
             </div>
 
             <div class="search-box" id="searchBoxArea">
-                <input type="text" id="searchInput" placeholder="단어, 상황(인스타, 결혼, 직장 등), 뜻 검색...">
+                <input type="text" id="searchInput" placeholder="검색어 입력...">
             </div>
             
             <div class="filter-group" id="filterBtnArea">
-                <button class="filter-btn active" onclick="filterRisk('ALL')">전체보기</button>
-                <button class="filter-btn" onclick="filterRisk('🟢 안전')">🟢 안전</button>
-                <button class="filter-btn" onclick="filterRisk('🟡 주의')">🟡 주의</button>
-                <button class="filter-btn" onclick="filterRisk('🔴 경보')">🔴 경보</button>
-                <button class="filter-btn" onclick="filterRisk('💣 지뢰')">💣 지뢰</button>
+                <button class="filter-btn active" onclick="filterRisk('ALL')" id="filterAll">전체보기</button>
+                <button class="filter-btn" onclick="filterRisk('SAFE')" id="filterSafe">🟢 안전</button>
+                <button class="filter-btn" onclick="filterRisk('WARN')" id="filterWarn">🟡 주의</button>
+                <button class="filter-btn" onclick="filterRisk('DANGER')" id="filterDanger">🔴 경보</button>
+                <button class="filter-btn" onclick="filterRisk('BOMB')" id="filterBomb">💣 지뢰</button>
             </div>
         </div>
     </header>
@@ -311,17 +312,16 @@
     <main>
         <div class="dictionary-list" id="dictionaryList"></div>
 
-        <!-- 📢 [광고 구역 3] 하단 배너 (목록 끝 영역) -->
+        <!-- 📢 하단 배너 광고 -->
         <div class="ad-container ad-footer-banner" id="footerAdArea">
             <span class="ad-label">ADVERTISEMENT</span>
-            <!-- 나중에 구글 애드센스 / 카카오 애드핏 코드를 여기에 넣으세요 -->
             <span>📢 광고 영역 (하단 스크롤 배너)</span>
         </div>
 
         <div id="quizView">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <span style="color: var(--secondary-color); font-weight: bold;">🚨 실전 위기탈출 퀴즈 (고난도)</span>
-                <button onclick="showDictionaryView()" style="border: none; background: none; color: #888; cursor: pointer;">✕ 사전으로 돌아가기</button>
+                <span id="quizHeaderTitle" style="color: var(--secondary-color); font-weight: bold;">🚨 위기탈출 퀴즈</span>
+                <button onclick="showDictionaryView()" style="border: none; background: none; color: #888; cursor: pointer;">✕</button>
             </div>
             <div class="quiz-question" id="quizQuestion"></div>
             <div class="quiz-options" id="quizOptions"></div>
@@ -333,333 +333,200 @@
     <div class="modal" id="randomModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeRandomModal()">&times;</span>
-            <div style="color: var(--primary-color); font-weight: bold; margin-bottom: 12px;">🎲 오늘의 랜덤 여자어</div>
+            <div id="randomModalTitle" style="color: var(--primary-color); font-weight: bold; margin-bottom: 12px;">🎲 오늘의 랜덤 여자어</div>
             <div id="randomCardContent"></div>
-            <button class="action-btn random-btn" style="width: 100%; margin-top: 16px;" onclick="renderRandomCard()">🔄 다른 단어 뽑기</button>
+            <button class="action-btn random-btn" id="btnRandomRefresh" style="width: 100%; margin-top: 16px;" onclick="renderRandomCard()">🔄 다른 단어 뽑기</button>
         </div>
     </div>
 
     <script>
-        // 300선 전체 데이터
+        // 🌐 1. UI 언어 패키지 (UI Translations)
+        const uiI18n = {
+            KR: {
+                title: "📖 여자어 대사전 (완결판)",
+                randomBtn: "🎲 랜덤 추출",
+                quizBtn: "🚨 위기탈출 퀴즈",
+                placeholder: "단어, 상황, 뜻 검색...",
+                filterAll: "전체보기", filterSafe: "🟢 안전", filterWarn: "🟡 주의", filterDanger: "🔴 경보", filterBomb: "💣 지뢰",
+                directLabel: "1. 직역 (Direct)", contextualLabel: "2. 의역 (Contextual)", exLabel: "💬 실전 용례:", solLabel: "💡 권장 대처법",
+                shareBtn: "📤 공유하기", shareAlert: "클립보드에 복사되었습니다!", noResult: "검색 결과가 없습니다. 🤔",
+                quizTitle: "🚨 실전 위기탈출 퀴즈", randomModalTitle: "🎲 오늘의 랜덤 여자어", randomRefresh: "🔄 다른 단어 뽑기",
+                quizSuccess: "🎉 정답입니다! 생존 확정!", quizFail: "❌ 오답입니다! (경고: 싸움 발생 위험)"
+            },
+            EN: {
+                title: "📖 Women's Nuance Dictionary",
+                randomBtn: "🎲 Random Pick",
+                quizBtn: "🚨 Survival Quiz",
+                placeholder: "Search word, situation, meaning...",
+                filterAll: "All", filterSafe: "🟢 Safe", filterWarn: "🟡 Caution", filterDanger: "🔴 Danger", filterBomb: "💣 Mine",
+                directLabel: "1. Literal Meaning", contextualLabel: "2. Hidden Meaning", exLabel: "💬 Real Example:", solLabel: "💡 Recommended Response",
+                shareBtn: "📤 Share", shareAlert: "Copied to clipboard!", noResult: "No results found. 🤔",
+                quizTitle: "🚨 Survival Quiz", randomModalTitle: "🎲 Today's Phrase", randomRefresh: "🔄 Pick Another",
+                quizSuccess: "🎉 Correct! Relationship saved!", quizFail: "❌ Wrong! Danger ahead!"
+            },
+            JP: {
+                title: "📖 女子語(Onnagokoro) 大辞典",
+                randomBtn: "🎲 ランダム抽出",
+                quizBtn: "🚨 危機脱出クイズ",
+                placeholder: "単語、状況、意味を検索...",
+                filterAll: "すべて", filterSafe: "🟢 安全", filterWarn: "🟡 注意", filterDanger: "🔴 警報", filterBomb: "💣 地雷",
+                directLabel: "1. 直訳 (Literal)", contextualLabel: "2. 本音 (Hidden Meaning)", exLabel: "💬 実戦例:", solLabel: "💡 おすすめの対応策",
+                shareBtn: "📤 共有する", shareAlert: "クリップボードにコピーされました！", noResult: "検索結果がありません。🤔",
+                quizTitle: "🚨 危機脱出クイズ", randomModalTitle: "🎲 今日の女子語", randomRefresh: "🔄 別の単語を引く",
+                quizSuccess: "🎉 正解です！生存確定！", quizFail: "❌ 不正解です！(警告: 喧嘩の危険あり)"
+            }
+        };
+
+        // 🌐 2. 다국어 사전 데이터셋 (Multilingual Dataset)
         const dictionaryData = [
-            { word: "가도 돼? / 다녀와", pos: "허락형 구어체", risk: "🔴 경보", category: "갈등/싸움, 일상", direct: "너의 외출이나 활동을 허가하겠다.", contextual: "가면 진짜 뒤진다. 내 기분이 안 좋으니 눈치껏 취소하거나 귀가 시간을 대폭 앞당겨라.", example: "여: '응, 다녀와~' ➔ 남: '오예 고마워! 늦게 들어갈게!' (결과: 자정 이후 폭풍전야)", solution: "'아니다, 네가 더 중요하지. 일찍 들어가서 통화하자'로 타협." },
-            { word: "거봐 / 내가 뭐랬어", pos: "감탄사적 관용구", risk: "🟡 주의", category: "일상, 갈등", direct: "내 예측이 정확했음을 확인시키는 말.", contextual: "내 직관과 조언은 항상 맞으니, 변명하지 말고 즉시 수긍하고 반성해라.", example: "여: '거기 맛없을 것 같다고 했잖아.' ➔ 남: '아니 블로그 리뷰는 다 좋았단 말이야...' (결과: 논쟁 격화)", solution: "'그러게, 역시 자기 말이 맞았네!'로 100% 인정 및 칭찬." },
-            { word: "그냥", pos: "부사", risk: "🔴 경보", category: "갈등/싸움", direct: "아무런 이유나 조건 없이.", contextual: "이유가 명확히 있지만, 지금 설명하기엔 네가 내 서운함을 전혀 이해하지 못하고 있어 답답하다.", example: "남: '무슨 일 있어?' ➔ 여: '그냥.' (결과: 냉기류 강화)", solution: "'그냥이 아닌 것 같은데, 내가 실수한 거 있으면 알려줘'라며 진성성 보이기." },
-            { word: "그냥 해본 말이야", pos: "관용구", risk: "🟡 주의", category: "쇼핑/기념일, 데이트", direct: "특별한 의도 없이 내뱉은 말.", contextual: "사실 굉장히 원하거나 관심이 있지만, 욕심내어 보이기 싫어서 던져본 간보기용 진심.", example: "여: '이 가방 되게 편해 보인다... 아냐, 그냥 해본 말이야.' ➔ 남: '그래? 넘어가지 뭐.' (결과: 서운함 스택 +1)", solution: "메모장에 기록해 두었다가 깜짝 선물로 활용하는 센스 발휘." },
-            { word: "글쎄", pos: "부사", risk: "🟡 주의", category: "데이트/일상", direct: "확답을 내리기 어려움.", contextual: "나는 이미 거절이나 다른 답을 정했으나, 네가 눈치껏 맞추길 바란다.", example: "남: '오늘 저녁에 순댓국 먹으러 갈까?' ➔ 여: '글쎄...' (결과: 가서 한 입도 안 먹음)", solution: "깔끔한 파스타나 일식 쪽으로 분위기가 다른 선택지 2~3개 재제시." },
-            { word: "귀여운데?", pos: "감탄사/형용사", risk: "🟢 안전", category: "쇼핑, 연애 초기", direct: "대상이 귀엽다.", contextual: "(물건) 사달라/갖고 싶다. (남성) 호감과 무해함을 동시에 느꼈다.", example: "여: '이 인형 귀여운데?' ➔ 남: '그러게. 가자.' (결과: 아쉬움 남음)", solution: "물건이라면 가격 확인 후 선물하거나, 자신을 향한 말이라면 기분 좋게 웃기." },
-            { word: "괜찮아", pos: "형용사적 구어체", risk: "💣 지뢰", category: "갈등/싸움, 일상", direct: "상태가 양호함.", contextual: "전혀 안 괜찮고 서운하지만, 지금 네가 뭘 잘못했는지 스스로 복기하길 바라는 중.", example: "남: '나 오늘 조금 늦을 것 같은데 괜찮아?' ➔ 여: '응, 괜찮아.' (결과: 도착 후 썰렁한 분위기)", solution: "'안 괜찮을 텐데 미안해. 최대한 서둘러서 갈게!'라며 미안함 표출." },
-            { word: "나 오늘 달라진 거 없어?", pos: "의문문", risk: "💣 지뢰", category: "데이트/일상", direct: "오늘 내 외모나 차림새 중 변경된 요소가 있는지 질문.", contextual: "네 관찰력과 나에 대한 애정도를 테스트하겠다.", example: "여: '나 오늘 달라진 거 없어?' ➔ 남: '살 빠졌어?' (결과: '관심 없지?' 맹공격)", solution: "머리, 네일, 귀걸이 등 상체 위주로 스캔 후 구체적인 후보 제시." },
-            { word: "나 살쪄서 그렇지?", pos: "답정너형 의문문", risk: "💣 지뢰", category: "일상/쇼핑", direct: "체중 증가 여부에 대한 객관적 확인 요청.", contextual: "절대 아니라고 강력하게 부정해라. 내 자존감을 채워라.", example: "여: '이 옷 부해 보이지? 나 살쪄서 그렇지?' ➔ 남: '약간?' (결과: 그날 식사 거부)", solution: "0.1초의 망설임도 없이 '살이 어디 쪘다고 그래, 옷 핏이 이상한 거네!' 라며 옷 탓하기." },
-            { word: "나 신경 쓰지 말고 놀아", pos: "명령형 관용구", risk: "🔴 경보", category: "갈등/유흥", direct: "나에 대한 걱정을 접고 편하게 즐겨라.", contextual: "진짜 신경 안 쓰고 재밌게 놀면 우리의 관계는 여기서 끝이다.", example: "여: '나 신경 쓰지 말고 재밌게 놀아~' ➔ 남: '응 고마워! 폰 두고 놀게!' (결과: 다음 날 냉전)", solution: "주기적으로 사진 첨부 연락을 남기며 '어떻게 신경을 안 써'라고 말하기." },
-            { word: "나 화 안 났는데?", pos: "평서문 (반어법)", risk: "💣 지뢰", category: "갈등/싸움", direct: "분노 상태가 아님.", contextual: "화가 머리끝까지 났으나 지성인처럼 참는 중이다.", example: "남: '화났어?' ➔ 여: '아닌데? 나 화 안 났는데?' (결과: 폭풍전야)", solution: "'내가 아까 눈치 없게 굴어서 미안해. 풀어주려면 어떻게 해야 할까?'라며 낮게 엎드리기." },
-            { word: "됐어", pos: "종결어미/감탄사", risk: "💣 지뢰", category: "갈등/싸움", direct: "요구사항이 충족되었거나 상황이 마무리됨.", contextual: "너와의 대화를 포기했다. 최고 수준의 경계 발령.", example: "남: '커피 사 올까?' ➔ 여: '됐어.' ➔ 남: '오케이 안 사 올게!' (결과: 파국)", solution: "'됐어'는 정성을 보여 달라는 신호. 좋아하는 디저트 사 오기 등 행동으로 풀기." },
-            { word: "뭐가 미안한데?", pos: "역질문", risk: "💣 지뢰", category: "갈등/싸움", direct: "사과의 구체적 사유에 대한 질문.", contextual: "네 죄목을 육하원칙에 따라 서술형으로 입증해 봐라.", example: "남: '미안해 내가 잘못했어' ➔ 여: '뭐가 미안한데?' ➔ 남: '그냥 다 미안해...' (결과: '영혼 없다' 폭발)", solution: "사건과 상대방이 느꼈을 감정 공감을 포함하여 구체적으로 답변하기." },
-            { word: "뭐 먹을까? (아무거나)", pos: "의문문", risk: "💣 지뢰", category: "데이트/식사", direct: "메뉴 선정을 상대방에게 위임함.", contextual: "내 머릿속에 있는 3가지 후보 중 하나를 눈치껏 맞춰라.", example: "여: '난 아무거나!' ➔ 남: '그럼 국밥 콜?' (결과: '이 더운 날 무슨 국밥이야...')", solution: "파스타, 일식 덮밥, 샐러드 등 분위기 깔끔한 옵션 2~3개 제안." },
-            { word: "솔직히 말해봐", pos: "유도형 명령문", risk: "💣 지뢰", category: "갈등/청문회", direct: "거짓 없이 진실만을 서술하라는 요청.", contextual: "솔직하게 말하면 진짜 죽는다. 자백을 유도하기 위한 함정이다.", example: "여: '솔직히 말하면 화 안 낼게' ➔ 남: '사실 그 여사친이 예쁘긴 하더라고' (결과: 즉각 처형)", solution: "상대가 듣고 싶어 하는 정답('자기밖에 안 보여')을 일관되게 주장하기." },
-            { word: "혼자 있고 싶어", pos: "상태 선언문", risk: "💣 지뢰", category: "갈등/감정", direct: "고독과 개인 시간을 원함.", contextual: "혼자 두면 '진짜 혼자 두네?' 하고 더 서운해진다. 당장 옆에 붙어서 달래줘라.", example: "여: '그냥 혼자 있고 싶어.' ➔ 남: '그래 푹 쉬어~' (결과: 이별 통보)", solution: "'혼자 두고 싶지 않아. 옆에 있을 테니까 편할 때 얘기해'라며 곁 지키기." },
-            { word: "어딜 봐서?", pos: "반박형 질문", risk: "💣 지뢰", category: "갈등/싸움", direct: "상대방 판단의 시각적/논리적 근거 제시 요구.", contextual: "네가 한 칭찬이나 해명이 전혀 와닿지 않으니 논리적으로 설득해 봐라. 어설프면 더 화낸다.", example: "남: '자기 오늘 너무 예쁜데?' ➔ 여: '어딜 봐서?' (결과: 오답 시 '건성으로 말하지 마' 폭발)", solution: "'눈빛이랑 오늘 옷 스타일이 분위기 있어서!'처럼 구체적인 부위와 이유를 대기." },
-            { word: "내가 예민한 거야?", pos: "동조 유도 질문", risk: "💣 지뢰", category: "갈등/공감", direct: "본인의 감정 반응에 대한 객관적 적절성 확인.", contextual: "'너 전혀 예민하지 않아, 내가/그 사람이 잘못한 거야'라는 서포트 발언을 즉시 제출해라.", example: "여: '내가 지금 예민한 거야?' ➔ 남: '응 약간 예민한 듯?' (결과: '내가 이상하다는 거네?' 대폭발)", solution: "'아니 전혀! 누구라도 그 상황이면 서운하고 화나지!'라며 100% 감정 편들어주기." },
-            { word: "아까는 미안했어", pos: "화해 요청문", risk: "🟢 안전", category: "갈등/화해", direct: "이전의 내 언행에 대해 사과한다.", contextual: "나도 내 행동이 과했던 건 아는데, 너도 얼른 미안하다고 하고 날 안아줘라.", example: "여: '아까는 내가 좀 미안했어...' ➔ 남: '알면 됐어~' (결과: 다시 화남)", solution: "'아니야, 내가 먼저 눈치채고 잘했어야 했는데 미안해'라며 맞사과 후 토닥이기." },
-            { word: "나 신경 쓰지 말고 일해", pos: "배려형 관용구", risk: "🔴 경보", category: "일상/연락", direct: "업무나 할 일에 집중하기를 권유.", contextual: "일하느라 나한테 소홀한 건 이해하지만, 그래도 중간중간 보고하고 날 생각하고 있음을 증명해라.", example: "여: '바쁘지? 나 신경 쓰지 말고 일해!' ➔ 남: '응 고마워!' 후 6시간 연락두절 (결과: 파국)", solution: "소홀해지지 않게 이동 시간이나 화장실 다녀올 때 짧게라도 애정 표현 톡 남기기." },
-            { word: "나중에 얘기하자", pos: "대화 유예문", risk: "💣 지뢰", category: "갈등/싸움", direct: "추후 시점으로 대화 이행을 미룸.", contextual: "지금 너랑 말하면 폭언이 나갈 것 같으니 참는 중이다. 당장 내 기분 풀어줄 방안을 찾아라.", example: "여: '지친다, 나중에 얘기하자.' ➔ 남: '오케이 나중에 연락해!' (결과: 차단)", solution: "'내가 기분 망쳐서 미안해. 조금 가라앉으면 바로 내 목소리 들어줄래?'라며 다독이기." },
-            { word: "원래 그래?", pos: "의문문", risk: "🟡 주의", category: "연애 초기/갈등", direct: "상대의 평소 행동 습관 질문.", contextual: "네 행동이 내 기준에서는 이해가 안 되고 서운한데, 다른 사람한테도 이러냐?", example: "여: '오빠는 원래 답장이 좀 늦은 편이야?' ➔ 남: '응 나 원래 폰 잘 안 봄' (결과: '나한테 관심 없네')", solution: "'원래는 그런데, 자기한테는 더 빠르고 정성스럽게 하도록 노력할게!'로 정답 내기." },
-            { word: "우린 참 안 맞는 것 같아", pos: "관계 회의문", risk: "💣 지뢰", category: "갈등/위기", direct: "서로의 성향적 불일치 선언.", contextual: "너랑 헤어지고 싶다는 게 아니라, 내가 지금 너 때문에 너무 맞춰주기 피곤하고 지쳤다는 신호.", example: "여: '우린 참 안 맞는 것 같아' ➔ 남: '맞아... 좀 다른 듯' (결과: 진짜 이별)", solution: "'다름을 맞춰가는 게 연애잖아. 내가 더 노력하고 이해할게'라며 굳건한 태도 보이기." },
-            { word: "오빠 편한 대로 해", pos: "위임형 평서문", risk: "💣 지뢰", category: "선택/갈등", direct: "상대방의 편의에 맞춰 결정권을 넘김.", contextual: "네 편한 대로 결정하는 순간 '자기중심적인 이기주의자'로 낙인찍겠다. 내 뜻을 따라라.", example: "남: '나 주말에 친구 만날까?' ➔ 여: '오빠 편한 대로 해~' ➔ 남: '나이스 가야지!' (결과: 냉전)", solution: "나의 편의가 아닌 상대방의 기분과 스케줄을 최우선으로 두고 다시 재제시하기." },
-            { word: "나 예뻐?", pos: "확인형 질문", risk: "🟢 안전", category: "일상/애정확인", direct: "외모적 매력에 대한 질문.", contextual: "사랑받고 있다는 느낌을 느끼고 싶다. 오글거리는 칭찬을 듬뿍 해라.", example: "여: '나 오늘 예뻐?' ➔ 남: '음, 평소랑 똑같은데?' (결과: 감성 파괴)", solution: "눈을 맞추며 '매일 예쁜데 오늘은 유독 더 예쁜데?'라며 주저 없이 애정 표현." },
-            { word: "연락이 좀 늦었네?", pos: "추궁형 질문", risk: "🟡 주의", category: "카톡/연락", direct: "답장 간격에 대한 사실 확인.", contextual: "너 방금 뭐 하느라 나를 방치했냐? 합당한 이유와 미안함을 표시해라.", example: "여: '연락이 좀 늦었네?' ➔ 남: '어 게임 한 판 하느라!' (결과: 싸움 시작)", solution: "'늦어서 미안해! OO 하느라 시간 가는 줄 몰랐어, 기다렸지?'라며 구체적 사유+미안함 제시." },
-            { word: "아무것도 아니야", pos: "회피형 문장", risk: "🔴 경보", category: "갈등/감정", direct: "말하려던 내용이 중요하지 않음.", contextual: "분명히 서운한 게 있지만, 먼저 말하면 나만 치사해 보이니까 네가 눈치채고 물어봐라.", example: "여: '아... 됐다, 아무것도 아니야.' ➔ 남: '아 오케이!' (결과: 답답함 폭발)", solution: "'아무것도 아닌 표정이 아닌데... 내가 마음 아프게 한 거 있으면 편하게 말해줘'라며 끄집어내기." },
-            { word: "다른 여자들도 다 그래?", pos: "비교형 질문", risk: "💣 지뢰", category: "갈등/청문회", direct: "여성 일반의 행동 특성 질문.", contextual: "나를 일반화해서 보지 마라. 그리고 딴 여자들 경험 들먹이지 마라.", example: "여: '다른 여자들도 다 이래?' ➔ 남: '어 보통 여자들은 다 그렇던데?' (결과: '남 비교하냐?')", solution: "'다른 사람은 모르겠고, 난 너만 보니까 너한테 맞추고 싶지!'라며 완벽한 회피." },
-            { word: "내가 알아서 할게", pos: "거절형 평서문", risk: "🟡 주의", category: "일상/갈등", direct: "스스로 해결하겠다는 의사 표시.", contextual: "너한테 말해봤자 해결도 안 되고 도움도 안 돼서 서운하니까 혼자 하겠다.", example: "여: '됐어 내가 알아서 할게.' ➔ 남: '어 그래 혼자 할 수 있지?' (결과: 서운함 스택)", solution: "'내가 도와주고 싶어서 그래. 손에 물 안 묻히게 내가 고쳐줄게/해줄게!'라며 뺏어 들기." },
-            { word: "술 많이 마시지 마", pos: "조언형 명령문", risk: "🟢 안전", category: "유흥/걱정", direct: "음주량 절제 권유.", contextual: "너 건강도 걱정되고, 술 취해서 실수하거나 연락 끊길까 봐 불안하다.", example: "여: '오늘 술 많이 마시지 마~' ➔ 남: '나 술 센 거 알잖아 갠춘!' (결과: 안심 못 시킴)", solution: "'응! 자기 말대로 적당히 마시고 조심히 일찍 들어갈게!'라며 안심시켜주기." },
-            { word: "어제 몇 시에 잤어?", pos: "동선 확인 질문", risk: "🟡 주의", category: "카톡/연락", direct: "취침 시간 확인.", contextual: "나한테 잘 자라고 톡 하고 나서 딴짓(게임, 인스타, 유튜브) 하다 늦게 잤인지 감시 중이다.", example: "여: '어제 몇 시에 잤어?' ➔ 남: '나 새벽 3시 넘어서 잤나?' (결과: '나한테 잘 자라매?')", solution: "'자기랑 톡 마치고 바로 누워서 금방 잠들었지!'처럼 칼같은 신뢰 주기." },
-            { word: "나 맛있는 거 사주라", pos: "애교형 요청문", risk: "🟢 안전", category: "데이트/일상", direct: "식사나 디저트 구매 요청.", contextual: "너랑 맛있는 거 먹으면서 데이트하고 싶다. 기분 좋게 밥 한 끼 사며 생색내라.", example: "여: '나 맛있는 거 사주라!' ➔ 남: '돈 없어' (결과: 분위기 냉각)", solution: "'당연하지! 자기가 먹고 싶은 거 다 골라봐, 맛집 찾아갈까?'라며 적극 호응." },
-            { word: "이거 사고 싶은데 좀 비싸다", pos: "간보기형 문장", risk: "🟢 안전", category: "쇼핑/기념일", direct: "물품 가격에 대한 부담감 표현.", contextual: "갖고 싶은데 내 돈 주고 사긴 아깝다. 능력이 된다면 사주거나 힌트로 기억해라.", example: "여: '이거 예쁜데 좀 비싸네...' ➔ 남: '비싸면 사지 마' (결과: 눈치 제로)", solution: "기념일이 가깝다면 기억해뒀다가 몰래 사주거나 '특별한 날 선물해 줄게!' 답하기." },
-            { word: "오빠는 참 쿨하다", pos: "비꼬는 형용사", risk: "🔴 경보", category: "갈등/싸움", direct: "성격이 소탈하고 의연함.", contextual: "쿨한 게 아니라 나한테 관심이 없고 눈치가 없어서 서운하다는 뜻이다.", example: "여: '오빠는 참 쿨하네~' ➔ 남: '어 나 원래 좀 쿨한 편임 ㅋ' (결과: 비꼬기 폭격)", solution: "'쿨한 게 아니라 자기를 믿는 거지! 그래도 서운한 부분 있었어?'라며 되물어보기." },
-            { word: "내가 무슨 말 하는지 알지?", pos: "공감 요구 질문", risk: "💣 지뢰", category: "갈등/소통", direct: "발언의 요지 파악 여부 질문.", contextual: "내 감정의 핵심을 제대로 짚어라. 건성으로 대답하면 다시 청문회 시작이다.", example: "여: '내가 무슨 말 하는지 알지?' ➔ 남: '응응 대충 알지' (결과: '뭘 아는데?' 역질문)", solution: "'응, 오빠가 실수해서 자기가 마음 고생했다는 뜻이잖아'라며 핵심 요약해서 말하기." },
-            { word: "톡 할 기분 아니야", pos: "대화 거부 선언", risk: "💣 지뢰", category: "카톡/싸움", direct: "메시지 주고받기 중단 선언.", contextual: "톡로는 성의가 안 느껴지니 지금 전화하거나 만나러 와서 진심을 보여라.", example: "여: '나 지금 톡 할 기분 아니야' ➔ 남: '오케이 기분 풀리면 톡해' (결과: 차단)", solution: "즉시 전화 통화를 연결하거나, 안 받으면 음성 메모/장문 편지로 성의 표출." },
-            { word: "사진 좀 찍어줘", pos: "요청형 구어체", risk: "💣 지뢰", category: "데이트/SNS", direct: "카메라로 나의 모습을 촬영해 줄 것을 요청.", contextual: "최소 50장 이상, 다각도와 비율을 고려해 인생샷이 나올 때까지 수고를 마다하지 마라.", example: "여: '오빠 나 여기서 사진 좀 찍어줘!' ➔ 남: '어 한 장 찍었다 끝!' (결과: 사진 보고 대폭발)", solution: "무릎을 꿇고 수평을 맞추며 연속 촬영 30장 이상 진행 후 '어때? 더 찍을까?' 물어보기." },
-            { word: "나 요즘 우울해", pos: "감정 표현문", risk: "🟢 안전", category: "일상/공감", direct: "정신적 침체나 우울감을 겪고 있음.", contextual: "원인을 분석하거나 해결책을 주지 말고, 내 우울함에 같이 아파해주고 기분 전환시켜 달라.", example: "여: '나 요즘 너무 우울해...' ➔ 남: '병원 가보거나 운동을 해봐!' (결과: 감성 파괴)", solution: "'무슨 일 있어? 내가 옆에 있어줄게. 맛있는 거 먹으러 나갈까?'라며 무조건적 공감." },
-            { word: "나 안 보고 싶었어?", pos: "애정 확인 질문", risk: "🟢 안전", category: "연락/연애초기", direct: "상대의 그리움 유무 확인.", contextual: "내가 너를 엄청 보고 싶어 했으니, 너도 나를 그만큼 보고 싶어 했다고 고백해라.", example: "여: '나 안 보고 싶었어?' ➔ 남: '어제 봤는데 뭘 또 보고 싶어~' (결과: 분위기 싸해짐)", solution: "'매일 봐도 매 순간 보고 싶은데 당연하지!'라며 극적인 오글거림 제공." },
-            { word: "너 편한 대로 해 (친구/지인용)", pos: "방관형 평서문", risk: "🔴 경보", category: "갈등/관계", direct: "상대의 자율적 선택 권장.", contextual: "네가 그렇게 이기적으로 행동하면 나도 너한테 선을 긋고 마음을 정리하겠다.", example: "여: '그래 그럼 너 편한 대로 해' ➔ 남: '응 고마워 내 맘대로 할게' (결과: 손절 프로세스 가동)", solution: "내 고집을 내려놓고 '아냐, 같이 결정하자. 네 생각은 어때?'라며 상대 의견 묻기." },
-            { word: "연락이 왜 이렇게 안 돼?", pos: "추궁형 의문문", risk: "💣 지뢰", category: "카톡/연락", direct: "통신 응답 부재에 대한 사유 질문.", contextual: "네 일상에서 내가 뒷전으로 밀린 것 같아 불안하고 화가 나니 정성껏 해명해라.", example: "여: '연락이 왜 이렇게 안 돼?' ➔ 남: '친구들이랑 얘기하느라 몰랐음' (결과: 서운함 폭발)", solution: "'미안해! 정신없어서 폰을 못 봤어. 다음부턴 미리 꼭 알려줄게!'라며 재발 방지 약속." },
-            { word: "아 그래? 몰랐네~", pos: "비꼬는 형용사", risk: "🔴 경보", category: "갈등/싸움", direct: "새로운 정보 접득에 대한 지식 표출.", contextual: "네 변명이 참 가당찮고 가식적이라는 걸 내가 뻔히 다 알고 있다.", example: "남: '진짜 회식 때문에 늦게 본 거야' ➔ 여: '아 그래? 몰랐네~' (결과: 거짓말 탐지기 가동)", solution: "변명을 늘어놓기보다 진심으로 솔직하게 상황을 설명하고 미안함 표출하기." },
-            { word: "내가 알아서 먹을게", pos: "거절형 문장", risk: "🟡 주의", category: "식사/갈등", direct: "음식 섭취의 자율성 선언.", contextual: "네가 챙겨주지 않아서 서운하니까 삐쳤다는 표시다.", example: "여: '됐어 내가 알아서 먹을게' ➔ 남: '어 그래 챙겨 먹어~' (결과: 식사 내내 정적)", solution: "'무슨 소리야, 내가 제일 좋은 거 덜어줘야지!'라며 직접 숟가락에 얹어주기." },
-            { word: "나 먼저 들어갈게", pos: "귀가 선언문", risk: "🔴 경보", category: "데이트/갈등", direct: "귀가 절차 진행.", contextual: "오늘 데이트가 너무 재미없거나 네 행동 때문에 기분이 망가졌으니 붙잡거나 달래라.", example: "여: '나 먼저 들어갈게.' ➔ 남: '어 그래 조심히 가!' (결과: 집 가면서 눈물 흘림)", solution: "'벌써 가려고? 내가 오늘 미숙했지 미안해, 잠깐만 내 이야기 좀 들어줘'라며 붙잡기." },
-            { word: "딴 여자한테도 그래?", pos: "경계형 질문", risk: "💣 지뢰", category: "연애 초기/갈등", direct: "타 여성 대상 동일 행동 여부 확인.", contextual: "너 플러팅(매력 어필)이 너무 자연스러운 데, 혹시 바람둥이나 선수 아니냐?", example: "여: '오빠 딴 여자한테도 다 이렇게 다정해?' ➔ 남: '어 나 원래 다정한 편임' (결과: 어장관리남 낙인)", solution: "눈을 똑바로 보며 '너한테만 이러는 거야. 다른 사람들한테는 안 그래'라며 확신 주기." },
-            { word: "이거 캡처해 뒀어", pos: "증거 수집 선언", risk: "💣 지뢰", category: "갈등/카톡", direct: "화면 저장 기능 이용 알림.", contextual: "네 발언은 나중에 법정(싸움)에서 증거물로 채택될 것이니 헛소리하지 마라.", example: "여: '방금 한 말 캡처해 뒀어.' ➔ 남: '캡처를 왜 해? 이상하네' (결과: 싸움의 대형화)", solution: "'캡처까지 할 정도로 서운했구나 미안해, 내 말 취소하고 다시 예쁘게 말할게'라며 수습." },
-            { word: "나 인스타에 올려도 돼?", pos: "허락 요청문", risk: "🟢 안전", category: "SNS/데이트", direct: "소셜 미디어 게시물 업로드 의사 확인.", contextual: "너와의 데이트가 마음에 들고 자랑하고 싶다. 예쁘게 댓글 달 준비나 해라.", example: "여: '우리 오늘 찍은 거 올려도 돼?' ➔ 남: '난 찌질하게 나와서 싫은데' (결과: 감흥 파괴)", solution: "'당연지사! 태그 꼭 해줘, 나도 바로 스토리 재공유할게!'라며 기쁘게 동조." },
-            { word: "손만 잡고 자자", pos: "완곡형 가이드라인", risk: "🟢 안전", category: "스킨십/연애초기", direct: "신체 접촉 범위를 손으로 제한.", contextual: "너의 신사적인 태도를 테스트해 보겠다 / 오늘은 진도보다는 분위기만 즐기자.", example: "여: '오늘은 손만 잡고 자는 거다?' ➔ 남: '에이 무슨 소리야~' (결과: 즉시 경계 태세)", solution: "'응 당연하지! 자기 안전하게 꼭 안아만 줄게'라며 신뢰감을 주어 방어선 무너뜨리기." },
-            { word: "오늘따라 피곤해 보이네?", pos: "상태 관찰 질문", risk: "🟡 주의", category: "데이트/일상", direct: "상대의 피로도 파악.", contextual: "나랑 있는 게 지루하거나 귀찮은 거냐? 아니면 진짜 피곤한 거냐?", example: "여: '오빠 오늘따라 피곤해 보이네?' ➔ 남: '어 나 사실 집 가고 싶음' (결과: 즉시 집으로 귀가 당함)", solution: "'아니야! 자기가 너무 예뻐서 눈을 못 떼서 그래, 피곤함 다 달아났다!'로 받아치기." },
-            { word: "그 사람이 나한테 뭐라고 했냐면~", pos: "서사형 고백", risk: "🟢 안전", category: "일상/공감", direct: "타인과의 대화 내용 전달.", contextual: "이야기가 길어질 예정이니 리액션(눈 커짐, 추임새, 상대방 욕해주기)을 준비해라.", example: "여: '그 사람이 나한테...' ➔ 남: '그래서 결론이 뭔데?' (결과: T형 남성에 대한 분노)", solution: "결론을 독촉하지 말고 '진짜? 미쳤네! 그래서 어떻게 됐어?'라며 영혼의 추임새 넣기." },
-            { word: "나 안 안아줘?", pos: "직진형 애교", risk: "🟢 안전", category: "스킨십/일상", direct: "포옹 요구.", contextual: "지금 즉시 따뜻하게 안아주며 애정 표현을 쏟아부어라.", example: "여: '나 안 안아줘?' ➔ 남: '어 있다가~' (결과: 민망함과 함께 서운함 발생)", solution: "말이 끝나기도 전에 꽉 안아주면서 '내가 먼저 안아줬어야 했는데!'라며 반응." },
-            { word: "나랑 있으면 재밌어?", pos: "만족도 확인 질문", risk: "🟢 안전", category: "연애 초기", direct: "동석 시 즐거움 유무 질문.", contextual: "너의 행복이 나 때문이라는 확신을 줘라. 내 존재감을 인정해라.", example: "여: '나랑 있으면 재밌어?' ➔ 남: '응 뭐 그냥 그래~' (결과: 자신감 상실)", solution: "'시간 가는 줄 모를 정도로 세상에서 제일 재밌어!'라며 격렬한 칭찬." },
-            { word: "내가 그렇게 쉬워 보여?", pos: "분노형 질책", risk: "💣 지뢰", category: "갈등/스킨십", direct: "상대의 가볍게 보는 태도 경고.", contextual: "네가 진도나 대화에서 선을 넘었다. 나를 존중하는 태도를 다시 보여라.", example: "여: '내가 그렇게 쉬워 보여?' ➔ 남: '아니 스킨십 좀 했다고 왜 그래' (결과: 관계 파국)", solution: "'절대 아니야, 내가 성급하고 경솔했어 미안해. 네 마음이 제일 중요해'라며 깊이 사과." },
-            { word: "우리가 언제 봤다고?", pos: "경계형 질문", risk: "🟡 주의", category: "썸/연애초기", direct: "친분 기간의 짧음 지적.", contextual: "너무 속도를 내지 말고, 서두르지 말고 차근차근 나한테 정성을 내보여라.", example: "여: '우리가 본 지 얼마나 됐다고~' ➔ 남: '기간이 뭐가 중요해!' (결과: 세속적인 사람으로 간주)", solution: "'기간은 짧지만 내 마음의 크기는 그만큼 깊어서 그래. 천천히 보여줄게'라며 안심시키기." },
-            { word: "나 옷이 너무 야한가?", pos: "의상 점검 질문", risk: "🟡 주의", category: "데이트/노출", direct: "복장의 노출 정도 질문.", contextual: "예쁘다는 칭찬과 동시에, 적당한 질투('나만 보고 싶은데 노출 좀 있는 듯!')를 보여라.", example: "여: '나 옷 너무 야한가?' ➔ 남: '어 너무 야해 단정하게 입어' (결과: '지적질하네?')", solution: "'너무 예쁜데, 딴 놈들이 볼까 봐 나만 보고 싶어서 질투 난다!'라며 칭찬+질투 조합." },
-            { word: "톡 그만하자", pos: "대화 중단 선언", risk: "💣 지뢰", category: "카톡/싸움", direct: "모바일 메시지 수신 거부.", contextual: "톡로는 성의가 안 느껴지니 지금 전화하거나 만나러 와서 진심을 보여라.", example: "여: '그만하자 톡' ➔ 남: '응 잘 자~' (결과: 다음 날 블록 상태)", solution: "즉시 전화 통화를 연결하거나, 안 받으면 음성 메모/장문 편지로 성의 표출." },
-            { word: "나 신경 쓰지 마", pos: "독립 선언문", risk: "💣 지뢰", category: "갈등/싸움", direct: "상대방의 관심과 케어를 사양함.", contextual: "지금 당장 나에게 집중하고 모든 정성을 쏟아부어라. 내 기분이 풀릴 때까지 붙잡아라.", example: "여: '됐어, 나 신경 쓰지 마.' ➔ 남: '오케이 할 일 할게!' (결과: 관계 파국)", solution: "'어떻게 신경을 안 써, 내 온 신경이 너한테 가 있는데'라며 껌딱지 모드 가동." },
-            { word: "내가 왜 화났는지 몰라?", pos: "원인 추궁 질문", risk: "💣 지뢰", category: "갈등/청문회", direct: "분노의 원인에 대한 인지 여부 확인.", contextual: "네 잘못을 내가 직접 입으로 말하면 치사해지니, 네 입으로 직접 자백하고 석고대죄해라.", example: "여: '내가 왜 화났는지 진짜 몰라?' ➔ 남: '어 전혀 모르겠는데?' (결과: 대폭발)", solution: "지난 24시간 동안의 행동을 빠르게 복기하고, 정 모르면 '눈치채지 못해서 미안해, 가르쳐 주면 깊이 반성할게'라고 낮추기." },
-            { word: "너 원래 이런 애였어?", pos: "실망 표출문", risk: "💣 지뢰", category: "갈등/싸움", direct: "상대방 본질적 인격에 대한 재평가.", contextual: "지금 너의 행동에 엄청나게 실망했으니, 너 원래 다정하고 좋은 사람이라는 걸 증명해라.", example: "여: '너 원래 이렇게 이기적인 애였어?' ➔ 남: '너야말로 원래 이랬냐?' (결과: 맞싸움으로 이별)", solution: "'아니야, 내가 순간 이기적으로 굴었어. 내가 원래 그런 사람이 아니라는 거 보여줄게'라며 안심시키기." },
-            { word: "나랑 싸우자는 거야?", pos: "경고형 의문문", risk: "🔴 경보", category: "갈등/논쟁", direct: "전투 의사 유무 질문.", contextual: "너 지금 말대꾸나 논리적 반박을 시도하는데, 감정 다툼으로 번지기 전에 즉시 꼬리 내려라.", example: "여: '지금 나랑 싸우자는 거야?' ➔ 남: '아니 팩트만 말하는 거잖아' (결과: 3차 세계대전)", solution: "논리적 팩트 폭격을 즉시 중단하고 '아니야 싸우기 싫어, 미안해 내가 말이 과했어'라며 항복." },
-            { word: "말이 그렇다는 거지~", pos: "해명형 관용구", risk: "🟡 주의", category: "일상/갈등", direct: "발언의 문자적 의미 완화.", contextual: "내가 약간 과장해서 말하긴 했는데, 네가 정색하니까 당황스럽다. 눈치껏 넘어가지 꼭 짚고 넘어가냐?", example: "여: '말이 그렇다는 거지~ 정색은 왜 해?' ➔ 남: '너 말을 그렇게 하면 안 되지' (결과: 분위기 냉각)", solution: "'아~ 그런 뜻이었어? 내가 너무 진지하게 받아들였네 무안하다'라며 너그럽게 넘어가기." },
-            { word: "오늘 술이 잘 받네?", pos: "음주 상태 보고", risk: "🟢 안전 ~ 🟡 주의", category: "유흥/데이트", direct: "알코올 분해 능력이 원활함.", contextual: "오늘 기분 좋으니까 너랑 더 길게 놀고 싶다 / 혹은 나 취했으니까 챙겨달라.", example: "여: '오늘따라 술이 되게 잘 받네?' ➔ 남: '오 그래? 그럼 한 병 더 시키자!' (결과: 여자는 기분 전환을 원했던 것)", solution: "'기분 좋아 보여서 다행이다! 그래도 많이 마시면 속 아프니까 천천히 마시자'라며 스윗하게 챙기기." },
-            { word: "나 어때 보여?", pos: "외모 점검 질문", risk: "🟢 안전", category: "데이트/일상", direct: "현재 용모 상태 질문.", contextual: "오늘 신경 써서 꾸미고 나왔으니 구체적이고 극적인 칭찬을 폭풍처럼 쏟아내라.", example: "여: '나 오늘 어때 보여?' ➔ 남: '그냥 뭐 평소 같아' (결과: 시무룩)", solution: "'오늘 헤어스타일이랑 옷 착장이 인스타 감성이다, 완벽해서 눈을 못 떼겠어'라며 호들갑." },
-            { word: "내가 네 여친이지, 친구냐?", pos: "신분 확인 문장", risk: "🔴 경보", category: "갈등/데이트", direct: "대인 관계에서의 지위 확인.", contextual: "나를 동성 친구 대하듯 대충 다루거나 유머 소재로 삼지 말고 특별대우와 로맨틱함을 제공해라.", example: "여: '내가 네 여친이지 친구냐?' ➔ 남: '편해서 그런 건데 왜 정색함?' (결과: 서운함 스택)", solution: "'편해서 나도 모르게 그랬나 봐, 넌 내 하나뿐인 공주님인데 내가 미안해'라며 오글거리는 정답." },
-            { word: "이거 완전 인스타 감성이다!", pos: "감탄사", risk: "🟢 안전", category: "데이트/SNS", direct: "소셜 미디어에 적합한 미적 가치 보유.", contextual: "여기 너무 마음에 든다. 당장 휴대폰을 들고 사진을 예쁘게 구도 잡아서 찍어라.", example: "여: '와 이거 완전 인스타 감성이다!' ➔ 남: '비싸기만 하고 양 적네' (결과: T형 남성의 감성 파괴)", solution: "'그러게! 분위기 대박이다, 자기 서봐 내가 사진 찍어줄게!'라며 카메라 가동." },
-            { word: "내가 무슨 부귀영화를 누리겠다고...", pos: "신세 한탄문", risk: "🔴 경보", category: "갈등/싸움", direct: "부귀영화 추구의 부질없음 상탄.", contextual: "너한테 기대하고 대우받으려 했던 내 자신이 한심하다. 서운함이 극에 달했다.", example: "여: '휴... 내가 무슨 부귀영화를 누리겠다고 너한테 말을 하냐' ➔ 남: '누가 기대하래?' (결과: 즉시 이별각)", solution: "'내가 너한테 그 정도밖에 안 되는 사람처럼 굴어서 미안해... 마음 아프게 안 할게'라며 진심 반성." },
-            { word: "어머, 쟤 진짜 예쁘다!", pos: "타인 칭찬문", risk: "💣 지뢰", category: "데이트/일상", direct: "제3자에 대한 외모적 찬사.", contextual: "지나가는 저 여자를 쳐다보지 마라. 그리고 '자기가 훨씬 더 예뻐'라는 답을 내놓아라.", example: "여: '어머 쟤 다리 진짜 길다 예쁘다!' ➔ 남: '어 그러게? 모델인가?' (결과: 옆구리 꼬집힘)", solution: "지나가는 사람을 쳐다보지도 않고 '글쎄, 내 눈엔 자기밖에 안 보여서 모르겠는데?' 라며 방어." },
-            { word: "너 하고 싶은 대로 해", pos: "포기형 방관문", risk: "💣 지뢰", category: "갈등/선택", direct: "상대방의 자율성에 맡김.", contextual: "네 마음대로 행동하는 순간 감당 못 할 후폭풍이 밀려올 것이다. 당장 내 의중대로 따라와라.", example: "남: '나 이번 주말에 친구들이랑 축구하고 올게?' ➔ 여: '너 하고 싶은 대로 해' (결과: 축구 갔다가 차단 당함)", solution: "하고 싶었던 행동을 포기하고 '아니다, 자기랑 주말에 같이 맛있는 거 먹자'라며 우선순위 변경." },
-            { word: "우리가 얼마나 됐다고?", pos: "속도 조절 질문", risk: "🟡 주의", category: "연애 초기/스킨십", direct: "관계 형성 기간의 경과 확인.", contextual: "진도가 너무 빠르거나 가벼워 보일까 봐 걱정되니, 나를 진중하게 생각한다는 걸 증명해라.", example: "여: '우리가 만난 지 얼마나 됐다고 벌써 그래~' ➔ 남: '요즘 다 이 정도는 하지!' (결과: 가벼운 사람 낙인)", solution: "'기간보다 네가 너무 소중해서 그래. 천천히 자기 속도에 맞출게'라며 안심시키기." },
-            { word: "원래 연락 잘 안하는 타입이지?", pos: "탐색형 질문", risk: "🟡 주의", category: "카톡/연락", direct: "상대의 연락 성향 파악.", contextual: "지금 너의 연락 빈도가 내 기준에 안 차서 서운하다. 나한테는 더 자주 연락하겠다고 선언해라.", example: "여: '오빠 원래 톡 잘 안 하는 타입이지?' ➔ 남: '어 나 원래 톡 귀찮아함' (결과: 서운함 폭발)", solution: "'원래는 잘 안 하는데, 자기랑 톡 하는 건 너무 즐거워서 자주 하고 싶어!'라며 예외성 강조." },
-            { word: "나 신경 쓰여?", pos: "유도형 질문", risk: "🟢 안전", category: "썸/연애초기", direct: "자신에 대한 관심도 질문.", contextual: "너 나한테 호감 있지? 솔직하게 고백하거나 마음을 내비쳐라.", example: "여: '나 좀 신경 쓰여?' ➔ 남: '아니 딱히?' (결과: 썸 종료)", solution: "'신경 쓰이는 정도가 아니라 하루 종일 머릿속에 너만 가득해'라며 직진." },
-            { word: "나 오늘 생얼이라 차림새가 좀 그래", pos: "밑밥 깔기 문장", risk: "🟢 안전", category: "데이트/일상", direct: "화장 및 스타일링 미흡 고백.", contextual: "꾸미지 않았어도 예쁘다고 말해라. 내 자존감을 세워줄 타이밍이다.", example: "여: '나 오늘 생얼이라 좀 그렇지?' ➔ 남: '어 화장 좀 하지 그랬어' (결과: 즉시 귀가)", solution: "'무슨 소리야, 안 꾸민 게 더 청순하고 예쁜데?'라며 영혼의 칭찬." },
-            { word: "오늘따라 보고 싶네", pos: "애정 표출문", risk: "🟢 안전", category: "카톡/연락", direct: "그리움 표출.", contextual: "너도 당장 나 보고 싶다고 말하고, 여건이 된다면 번개 데이트를 제안해라.", example: "여: '오늘따라 보고 싶네...' ➔ 남: '나 내일 출근이라 못 봄~' (결과: 로맨스 파괴)", solution: "'나도 너무 보고 싶어서 당장 달려가고 싶다! 주말에 만나서 꽉 안아줄게'라며 열정 보이기." },
-            { word: "아 그래? 그렇구나~", pos: "영혼 없는 수긍문", risk: "🔴 경보", category: "갈등/싸움", direct: "상대방의 의견 수용.", contextual: "네 말도 안 되는 변명에 억지로 받아쳐주는 척하는 거다. 속으로는 칼을 갈고 있다.", example: "남: '이래저래 해서 늦었어' ➔ 여: '아 그래? 그렇구나~' (결과: 싸움 2차전 준비 중)", solution: "변명을 그만두고 진심 어린 미안함과 상대 감정 케어에 집중하기." },
-            { word: "나한테 뭐 숨기는 거 없어?", pos: "함정형 질문", risk: "💣 지뢰", category: "갈등/청문회", direct: "비밀 유무 확인.", contextual: "이미 증거 잡았거나 의심스러운 상황이 있으니, 더 큰 벌을 받기 전에 스스로 솔직하게 말해라.", example: "여: '너 나한테 숨기는 거 없지?' ➔ 남: '어 없어!' (결과: 증거 사진 등판하며 파국)", solution: "지난 24시간 동안의 행동을 빠르게 복기하고 양심에 걸리는 부분을 자수하기." },
-            { word: "그냥 너 생각나서 사봤어", pos: "선물 전달문", risk: "🟢 안전", category: "일상/선물", direct: "대가 없는 소소한 선물 전달.", contextual: "일상 속에서도 늘 너를 생각하고 있다. 격하게 기뻐해 주고 고마움을 표현해라.", example: "여: '지나가다 오빠 생각나서 사 왔어' ➔ 남: '어 쓸데없이 이런 걸 왜 사?' (결과: T 남성의 대참사)", solution: "'대박... 내 생각 해준 게 너무 감동이다! 평생 아껴서 잘 쓸게!'라며 오버하며 기뻐하기." },
-            { word: "주말에 보통 뭐 하세요?", pos: "탐색형 질문", risk: "🟢 안전", category: "소개팅/썸", direct: "주말 여가 활동 질문.", contextual: "너의 취향과 라이프스타일을 파악해서 나랑 데이트할 명분을 만들어라.", example: "남: '저 주말엔 그냥 집에서 누워있는데요' ➔ 여: '아 네...' (결과: 정적)", solution: "'맛집 탐방 좋아하는데, 혹시 괜찮은 카페 아시는 곳 있으세요?'라며 자연스럽게 데이트 연결." },
-            { word: "오빠는 눈이 높을 것 같아요", pos: "간보기형 칭찬", risk: "🟢 안전", category: "소개팅/연애초기", direct: "상대방의 이성 기준에 대한 추측.", contextual: "너 인기 많아 보인다. 그리고 나 같은 스타일도 네 기준에 들어가는지 호감을 표해라.", example: "남: '어 맞아 나 눈 좀 높음' ➔ 여: '아... 그래요?' (결과: 재수없음 낙인)", solution: "'전혀 안 높은데요! 전 외모보다 대화 잘 통하는 사람이 좋은데, 오늘 너무 즐겁네요'라며 호감 표현." },
-            { word: "저는 연상(연하)이 편하더라고요", pos: "취향 선언문", risk: "🟢 안전", category: "소개팅/썸", direct: "선호하는 나이대 언급.", contextual: "네 나이가 딱 내 취향범위 안에 들어온다는 은근한 시그널이다. 자신감을 가져라.", example: "여: '저는 연상이 편하더라고요' ➔ 남(연상): '아 그래요? 전 연하가 좋은데' (결과: 찌찌뽕 파괴)", solution: "'저도 연상이랑 대화할 때 훨씬 편하고 좋더라고요!'라며 맞장구치기." },
-            { word: "저 원래 술 잘 못 마셔요", pos: "밑밥 깔기 문장", risk: "🟡 주의", category: "소개팅/유흥", direct: "주량 미흡 고백.", contextual: "너랑 있는 분위기가 어색하거나, 억지로 취하게 만들지 말고 신사적으로 챙겨달라.", example: "남: '에이 한 잔은 괜찮아요 마셔요!' ➔ 여: '(억지 미소)' (결과: 매너 없는 남자로 평가)", solution: "'그러시구나! 무리하지 마시고 음료나 차 마셔요,제가 챙겨드릴게요'라며 스윗함 어필." },
-            { word: "친한 여사친 많으시죠?", pos: "탐색형 질문", risk: "💣 지뢰", category: "소개팅/연애초기", direct: "동성/이성 친구 관계 질문.", contextual: "너 혹시 주변에 여자 끼고 사는 플러팅남 아니냐? 깔끔한 관계임을 증명해라.", example: "남: '어 나 여사친 진짜 많지~' ➔ 여: '아... 그러시구나' (결과: 신뢰도 급락)", solution: "'아뇨! 연락하는 여사친 거의 없고, 전 여친/여사친 문제로 신경 쓰이게 하는 스타일 절대 아니에요'라며 단호함 선언." },
-            { word: "오빠, 내 친구가 그러는데~", pos: "인용형 인트로", risk: "🟡 주의", category: "일상/갈등", direct: "타인의 발언 전달.", contextual: "내 친구의 입을 빌려 말하지만 사실 이건 '내 생각'이다. 내 말로 듣고 반응해라.", example: "여: '내 친구가 주말 데이트 때 남친이 늦으면 손절하래' ➔ 남: '네 친구 좀 이상하다' (결과: '내 친구 욕하냐?' 대폭발)", solution: "친구의 인격을 비난하지 말고 '아 진짜? 자기도 내가 늦으면 속상하겠네, 절대 안 늦을게!'로 받아치기." },
-            { word: "우리 나중에 어디 가볼까?", pos: "미래 지향적 질문", risk: "🟢 안전", category: "연애초기/데이트", direct: "향후 방문 장소 제안.", contextual: "너랑 오랫동안 계속 만나고 싶다. 미래 계획에 적극적으로 호응해라.", example: "여: '우리 나중에 제주도 가볼까?' ➔ 남: '제주도 비행기 값 비싼데...' (결과: T 남성의 현실성 대참사)", solution: "'대박! 너무 좋다, 언제 갈까? 내가 가고 싶은 숙소 찾아볼게!'라며 열정 표현." },
-            { word: "너는 왜 항상 그래?", pos: "일반화 규탄문", risk: "💣 지뢰", category: "갈등/싸움", direct: "상대 행동의 상습성 비판.", contextual: "이전부터 쌓였던 서운함이 터졌다. 억울하다고 단어 '항상'에 집착하지 말고 사과해라.", example: "여: '너는 왜 항상 늦어?' ➔ 남: '내가 언제 항상 늦었어? 저번엔 일찍 왔잖아!' (결과: 말꼬리 잡기로 대형전투)", solution: "'항상'이라는 단어에 꼬투리 잡지 말고 '미안해, 최근에 내가 자주 늦어서 자기를 기분 상하게 했네'라며 사과." },
-            { word: "내가 말을 말아야지", pos: "체념 선언문", risk: "💣 지뢰", category: "갈등/싸움", direct: "발언 시도 자체를 중단하겠다.", contextual: "너랑 대화하는 게 너무 답답해서 가슴이 터질 것 같다. 내가 왜 답답한지 깨달아라.", example: "여: '에휴, 내가 말을 말아야지.' ➔ 남: '어 그래 말하지 마 편하네' (결과: 이별 수순)", solution: "'내가 자기를 너무 답답하게 만들었지 미안해, 화내지 말고 천천히 들어줄 테니까 말해줘'라며 잡기." },
-            { word: "아 그래? 네 생각이 그렇다면 뭐...", pos: "수동적 공격문", risk: "🔴 경보", category: "갈등/싸움", direct: "상대의 의견을 받아들임.", contextual: "네 의견에 동의해서 인정하는 게 아니라, 네 고집과 이기심에 기가 차서 포기하는 거다.", example: "남: '내 말이 맞잖아!' ➔ 여: '아 그래? 네 생각이 그렇다면 뭐...' (결과: 며칠간 카톡 단답형 냉전)", solution: "승리했다고 좋아하지 말고 '아냐, 자기 기분이 안 좋아 보이는데 다시 이야기해 보자'라며 달래기." },
-            { word: "나 오늘 집에 아무도 없어", pos: "초대형 신호", risk: "🟢 안전 (기회)", category: "연애/스킨십", direct: "주거 공간 내 타인 부재 알림.", contextual: "우리 둘만의 사적인 시간을 보내자. 분위기 잡고 집으로 와라.", example: "여: '나 오늘 집에 아무도 없는데...' ➔ 남: '오 집 넓고 편하겠다 부럽!' (결과: 눈치 바보 인증)", solution: "'진짜? 그럼 오늘 맛있는 거 사들고 자기 집으로 놀러 갈까?'라며 은근하게 받아치기." },
-            { word: "오늘따라 화장이 잘 됐네", pos: "자기 만족 감탄문", risk: "🟢 안전", category: "데이트/일상", direct: "메이크업 상태 만족 표출.", contextual: "오늘 내 얼굴 상태가 정상이니 사진을 찍어주거나 '화장 안 해도 예쁜데 더 예쁘다' 해라.", example: "여: '오늘 화장 진짜 잘 됐다!' ➔ 남: '어 화장 짙어 보여' (결과: 감성 파괴)", solution: "'원래도 예쁜데 오늘 진짜 인형 같다! 기념으로 사진 찍어줄게 서봐!'라며 호들갑." },
-            { word: "나 원래 맛집 찾아다니는 스타일 아니야", pos: "특별함 어필문", risk: "🟢 안전", category: "데이트/일상", direct: "식도락 기행 성향 부재 고백.", contextual: "너랑 같이 보내는 시간이 너무 좋아서 평소 안 하던 짓도 기분 좋게 하고 있다.", example: "여: '나 원래 맛집 웨이팅하고 이런 거 안 하는데~' ➔ 남: '아 그래? 다음엔 그냥 아무 데나 가자' (결과: 눈치 제로)", solution: "'나랑 와줘서 너무 고마워! 자기가 고생한 만큼 내가 오늘 진짜 재밌게 해줄게'라며 고마움 표출." },
-            { word: "너는 나 안 보고 싶어?", pos: "애정 서운함 표출", risk: "🟡 주의", category: "카톡/연락", direct: "상대의 그리움 유무 확인.", contextual: "나만 너를 보고 싶어 하고 안달 나는 것 같아 자존심 상하고 서운하니 애정 표현을 쏟아라.", example: "여: '너는 나 안 보고 싶어?' ➔ 남: '어제 봤잖아 똑같지 뭐' (결과: 서운함 폭발)", solution: "'무슨 소리야, 내가 훨씬 더 보고 싶어서 안달 났는데 표현이 부족했네 미안해!'라며 애정 쏟아붓기." },
-            { word: "너한테 난 뭐야?", pos: "정체성 의문문", risk: "💣 지뢰", category: "갈등/위기", direct: "상대 삶에서의 존재 가치 질문.", contextual: "네 소홀함이 극에 달했다. 내가 너한테 얼마나 소중한 존재인지 진심을 다해 증명해라.", example: "여: '너한테 난 도대체 뭐야?' ➔ 남: '네가 내 여자친구지 뭐야?' (결과: 영혼 없는 대답에 이별 통보)", solution: "'내 삶에서 가장 중요하고 소중한 사람이지... 내가 요즘 소홀해서 자기를 불안하게 했어 미안해'라며 진심 어린 포옹." },
-            { word: "내 친구 남친은 안 그러던데", pos: "타인 비교문", risk: "💣 지뢰", category: "갈등/비교", direct: "타인 연인의 행동 특성 인용.", contextual: "네 서운한 행동을 고쳐라. 남들과 비교해서 자존심 긁으려는 게 아니니 행동을 바꿔라.", example: "여: '내 친구 남친은 기념일 다 챙기던데...' ➔ 남: '그럼 걔랑 사귀든가!' (결과: 파국)", solution: "자존심 세우지 말고 '내가 자기를 친구 남친보다 더 행복하게 해줬어야 했는데 부족했네, 이번 기념일 기대해!'라며 리드." },
-            { word: "우리 친구끼리 이러면 안 되지", pos: "선 긋기 문장", risk: "🟡 주의", category: "썸/스킨십", direct: "친구 관계에서의 행동 경계선 설정.", contextual: "나랑 썸만 타고 스킨십만 하지 말고, 확신을 갖고 정식으로 고백해라.", example: "여: '우리 친구끼리 손잡고 이러면 안 되지~' ➔ 남: '아 그래? 미안 손 뺄게' (결과: 찌질남 낙인)", solution: "'친구 아니라 너랑 연인하고 싶어서 그래. 나랑 정식으로 만나줄래?'라며 직진 고백." },
-            { word: "나 오늘 좀 우울해서 쇼핑했어", pos: "지출 보고문", risk: "🟢 안전", category: "일상/쇼핑", direct: "구매 행위를 통한 스트레스 해소 알림.", contextual: "돈 낭비했다고 잔소리하지 말고, 내 우울했던 기번에 공감하고 토닥여줘라.", example: "여: '나 오늘 우울해서 옷 몇 개 샀어' ➔ 남: '또 샀어? 돈 좀 아껴 써라' (결과: 잔소리꾼으로 찍힘)", solution: "'아이구 무슨 일 있었어? 스트레스 많이 받았나 보네, 기분은 좀 풀렸어?'라며 감정부터 챙기기." },
-            { word: "나 나중에 결혼하면~", pos: "미래 밑밥 질문", risk: "🟡 주의", category: "연애 중반/결혼", direct: "가정 형성에 대한 가상 시나리오 언급.", contextual: "너랑 결혼까지 생각하고 있다. 너는 나와의 미래를 어디까지 구상하고 있는지 밝혀라.", example: "여: '나 나중에 결혼하면 요리 배워볼까 봐' ➔ 남: '누구랑 결혼하게?' (결과: 로맨스 파괴)", solution: "'나랑 결혼하면 내가 요리 다 해줄 테니까 자기는 맛있게 먹기만 해!'라며 심쿵 멘트." },
-            { word: "나 이번 달에 생리 전이라 그래", pos: "호르몬 상태 알림", risk: "🟢 안전 ~ 🟡 주의", category: "건강/감정기복", direct: "생리전증후군(PMS) 상태 고백.", contextual: "내 감정 기복과 서운함이 내 의지와 상관없이 증폭되고 있으니 평소보다 3배 더 배려하고 달콤하게 대해라.", example: "여: '나 생리 전이라 좀 예민한가 봐' ➔ 남: '아 어쩐지 유난스럽다 했음' (결과: 대형 전투 발발)", solution: "'아 그랬구나, 몸도 마비되고 힘들 텐데 내가 눈치 없이 굴어서 미안해. 배 따뜻하게 하고 맛있는 거 사갈게!'라며 케어." },
-            { word: "오빠, 나 믿지?", pos: "신뢰 요구 문장", risk: "🟡 주의", category: "일상/선택", direct: "상대방의 신뢰도 확인.", contextual: "내가 약간 무모하거나 이해 안 되는 결정을 하더라도 태클 걸지 말고 무조건 내 편을 들어라.", example: "여: '오빠 나 믿지?' ➔ 남: '상황을 봐서 믿지~' (결과: 섭섭함 폭발)", solution: "'당연히 믿지! 자기가 하는 결정인데 무조건 응원해!'라며 무한 신뢰 제공." },
-            { word: "나 오늘 일찍 잘게", pos: "조기 취침 선언", risk: "🔴 경보", category: "카톡/싸움", direct: "수면 활동 조기 시작.", contextual: "너랑 더 이상 톡 해봤자 기분만 망치니까 대화 끊는다. (실제 수면 확률 5% 이하)", example: "여: '나 오늘 피곤해서 일찍 잘게' ➔ 남: '응 잘 자!' ➔ 남성은 게임 접속 (결과: 인스타에 '지친다' 스토리 올라옴)", solution: "'내가 서운하게 해서 피곤한 거지... 미안해, 내일은 꼭 기분 풀게 해줄게 푹 쉬어'라며 달래주기." },
-            { word: "진짜 웃긴다 너 ㅋ", pos: "비꼬는 실소", risk: "💣 지뢰", category: "갈등/싸움", direct: "상대 행동의 우스꽝스러움 지적.", contextual: "하나도 안 웃기고 황당해서 기가 차다. 너 지금 변명이라고 늘어놓냐?", example: "남: '진짜 차 막혀서 늦은 거라니까?' ➔ 여: '진짜 웃긴다 너 ㅋ' (결과: 싸움 극대화)", solution: "웃어넘기지 말고 정색을 풀며 '미안해 내가 말이 안 되는 거 아는데, 기분 상하게 해서 정말 미안해'라며 진심 사과." },
-            { word: "그냥 다 내 잘못이지 뭐", pos: "자조적 체념문", risk: "💣 지뢰", category: "갈등/싸움", direct: "자신에게 모든 과실 귀속.", contextual: "네가 끝까지 네 잘못을 인정 안 하고 나를 죄인 취급하니까 내가 기가 차서 거꾸로 비꼬는 거다.", example: "여: '됐어, 그냥 다 내 잘못이지 뭐~' ➔ 남: '알면 다음부터 그러지 마' (결과: 파국 및 이별 수순)", solution: "'자기가 왜 잘못이야, 100% 내 잘못이고 내가 눈치 없었어'라며 사과." },
-            { word: "T야?", pos: "성향 판단 질문", risk: "🟡 주의", category: "MBTI/공감", direct: "MBTI 진단 결과 중 사고형(Thinking) 여부 질문.", contextual: "너 지금 내 기분에 공감 안 해주고 팩트/해결책만 따지는데 눈치 진짜 없다.", example: "여: '나 사고 나서 너무 무서웠어' ➔ 남: '보험 접수했어?' ➔ 여: '너 T야?' (결과: 서운함 폭발)", solution: "해결책을 지우고 '아이구 진짜 놀랐겠다! 다친 데는 없어?'라며 F 감성으로 100% 공감부터 하기." },
-            { word: "나 오늘 인스타 스토리 안 올려?", pos: "SNS 암시문", risk: "🟢 안전 ~ 🟡 주의", category: "SNS/인스타", direct: "소셜 미디어 게시물 미업로드 확인.", contextual: "오늘 너랑 한 데이트나 내 착장이 마음에 드니까 인스타 태그해서 럽스타그램 자랑해라.", example: "여: '오빠 오늘 스토리 안 올려?' ➔ 남: '귀찮게 뭘 올려~' (결과: '나랑 있는 게 창피하냐?' 시비 발발)", solution: "즉시 같이 찍은 사진이나 음식 사진을 스토리로 올리고 계정을 태그해 주기." },
-            { word: "이 영상 너 같지 않아? (릴스/숏폼 공유)", pos: "비유형 링크 공유", risk: "🟡 주의", category: "SNS/유튜브", direct: "영상 속 인물과 상대방의 유사성 제시.", contextual: "영상 속 답답한 남주처럼 너도 평소에 이러니까 보고 반성하고 고쳐라.", example: "여: '(서운하게 하는 남친 릴스 공유) 이거 완전 너 같지 않아?' ➔ 남: '하나도 안 비슷한데?' (결과: 대화 차단)", solution: "'헉 내가 진짜 이러고 있었어? 미안해 앞으론 조심할게!'라며 깔끔하게 수긍." },
-            { word: "요즘 유튜브 알고리즘에 떠서 봤는데~", pos: "밑밥 깔기 인트로", risk: "🟢 안전", category: "유튜브/일상", direct: "추천 알고리즘을 통한 영상 시청 고백.", contextual: "알고리즘 핑계를 대지만 사실 요즘 핫한 연애 팁/맛집/여행지 정보를 얻었으니 같이 가자.", example: "여: '알고리즘에 떠서 봤는데 이 팝업스토어 재밌겠다!' ➔ 남: '사람 많아서 피곤함' (결과: 흥 깨짐)", solution: "'오 신기하다! 재밌어 보이는데 이번 주말에 나랑 도장 깨기 하러 갈까?'라며 데이트 제안." },
-            { word: "나 디엠(DM)으로 문의받음", pos: "은근한 자랑", risk: "🟢 안전", category: "SNS/인스타", direct: "인스타그램 다이렉트 메시지 수신 보고.", contextual: "오늘 내 착장이나 사진 구도가 인플루언서급으로 완벽했음을 알아채고 칭찬해라.", example: "여: '나 오늘 입은 옷 어디 거냐고 DM 3개나 왔어!' ➔ 남: '어 그래?' (결과: 리액션 부족 서운함)", solution: "'대박! 자기가 오늘 유독 모델 같긴 했어, 역시 내 여자친구 스타일 대박이다'라며 오버 칭찬." },
-            { word: "너 원래 좋아요 잘 안 누르지?", pos: "SNS 반응 추궁", risk: "🟡 주의", category: "SNS/인스타", direct: "게시물 좋아요 버튼 클릭 빈도 질문.", contextual: "딴 사람 인스타엔 좋아요 잘 누르면서 내 피드나 스토리엔 왜 칼같이 반응 안 해주냐?", example: "여: '너 원래 남 게시물에 좋아요 잘 안 눌러?' ➔ 남: '어 나 인스타 눈팅만 함' (결과: '내 거엔 왜 안 누르는데?')", solution: "'내 피드엔 자기가 늘 1등이야! 올라오자마자 무조건 하트 찍을게'라며 안심시키기." },
-            { word: "오빠, 나 깻잎 떼어줘도 돼?", pos: "깻잎 논쟁 테스트", risk: "💣 지뢰", category: "SNS/논쟁", direct: "타인 깻잎 분리 보조 행위 허용 여부 질문.", contextual: "인터넷 밈을 통한 질투 심리 테스트다. 절대 타 이성에게 다정한 스킨십/배려를 하지 않겠다고 해라.", example: "여: '내 친구가 깻잎 못 떼고 있으면 떼어줄 거야?' ➔ 남: '어 뭐 어때 떼어주지' (결과: 유혈사태)", solution: "'절대 안 되지! 깻잎을 떼어주든 젓가락을 잡든 내 다정함은 너한테만 끝이다'라며 단호박 거절." },
-            { word: "나 만약에 벌레로 변하면 어떻게 할 거야?", pos: "IF 가상 테스트", risk: "💣 지뢰", category: "SNS/밈", direct: "곤충 변신 시 대응 시나리오 질문.", contextual: "현실적인 답변 따지지 말고 오글거리더라도 나를 향한 조건 없는 사랑과 낭만을 증명해라.", example: "여: '나 바퀴벌레로 변하면 어떡할 거야?' ➔ 남: '약 뿌려야지 뭔 소리야' (결과: 감성 파괴로 이별각)", solution: "'가장 예쁜 보석 케이지에 넣어서 매일 맛있는 거 주고 평생 키울 건데?'라며 과몰입 감성 답변." },
-            { word: "이거 요즘 숏폼에 되게 자주 나오더라!", pos: "트렌드 공유", risk: "🟢 안전", category: "유튜브/SNS", direct: "유행 숏폼 콘텐츠 언급.", contextual: "나 트렌디한 사람이다! 이 챌린지나 밈을 너도 같이 알고 호응해 줘라.", example: "여: '이거 틱톡에서 완전 유행하는 챌린지잖아!' ➔ 남: '유치하게 그런 걸 왜 봄?' (결과: 꼰대 낙인)", solution: "'아 이거! 나도 봤어 ㅋㅋㅋ 이거 진짜 웃기던데 우리도 다음에 찍어볼까?'라며 트렌드 동조." },
-            { word: "오빠, 요즘 무기력하다며?", pos: "알고리즘 기반 질문", risk: "🟢 안전", category: "일상/공감", direct: "상대의 정신적 피로 상태 질문.", contextual: "유튜브/인스타에서 번아웃 관련 영상을 봐서 네 생각이 났다. 너를 걱정하고 있으니 감동받아라.", example: "여: '요즘 일 피곤하지 않아? 힘들어 보이던데' ➔ 남: '아닌데? 안 피곤한데?' (결과: 머쓱함)", solution: "'자기가 챙겨주니까 피곤함이 싹 달아나네... 내 걱정 해주는 건 역시 자기밖에 없다'라며 고마움 표시." },
-            { word: "스토리에 내 사진 왜 안 올려?", pos: "공개 연애 요구", risk: "🔴 경보", category: "SNS/인스타", direct: "인스타그램 스토리에 얼굴 사진 미게시 추궁.", contextual: "너 혹시 나 몰래 딴 여자한테 솔로인 척 숨기려고 내 사진 안 올리는 거냐?", example: "여: '내 얼굴 나온 거 왜 스토리에 안 올려?' ➔ 남: '나 인스타 잘 안 하잖아' (결과: 의심 지수 상승)", solution: "'자기가 너무 예뻐서 나만 보고 싶어 숨겨둔 건데, 당장 자랑해야겠다!'라며 계정 태그 후 바로 업로드." },
-            { word: "이 유튜버 되게 말 센스 있게 한다", pos: "타인 칭찬/비교", risk: "🟡 주의", category: "유튜브/일상", direct: "특정 크리에이터 화술 찬사.", contextual: "너도 이 사람처럼 센스 있고 스윗하게 대화해라. 뚝뚝 끊기는 T형 대화 그만해라.", example: "여: '이 크리에이터 대화 센스 대박이다~' ➔ 남: '대본 읽는 거잖아' (결과: T 남성의 분위기 파괴)", solution: "'그러게! 유머러스하면서도 되게 다정하네, 나도 배워서 자기 더 기분 좋게 해줘야겠다'라며 스윗 답변." },
-            { word: "나 오늘 인스타 디톡스 하려고", pos: "SNS 중단 선언", risk: "🟢 안전", category: "SNS/일상", direct: "소셜 미디어 사용 일시 중단.", contextual: "SNS 보다가 피곤하거나 우울해졌으니 나한테 더 다정하게 카톡/전화해 주고 현실 데이트에 집중해라.", example: "여: '나 오늘부터 인스타 지우고 디톡스함' ➔ 남: '어 그래 잘 생각함~' (결과: 무심함)", solution: "'잘했어! 눈 피로도 줄이고 좋은 생각만 하자. 오늘은 나랑 전화 길게 할까?'라며 케어." },
-            { word: "너는 왜 댓글 안 달아줘?", pos: "SNS 피드백 추궁", risk: "🟡 주의", category: "SNS/인스타", direct: "게시물 댓글 미작성 질문.", contextual: "남들은 예쁘다고 댓글 달아주는데 남친인 네가 제일 먼저 주접 댓글을 써야 하는 거 아니냐?", example: "여: '내 사진에 왜 댓글 안 달아?' ➔ 남: '카톡으로 예쁘다고 했잖아' (결과: '남들 다 보는데서 써야지!')", solution: "즉시 주접 피처링 댓글('세상에서 제일 예쁜 내 공주님🔥')을 주저 없이 작성하기." },
-            { word: "이 카페 저장해 뒀어!", pos: "장소 공유", risk: "🟢 안전", category: "데이트/SNS", direct: "지도/SNS 앱 내 플레이스 저장 알림.", contextual: "다음 데이트 코스는 여기다. 기억해 뒀다가 네가 먼저 리드해서 데려가라.", example: "여: '나 여기 인스타 보고 저장해 뒀잖아!' ➔ 남: '아 그래? 나중에 생각나면 가든가' (결과: 성의 부족)", solution: "'우와 뷰 대박이다! 이번 주말 데이트 코스는 여기로 정하자, 내가 동선 짜볼게'라며 적극 리드." },
-            { word: "너 릴스 너무 많이 보는 거 아니야?", pos: "주의 집중 요구", risk: "🟡 주의", category: "SNS/데이트", direct: "숏폼 시청 시간 과다 지적.", contextual: "나랑 같이 있으면서 폰만 보고 있으니까 서운하다. 폰 치우고 나한테 집중해라.", example: "여: '너 릴스 좀 그만 봐~' ➔ 남: '이것만 보고!' (결과: 데이트 분위기 냉각)", solution: "즉시 폰을 주머니에 넣고 '미안! 자기가 앞에 있는데 내가 딴짓했네, 자기 얼굴 보는 게 더 재밌어'라며 손잡기." },
-            { word: "나 카톡 프로필 사진 바꿨는데 어때?", pos: "프로필 점검 질문", risk: "🟢 안전", category: "카톡/일상", direct: "메신저 프사 변경 파악 유무 질문.", contextual: "내 프사 바뀐 거 빛의 속도로 캐치해서 칭찬해라. 나한테 늘 관심 가져라.", example: "여: '나 프사 바꿨는데 어때?' ➔ 남: '어 아까 바꾼 거 봄 그냥 그래' (결과: 반응 부족)", solution: "'안 그래도 아까 바꾸자마자 캡처해 뒀지! 이번 프사 진짜 분위기 미쳤어'라며 정성 표출." },
-            { word: "요즘 인스타에 예쁜 단발 진짜 많더라", pos: "스타일 변경 밑밥", risk: "🟢 안전 ~ 🟡 주의", category: "일상/스타일", direct: "특정 헤어스타일 탐색 알림.", contextual: "나 머리 자를까 고민 중인데, 네 의견을 묻는 거다. 단발이든 긴머리든 다 예쁠 거라고 해라.", example: "여: '나 단발로 잘라볼까?' ➔ 남: '너 단발 안 어울릴 듯' (결과: 대참사)", solution: "'자기는 이목구비가 예뻐서 단발 하면 완전 도도해 보이고 예쁠 것 같은데? 하고 싶은 거 다 해봐!'라며 응원." },
-            { word: "오빠, 나 방금 유튜브에서 타로 봤는데~", pos: "운세/심리 인트로", risk: "🟢 안전", category: "유튜브/일상", direct: "온라인 타로/점술 시청 결과 전달.", contextual: "우리 관계에 대한 긍정적인 운세가 나왔으니 너도 신기해하고 우리 관계에 확신을 가져라.", example: "여: '타로 봤는데 우리 궁합 대박이래!' ➔ 남: '그런 미신을 왜 믿냐?' (결과: 감성 파괴)", solution: "'진짜? 역시 타로도 인정하는 천생연분이네! 기분 너무 좋다'라며 기쁘게 수긍." },
-            { word: "나랑 릴스 챌린지 하나만 찍자!", pos: "협동 촬영 요청", risk: "🟢 안전", category: "SNS/데이트", direct: "숏폼 댄스/커플 챌린지 동참 요구.", contextual: "부끄러워하지 말고 오글거림을 무릅쓴 채 나랑 재밌게 릴스 찍어서 추억을 남기자.", example: "여: '이 릴스 챌린지 딱 1번만 찍자!' ➔ 남: '아 오글거리게 그런 걸 왜 해 싫어' (결과: 삐짐)", solution: "'나 몸치인데 자기가 하자면 해야지! 몇 번 연습하고 올릴까?'라며 적극 동참." },
-            { word: "나 프로필 사진 다 내렸어", pos: "SNS 상태 변경 선언", risk: "💣 지뢰", category: "SNS/싸움", direct: "메신저/SNS 프로필 사진 제거 완료.", contextual: "너랑 대판 싸워서 빡쳤거나 내 심경에 대형 폭풍이 불했으니 당장 사과하고 달래라.", example: "여: '나 프사 다 내렸어' ➔ 남: '어 그래 기분 전환하게 냅둬' (결과: 즉시 블록 및 차단)", solution: "'내가 마음 아프게 해서 미안해, 프사 다시 올릴 수 있게 내가 노력할게'라며 바로 전화." },
-            { word: "오늘따라 퇴근길이 너무 길게 느껴진다", pos: "감성 감탄문", risk: "🟢 안전", category: "일상/퇴근", direct: "귀가 동선 체감 시간 지연 표출.", contextual: "오늘 직장에서 기 빨리고 힘들었으니 따뜻한 공감과 함께 맛있는 거 먹으러 가자고 해라.", example: "여: '오늘 퇴근길 왜 이리 멀지...' ➔ 남: '지하철 지연됐어?' (결과: T형 대답으로 서운함)", solution: "'오늘 회사에서 고생 많았지? 맛있는 거 사들고 집 앞으로 갈 테니까 맛있는 거 먹자!'라며 다독이기." },
-            { word: "나 저녁 안 먹을래 (삐쳤을 때)", pos: "식사 거부 선언", risk: "🔴 경보", category: "갈등/식사", direct: "석식 섭취 의사 부재.", contextual: "입맛이 없는 게 아니라 네 행동 때문에 기분 상해서 밥도 안 넘어간다는 시위다.", example: "여: '나 저녁 안 먹을래' ➔ 남: '오케이 나 혼자 먹을게~' (결과: 냉전 수개월)", solution: "'기분 안 좋다고 밥 안 먹으면 내 마음이 아파, 자기가 좋아하는 거 사왔으니까 한 입만 먹자'라며 달래기." },
-            { word: "오빠는 친구들이랑 있을 때가 제일 행복해 보여", pos: "비교형 섭섭함 표출", risk: "🔴 경보", category: "갈등/우선순위", direct: "동성 친구 동석 시의 표정 관찰 보고.", contextual: "나랑 있을 때보다 친구들이랑 놀 때 더 신나 보이는데, 내 존재감이 뒷전인 것 같아 서운하다.", example: "여: '오빠는 친구들이랑 놀 때가 젤 재밌어 보여' ➔ 남: '어 친구들이 웃기긴 하지' (결과: 파국)", solution: "'무슨 소리야, 친구들은 10명 모여도 자기 혼자 있을 때 주는 행복의 1%도 못 따라와'라며 오글 멘트." },
-            { word: "나 원래 이런 걸로 안 서운해하는데...", pos: "서운함 유의문", risk: "🟡 주의", category: "갈등/소통", direct: "본인의 서운함 발생 기준 설명.", contextual: "내가 째째하게 삐치는 사람이 아닌데 너의 행동은 선을 넘을 정도로 서운했다.", example: "여: '나 원래 이런 거 신경 안 쓰는데...' ➔ 남: '근데 왜 그래?' (결과: '내가 째째하다는 거냐?')", solution: "'자기가 그렇게 느꼈다면 내가 정말 무심했던 거야. 미안해 다음부턴 신경 쓸게'라며 수긍." },
-            { word: "오늘 날씨 되게 좋다! (주말 전)", pos: "데이트 유도문", risk: "🟢 안전", category: "일상/데이트", direct: "기상 상태 찬사.", contextual: "주말에 집에 콕 박혀있지 말고 바깥으로 나가서 감성 카페나 나들이 데이트를 가자.", example: "여: '오늘 날씨 진짜 대박이다~' ➔ 남: '그러게 더워서 에어컨 틀었음' (결과: 감성 파괴)", solution: "'그러게! 이번 주말에 날씨 좋다는데 드라이브 겸 예쁜 야외 카페 다녀올까?'라며 즉시 제안." },
-            { word: "나 요즘 몸이 계속 찌푸둥하네", pos: "건강 상태 보고", risk: "🟢 안전", category: "일상/케어", direct: "신체적 피로감 호소.", contextual: "나한테 관심을 갖고 마사지를 해주거나 따뜻한 케어(비타민, 맛있는 영양식)를 제공해라.", example: "여: '몸이 왜 이렇게 찌푸둥하지...' ➔ 남: '스트레칭 좀 해' (결과: 건조한 대답에 시무룩)", solution: "'고생해서 그래... 내가 오늘 어깨 주물러 줄게, 마사지 받으러 가거나 푹 쉬자'라며 케어." },
-            { word: "그 여사친은 참 성격도 좋아 보이네~", pos: "돌려 까기 비꼬기", risk: "💣 지뢰", category: "갈등/질투", direct: "이성 친구의 성격적 장점 칭찬.", contextual: "네 여사친 칭찬하지 마라. 난 그 여사친이 거슬리고 너의 이성 관계 태도가 마음에 안 든다.", example: "여: '그 여사친 성격 되게 털털하고 좋네' ➔ 남: '어 걔 진짜 성격 짱임!' (결과: 눈치 제로 처형)", solution: "'글쎄, 난 관심 없어서 잘 모르겠고 내 눈엔 자기 성격이 세상에서 제일 예쁘고 좋아'라며 회피." },
-            { word: "나 오늘 칼퇴할 수 있을까?", pos: "업무 스트레스 토로", risk: "🟢 안전", category: "일상/직장", direct: "정시 퇴근 가능 여부 자문.", contextual: "오늘 회사 일 너무 많고 야근각이라 짜증 나니까 나 퇴근할 때까지 응원해 주고 맛난 거 대기시켜라.", example: "여: '아 오늘 칼퇴 가능하려나...' ➔ 남: '할 일 다 끝내면 칼퇴 하겠지' (결과: T형 남성의 팩트 폭격)", solution: "'상사 눈치 보지 말고 칼퇴 가자! 칼퇴 하면 내가 회사 앞으로 짠 나타날게'라며 사기 진작." },
-            { word: "나 오늘 인스타 스토리 누구누구 봤는지 다 보임", pos: "SNS 감시 알림", risk: "🟡 주의", category: "SNS/인스타", direct: "스토리 조회자 목록 확인 가능성 강조.", contextual: "너 내가 올린 스토리 언제 보나 1초마다 확인하고 있으니까 안 읽고 씹지 마라.", example: "여: '스토리 조회자 목록 다 뜨는 거 알지?' ➔ 남: '어 알아~' (결과: 무감각한 반응)", solution: "'당연지사! 자기가 스토리 올리면 내가 제일 먼저 클릭해서 1등으로 볼 건데?'라며 관심 표출." },
-            { word: "너 요즘 나한테 좀 편해졌나 봐?", pos: "관계 경고문", risk: "🔴 경보", category: "갈등/연애중반", direct: "상대방의 친밀도 증가 관찰.", contextual: "편해진 건 좋은데 나를 잡은 물고기 취급하면서 성의 없이 대하는 게 느껴지니까 긴장해라.", example: "여: '너 요즘 나한테 되게 편해졌다?' ➔ 남: '응 너랑 있으면 편해서 좋지!' (결과: 서운함 폭발)", solution: "'편해서 좋은 거지만, 그렇다고 서운하게 하거나 성의 없이 굴 생각 전혀 없어! 내 마음은 늘 연애 초기야'라며 수습." },
-            { word: "그 옷 오빠 스타일이야?", pos: "취향 점검 질문", risk: "🟡 주의", category: "쇼핑/패션", direct: "특정 의상에 대한 선호도 질문.", contextual: "내 스타일인데 너도 마음에 드는지 확인하거나, 네 칭찬을 기대하고 물어보는 거다.", example: "여: '이 옷 오빠 스타일이야?' ➔ 남: '아니 별로 내 스타일 아닌데' (결과: 쇼핑 분위기 냉각)", solution: "'자기가 입으면 뭔들 오빠 스타일이지! 입어봐, 완전 잘 어울릴 듯!'라며 칭찬 유도." },
-            { word: "오빠, 요즘 로또 사고 싶지 않아?", pos: "미래 밑밥 질문", risk: "🟢 안전", category: "일상/유머", direct: "복권 구매 의사 질문.", contextual: "너랑 맛있는 거 먹고 행복하게 살고 싶다는 가벼운 로맨틱 유머니 기분 좋게 받아쳐라.", example: "여: '오빠 요즘 로또 사고 싶지 않아?' ➔ 남: '어차피 당첨 안 됨 사지 마' (결과: 감성 파괴)", solution: "'로또 당첨되면 자기한테 반 떼주고 당장 건물 사서 놀러 다녀야지!'라며 유쾌하게 응수." },
-            { word: "나 머리 많이 길렀지?", pos: "외모 점검 질문", risk: "🟢 안전", category: "일상/스타일", direct: "모발 기장 변화 확인.", contextual: "긴 머리 스타일 칭찬해 주거나, 자를지 말지 고민 중이니 스윗하게 반응해 줘라.", example: "여: '나 머리 많이 길렀지?' ➔ 남: '어 잘라라 좀' (결과: 감성 파괴 대참사)", solution: "'그러네! 머릿결도 너무 좋고 길수록 더 여신 같다. 자르지 마, 지금 너무 예뻐!'라며 호들갑." },
-            { word: "나중에 시간 되면 가보자~", pos: "완곡형 가이드라인", risk: "🟡 주의", category: "데이트/일상", direct: "여유 시 방문 제안.", contextual: "'시간 되면'이 아니라 당장 이번 주말이나 조만간 구체적인 날짜 잡아서 데려가라.", example: "여: '여기 나중에 시간 되면 가보자~' ➔ 남: '어 나중에 시간 날 때 가든가' (결과: 잊혀진 약속에 서운함)", solution: "'나중이 어디 있어! 당장 이번 주 토요일에 예약해서 갈까?'라며 구체적 날짜 타격." },
-            { word: "너는 나랑 있을 때 핸드폰이 더 재밌어?", pos: "주의 집중 질문", risk: "🔴 경보", category: "갈등/데이트", direct: "동석 중 스마트폰 사용 몰입도 비교.", contextual: "당장 폰 끄고 내 눈 맞춰라. 나랑 있는 시간이 성의 없게 느껴져서 화나기 직전이다.", example: "여: '너 나랑 있을 때 폰이 더 재밌어?' ➔ 남: '어 잠시만 이것만 보고!' (결과: 폰 뺏기고 냉전)", solution: "즉시 폰을 주머니에 넣거나 뒤집어놓고 '미안해! 자기 얼굴 보는 게 세상에서 제일 재밌지'라며 손잡기." },
-            { word: "나 오늘부터 다이어트 1일 차야!", pos: "목표 선언문", risk: "🟡 주의", category: "일상/다이어트", direct: "체중 감량 개시 선언.", contextual: "살 안 빼도 예쁘다고 극구 말리거나, 다이어트할 때 맛있는 저칼로리 음식으로 스윗하게 챙겨라.", example: "여: '나 오늘부터 다이어트한다!' ➔ 남: '응 이번엔 며칠 가나 보자' (결과: 의지 상실 및 분노)", solution: "'뺄 살이 어디 있다고 그래~ 그래도 자기가 한다니까 응원할게! 맛있는 샐러드 맛집 찾아갈까?'라며 응원." },
-            { word: "나 오늘 일하다가 울 뻔했잖아", pos: "감정 토로문", risk: "🟢 안전", category: "일상/직장", direct: "업무 중 눈물 고임 경험 전달.", contextual: "회사에서 억울하거나 힘든 일이 있었으니 원인 따지지 말고 내 편이 되어 상대방을 같이 씹어라.", example: "여: '나 오늘 일하다 울 뻔했어...' ➔ 남: '무슨 일인데? 네가 실수했어?' (결과: T형 남성의 대참사)", solution: "'미쳤나 봐, 누가 우리 자기 마음 아프게 했어?! 어떤 놈이야, 내가 가서 혼내줄까?'라며 100% 편들기." },
-            { word: "오빠, 나 쌩얼인데 사진 찍지 마~", pos: "촬영 거부(?) 표명", risk: "🟢 안전", category: "데이트/SNS", direct: "민낯 상태에서의 촬상 거부.", contextual: "진짜 찍지 말라는 게 아니라, 안 꾸며도 예쁘다는 칭찬과 함께 예쁜 필터로 찍어달라.", example: "여: '나 쌩얼인데 찍지 마~' ➔ 남: '어 그래 안 찍음' (결과: 서운함)", solution: "'무슨 소리야, 쌩얼이 제일 청순하고 예쁜데! 기분이다, 예쁜 인스타 필터로 찍어줄게!'라며 기분 맞추기." },
-            { word: "그냥 문득 생각나서 카톡 해봤어", pos: "갑작스러운 연락", risk: "🟢 안전", category: "카톡/연락", direct: "우발적 메시지 송신.", contextual: "하루 종일 네 생각이 나서 안달 난 거니까 따뜻하고 달콤하게 사랑을 표현해 줘라.", example: "여: '그냥 문득 생각나서 톡 했어~' ➔ 남: '어 나 지금 바쁜데 차후 톡함' (결과: 차가움)", solution: "'우와 진짜? 나도 방금 자기 생각하고 있었는데 우리 이심전심이다! 너무 보고 싶어'라며 애정 쏟아붓기." },
-            { word: "나 오늘 기분도 적적한데 맥주 한잔할까?", pos: "데이트 제안문", risk: "🟢 안전", category: "일상/유흥", direct: "알코올 음용을 통한 기분 전환 제안.", contextual: "오늘 있었던 서운한 일이나 기분 나쁜 일을 들어주고 내 편이 되어달라는 신호다.", example: "여: '나 오늘 맥주 한잔할까?' ➔ 남: '나 오늘 피곤해서 집에서 쉴래' (결과: 서운함 스택)", solution: "'좋지! 내가 맛있는 안주 사갈 테니까 오늘 무슨 일 있었는지 다 털어놔!'라며 적극 응수." },
-            { word: "오빠는 만약에 로또 당첨되면 뭐부터 할 거야?", pos: "미래 가상 질문", risk: "🟢 안전", category: "일상/유머", direct: "고액 복권 당첨 시 우선 집행 계획 질문.", contextual: "네 당첨금 사용 계획에 '나'와 '우리 커플의 미래'가 포함되어 있는지 확증을 원한다.", example: "여: '로또 되면 뭐 할 거야?' ➔ 남: '당장 회사 관두고 차 바꿔야지!' (결과: '나는 없네?')", solution: "'당연히 너한테 반 딱 주고, 너 사고 싶은 거 다 사주고 같이 해외여행 떠나야지!'라며 정답." },
-            { word: "나 방금 지나간 옷 가게 옷 진짜 예쁘지 않아?", pos: "간보기형 칭찬", risk: "🟢 안전", category: "쇼핑/데이트", direct: "특정 매장 의상 미학 평가.", contextual: "다시 돌아서 그 옷 입어보러 가자고 권유하거나 사달라는 뜻이다.", example: "여: '방금 그 옷 예쁘다!' ➔ 남: '어 예쁘네' 하고 계속 직진 (결과: 시무룩)", solution: "'어 그래? 다시 들어가서 입어볼까? 완전 잘 어울릴 것 같은데!'라며 손잡고 들어가기." },
-            { word: "나 오늘 화장 거의 안 했는데...", pos: "외모 밑밥문", risk: "🟢 안전", category: "데이트/외모", direct: "메이크업 완성도 미흡 전달.", contextual: "화장 안 한 민낯도 너무 청순하고 예쁘다는 극찬을 쏟아내라.", example: "여: '나 오늘 화장 거의 못 했어' ➔ 남: '어쩐지 좀 수척해 보이더라' (결과: 대참사)", solution: "'무슨 소리야, 안 꾸민 게 더 청순하고 예쁜데? 쌩얼이 완전 아기 같다'라며 영혼의 칭찬." },
-            { word: "너 원래 카톡 할 때 이모티콘 안 써?", pos: "카톡 온도 추궁", risk: "🟡 주의", category: "카톡/연락", direct: "메시지 내 이모티콘 사용 빈도 질문.", contextual: "네 텍스트만 보니까 성의 없고 딱딱하게 느껴지니 하트나 다정한 이모티콘 좀 팍팍 써라.", example: "여: '너 원래 이모티콘 안 써?' ➔ 남: '어 나 귀찮아서 잘 안 씀' (결과: 냉전 가동)", solution: "'아 차가워 보였구나 미안해! 앞으로 자기한테는 하트 이모티콘 남발할게 ❤️'라며 애교 복구." },
-            { word: "나 오늘 회사에서 진짜 어이없는 일 있었잖아", pos: "공감 요구 인트로", risk: "🟢 안전", category: "일상/직장", direct: "부당한 사건 경과 보고 시작.", contextual: "상황 설명하는 동안 절대 팩트 판단하지 말고 내 편만 들어서 같이 화내줘라.", example: "여: '오늘 회사에서 진짜 어이없었어' ➔ 남: '상사 입장에서는 그럴 수도 있지' (결과: '누구 편이야?')", solution: "'뭐? 어떤 몰상식한 놈이 우리 자기 기분을 망쳤어?! 내 오디오 채워줄 테니까 다 말해봐!'라며 100% 동조." },
-            { word: "너 나한테 할 말 없어?", pos: "자백 유도문", risk: "💣 지뢰", category: "갈등/청문회", direct: "진술할 사안의 존재 확인.", contextual: "네가 실수하거나 숨긴 거 이미 알고 있으니까 더 커지기 전에 알아서 자백해라.", example: "여: '너 나한테 할 말 없어?' ➔ 남: '어? 없는데 왜?' (결과: 증거 사진 투척되며 대폭발)", solution: "최근 며칠간의 잘못(늦은 연락, 여사친 언급, 기념일 깜빡 등)을 빠르게 복기하고 먼저 자수하기." },
-            { word: "오늘따라 지하철에 사람이 왜 이렇게 많지?", pos: "퇴근길 투정문", risk: "🟢 안전", category: "일상/퇴근", direct: "대중교통 혼잡도 고백.", contextual: "지옥철 타느라 고생하는 나를 달래주고 맛있는 거 사주거나 안아달라.", example: "여: '오늘 지하철 진짜 사람 터진다 ㅠㅠ' ➔ 남: '퇴근 시간이 다 그렇지 뭐' (결과: T형 남성의 찬물)", solution: "'아이구 힘들겠다... 사람 치여서 고생 많네, 도착하면 맛있는 거 먹고 내가 푹 쉬게 해줄게!'라며 케어." },
-            { word: "그 여배우 되게 매력 있게 생겼다~", pos: "미끼 던지기 문장", risk: "💣 지뢰", category: "데이트/TV", direct: "특정 여성 연예인 미모 찬사.", contextual: "그 연예인 예쁘다고 동조하지 말고 '내 눈엔 자기가 더 예뻐'라는 답을 내놓아라.", example: "여: '저 여배우 진짜 매력적이다!' ➔ 남: '어 맞아 몸매도 되게 좋더라' (결과: 눈치 제로 처형)", solution: "'글쎄, 화면이라 예쁘게 나오는 거겠지. 내 눈엔 자기가 훨씬 더 매력 있고 예쁜데?'라며 철벽 방어." },
-            { word: "오빠는 친구들 만나면 내 얘기 해?", pos: "자랑 욕구 확인", risk: "🟢 안전", category: "연애 중반/SNS", direct: "동성 친구들과의 대화 주제 질문.", contextual: "친구들한테 내 자랑 엄청 하고 다닌다고 말해서 내 존재감을 세워달라.", example: "여: '친구들 만나면 내 얘기 해?' ➔ 남: '아니 남자가 친구들 만나서 여친 얘기 왜 함?' (결과: 서운함 폭발)", solution: "'당연하지! 내 여친이 얼마나 예쁘고 다정한지 하도 자랑해서 친구들이 부러워 죽으려고 해!'라며 극찬." },
-            { word: "나 오늘 인스타 스토리 올렸는데 반응이 없네", pos: "관심 요구문", risk: "🟢 안전", category: "SNS/인스타", direct: "게시물 피드백 부족 토로.", contextual: "네가 제일 먼저 칼같이 하트 누르고 제일 달콤한 댓글 달아달라.", example: "여: '스토리 올렸는데 반응이 없네~' ➔ 남: '게시물이 재미없나 보지' (결과: 감성 파괴)", solution: "'대박 내가 바로 가서 1등으로 하트 누르고 댓글 남길게! 제일 예쁜 건 남들이 몰라봐도 내가 알지'라며 즉시 반응." },
-            { word: "나 머리 자를까, 말까?", pos: "무한 루프 질문", risk: "🟡 주의", category: "일상/스타일", direct: "헤어스타일 변경 고민 자문.", contextual: "네 의견이 중요하다기보다 '뭘 해도 예쁘니까 하고 싶은 대로 해'라는 무조건적 칭찬을 원한다.", example: "여: '나 머리 자를까 말까?' ➔ 남: '자르든지 말든지 네 마음대로 해' (결과: '관심 없네')", solution: "'긴 머리는 청순해서 예쁘고 단발은 도도해서 예쁜데, 자기는 얼굴이 다해서 뭘 해도 여신이지!'라며 호들갑." },
-            { word: "너는 나랑 있을 때 제일 즐거운 순간이 언제야?", pos: "추억 확인 질문", risk: "🟢 안전", category: "연애초기/애정", direct: "동석 시 최상의 만족감 시점 질문.", contextual: "우리가 함께한 로맨틱한 추억 하나를 구체적으로 언급해서 감동을 줘라.", example: "여: '언제가 제일 즐거워?' ➔ 남: '맛있는 거 먹을 때?' (결과: '먹으러 만나냐?')", solution: "'저번에 같이 밤바다 보면서 손잡고 걸었을 때, 네가 웃던 모습 보던 그 순간이 제일 행복했어'라며 감성 답변." },
-            { word: "나 오늘 그냥 집에서 쉬고 싶은데...", pos: "에너지 방전 신호", risk: "🟡 주의", category: "데이트/컨디션", direct: "야외 활동 지양 및 집 휴식 희망.", contextual: "진짜 데이트하기 싫은 게 아니라, 밖에서 피곤하게 돌아다니지 말고 실내 데이트나 배달 음식 먹으며 오붓하게 쉬자.", example: "여: '나 오늘 집에서 쉴래...' ➔ 남: '아 그래? 그럼 오늘 데이트 취소!' (결과: 서운함 폭발)", solution: "'오늘 많이 피곤했구나! 그럼 내가 자기가 좋아하는 음식 사들고 집으로 가서 오붓하게 영화나 볼까?'라며 실내 데이트 제안." },
-            { word: "오빠, 요즘 나한테 좀 서운한 거 있어?", pos: "역공형 질문", risk: "💣 지뢰", category: "갈등/소통", direct: "상대의 불만 사항 탐색.", contextual: "서운한 거 절대 말하지 마라. 말하는 순간 '너는 날 이렇게 생각했냐'며 역으로 털릴 것이다.", example: "여: '서운한 거 있으면 말해봐' ➔ 남: '너 답장 좀 늦게 하는 거?' (결과: '내가 바빠서 그렇다는데 그게 서운해?')", solution: "'서운하긴 무슨! 자기가 나한테 얼마나 잘하는데, 늘 고맙고 미안하지'라며 칼같이 방어." },
-            { word: "이거 인스타에서 봤는데 너무 웃기지 않음? ㅋㅋㅋ", pos: "유머 링크 공유", risk: "🟢 안전", category: "SNS/유머", direct: "재미있는 미디어 콘텐츠 공유.", contextual: "재미있게 크게 웃어주고 너와 티키타카 대화를 이어가고 싶다.", example: "여: '이거 진짜 웃김 ㅋㅋㅋ' ➔ 남: '이미 옛날에 본 거임' (결과: 흥 깨짐)", solution: "'ㅋㅋㅋㅋ 아 미쳤다 진짜 웃기네 ㅋㅋㅋ 자기 이런 유머 감각 너무 좋아!'라며 폭풍 리액션." },
-            { word: "나 오늘 밤에 잠이 안 오네...", pos: "심야 감성 메시지", risk: "🟢 안전", category: "카톡/연락", direct: "불면 상태 보고.", contextual: "너 생각하느라 잠이 안 오거나 쓸쓸하니, 달콤한 목소리로 전화해 주거나 다정한 톡을 해달라.", example: "여: '잠이 안 와...' ➔ 남: '폰 보지 말고 눈 감아라' (결과: T형 남성의 감성 파괴)", solution: "'자기 생각하느라 잠 못 드는 거 아니야? 내가 자장가 불러줄까, 전화할까?'라며 스윗하게 응수." },
-            { word: "나 오늘 옷 어때? 이상해?", pos: "불안감 해소 질문", risk: "🟢 안전", category: "데이트/패션", direct: "의상 어울림 상태 확인.", contextual: "자신감이 약간 떨어졌으니 오늘 착장 완벽하다고 최고로 칭찬해 줘라.", example: "여: '나 오늘 옷 좀 이상해?' ➔ 남: '어 약간 색조합이 이상한 듯' (결과: 그날 데이트 분위기 파국)", solution: "'이상하긴 뭐가 이상해! 오늘따라 스타일리시하고 자기한테 딱착붙인데?'라며 극찬." },
-            { word: "너 원래 연애할 때 스타일이 그래?", pos: "연애 성향 질책", risk: "🔴 경보", category: "갈등/연애중반", direct: "상대 연애 방식의 일반성 질문.", contextual: "네 연애방식이 나한테 너무 무심하고 성의 없어서 서운하니까 제발 다정하게 고쳐라.", example: "여: '너 원래 연애 스타일이 그래?' ➔ 남: '어 나 원래 무던한 스타일임' (결과: '나랑 안 맞네' 이별각)", solution: "'아니야, 내가 요즘 무심해서 자기를 서운하게 했네 미안해. 더 다정하게 노력할게!'라며 수습." },
-            { word: "오늘 너무 고생 많았어, 맛있는 거 먹고 푹 쉬어!", pos: "따뜻한 마무리 문장", risk: "🟢 안전", category: "일상/격려", direct: "노고 치하 및 휴식 권유.", contextual: "너를 깊이 챙기고 걱정하고 있으니 고마움을 표하고 사랑을 고백해라.", example: "여: '오늘 고생했어! 푹 쉬어~' ➔ 남: '어 그래~' (결과: 밋밋한 반응)", solution: "'자기 응원 덕분에 피로가 싹 풀린다! 오늘 하루도 너무 고마웠고 많이 사랑해 ❤️'라며 애정 표현." },
-            { word: "너는 왜 내가 말하기 전에 먼저 안 해줘?", pos: "센스 추궁문", risk: "💣 지뢰", category: "갈등/배려", direct: "선제적 행동 미실행 비판.", contextual: "요청해서 받는 케어는 의미가 없다. 내 니즈를 스스로 알아채는 '눈치'를 길러라.", example: "여: '내가 꼭 말해야만 사줘?' ➔ 남: '말을 해야 알지!' (결과: '센스 진짜 없다')", solution: "'내가 센스가 부족해서 먼저 못 챙겼네 미안해! 다음부턴 꼭 자기가 말하기 전에 먼저 할게'라며 수긍." },
-            { word: "나 오늘 주말인데 약속 하나도 없어", pos: "데이트 신청 유도문", risk: "🟢 안전 (기회)", category: "소개팅/썸", direct: "주말 개별 일정 부재 고백.", contextual: "시간 한가하니까 당장 눈치채고 오늘이나 내일 데이트 신청을 해라.", example: "여: '나 이번 주말에 약속 0개임 ㅠㅠ' ➔ 남: '집에서 푹 쉬겠네 부럽다!' (결과: 눈치 바보 인증)", solution: "'진짜요? 그럼 잘됐다! 혹시 시간 괜찮으시면 저랑 맛있는 거 먹으러 갈래요?'라며 즉시 데이트 타격." },
-            { word: "너는 왜 맨날 네 생각만 해?", pos: "이기심 규탄문", risk: "💣 지뢰", category: "갈등/싸움", direct: "상대방의 자기중심적 행동 지적.", contextual: "내 기분이나 스케줄은 안 챙기고 너 편한 대로 행동해서 엄청 서운하니까 변명 말고 사과해라.", example: "여: '너는 왜 맨날 네 생각만 해?' ➔ 남: '내가 언제? 너한테 다 맞췄잖아!' (결과: 논쟁 격화)", solution: "'내가 자기를 배려하지 못하고 이기적으로 굴었네 미안해... 네 기분이 어땠을지 먼저 생각했어야 했는데'라며 사과." },
-            { word: "이 음식 호불호 되게 많이 갈린다던데?", pos: "간보기형 취향 질문", risk: "🟡 주의", category: "식사/데이트", direct: "특정 음식의 호불호 분분성 언급.", contextual: "나는 별로 안 내키거나 먹기 싫은 메뉴인데, 네가 눈치껏 다른 거 먹자고 제안해라.", example: "여: '이 메뉴 호불호 갈린다더라~' ➔ 남: '난 호! 이거 먹자!' (결과: 가고 나서 한 입도 안 먹음)", solution: "'아 그래? 그럼 무난하고 훨씬 맛있는 다른 걸로 갈까?'라며 센스 있게 메뉴 선회." },
-            { word: "나 오늘 기분 전환 좀 해야겠어", pos: "감정 환기 선언", risk: "🟢 안전", category: "일상/공감", direct: "기분 개선 활동 수행 의사 표출.", contextual: "오늘 스트레스 대박 받았으니까 드라이브 데려가거나, 달콤한 디저트/소소한 선물을 사달라.", example: "여: '아 오늘 진짜 기분 전환 필요함' ➔ 남: '어 노래방이라도 다녀와' (결과: 무심함 판정)", solution: "'무슨 일 있었어? 내가 기분 싹 풀리게 예쁜 야외 카페나 맛있는 디저트 사줄게 사와!'라며 힐링 제공." },
-            { word: "오빠, 요즘 나한테 연락이 좀 소홀해진 것 같지 않아?", pos: "경고형 질문", risk: "🔴 경보", category: "카톡/연락", direct: "통신 빈도 감소 관찰 질문.", contextual: "변명 대지 말고 나한테 마음 식은 거 아니라고 애정 표현 폭풍으로 퍼부어라.", example: "여: '요즘 연락 좀 소홀하다?' ➔ 남: '나 일 바쁜 거 알잖아' (결과: '바쁘면 연애 왜 함?')", solution: "'자기가 그렇게 느끼게 해서 정말 미안해! 일 때문에 정신없었어도 자기가 우선인데, 앞으론 연락 더 자주 할게'라며 수습." },
-            { word: "나 오늘 인스타 스토리 프레임 예쁘지?", pos: "SNS 자랑 질의", risk: "🟢 안전", category: "SNS/인스타", direct: "게시물 디자인/구도 미학 평가 요청.", contextual: "오늘 내 감성과 스타일 완벽하니까 '인스타 감성 미쳤다', '너무 예쁘다'며 폭풍 주접을 떨어라.", example: "여: '오늘 스토리 구도 예쁘지?' ➔ 남: '그냥 뭐 평범한데' (결과: 감성 파괴)", solution: "'대박 완전 핀터레스트 감성이다! 자기는 사진 구도를 진짜 잘 잡는 듯'라며 오버 칭찬." },
-            { word: "내가 알아서 결정할 테니까 신경 써도 돼", pos: "단절 선언문 (반어법)", risk: "💣 지뢰", category: "갈등/선택", direct: "자율적 의사 결정 진행 통보.", contextual: "네가 계속 내 의견 무시하고 기분 상하게 하니까 너랑 논의 안 하겠다는 거다. 당장 달래라.", example: "여: '됐다 내가 알아서 결정함 신경 꺼' ➔ 남: '오케이 편하네~' (결과: 파국)", solution: "'내가 자기 의견 안 듣고 고집 피워서 미안해. 자기 생각이 제일 중요하니까 다시 차근차근 얘기하자'라며 잡기." },
-            { word: "너 원래 내가 한 말 잘 잊어버리지?", pos: "기억력 추궁문", risk: "🟡 주의", category: "갈등/소통", direct: "발언 기억 이행률 미흡 지적.", contextual: "지나가는 말로 했던 내 취향이나 약속 기억 못 해서 서운하니까 정성껏 사과하고 기억해라.", example: "여: '너 내가 한 말 또 잊었지?' ➔ 남: '사람이 깜빡할 수도 있지!' (결과: 서운함 스택 폭발)", solution: "'미안해! 내가 꼼꼼히 챙겼어야 했는데 칠칠치 못했네, 메모장에 적어두고 꼭 기억할게'라며 진정성 보이기." },
-            { word: "나 오늘 회사에서 영혼 탈탈 털림 ㅠㅠ", pos: "피로 토로문", risk: "🟢 안전", category: "일상/직장", direct: "정신적 에너지 소모 극심 호소.", contextual: "원인 분석이나 조언하지 말고 '우리 자기 너무 고생했다'라며 따뜻하게 안아주고 편 들어라.", example: "여: '오늘 영혼 탈탈 털렸다...' ➔ 남: '무슨 일인데? 네 직급에선 원래 그래' (결과: T 남성의 대참사)", solution: "'아이구 세상에... 어떤 놈이 우리 자기를 괴롭혔어! 고생 많았어, 오늘 맛있는 거 먹고 푹 쉬자'라며 케어." },
-            { word: "오빠, 내 사진 중에 뭐가 제일 예뻐?", pos: "답정너 테스트", risk: "🟢 안전 ~ 🟡 주의", category: "데이트/외모", direct: "복수 촬영물 중 최상위 평가물 선택 요청.", contextual: "그냥 '다 예뻐서 못 고르겠다'고 하거나, 선택 후 구체적인 이유(웃는 모습, 눈빛 등)를 대라.", example: "여: '어떤 사진이 제일 예뻐?' ➔ 남: '다 비슷한데 아무거나 올려' (결과: 성의 부족에 삐짐)", solution: "'다 여신 같아서 진짜 못 고르겠는데... 굳이 고르면 이 사진 눈웃음이 제일 미쳤다!'라며 구체적 서술." },
-            { word: "우리는 커플링 언제 해?", pos: "확신 요구 질문", risk: "🟡 주의", category: "연애 중반/기념일", direct: "상징적 장신구 제작 시기 질의.", contextual: "너랑 더 깊고 확실한 연인 관계임을 입증하고 싶다. 구체적인 계획이나 적극성을 보여라.", example: "여: '우리는 커플링 안 해?' ➔ 남: '손가락 답답해서 반지 싫어함' (결과: 서운함 스택)", solution: "'당연히 해야지! 가성비 말고 진짜 예쁜 디자인으로 찾아보고 이번 기념일 때 맞추러 가자'라며 리드." },
-            { word: "너는 왜 내가 화났을 때 전화를 안 해?", pos: "서운함 추궁문", risk: "💣 지뢰", category: "카톡/싸움", direct: "갈등 발생 시 음성 통화 미시도 비판.", contextual: "텍스트로는 내 기분이 안 풀리니까 직접 목소리 듣고 달래주는 성의를 보이라는 뜻이다.", example: "여: '왜 전화를 안 해?' ➔ 남: '네가 톡으로 정색하니까 부담스러워서 그렇지' (결과: '성의 진짜 없다')", solution: "'미안해, 톡으로 말하면 내 진심이 다 안 전달될까 봐 주저했어. 바로 전화해서 목소리 들려줄게'라며 수습." },
-            { word: "오늘따라 하늘 사진 찍고 싶더라", pos: "감성 공유문", risk: "🟢 안전", category: "일상/감성", direct: "기상/풍경 촬영 욕구 표출.", contextual: "나 오늘 감수성 풍부해졌으니까 너도 감성적으로 오글거리는 나뭇잎/하늘 멘트 받아쳐라.", example: "여: '오늘 하늘 진짜 미쳤다 사진 찍음!' ➔ 남: '미세먼지 심하네' (결과: 감성 파괴)", solution: "'와 진짜 예쁘다! 감성 대박이네, 예쁜 풍경 보면 내 생각부터 나지?'라며 달콤하게 받아치기." },
-            { word: "나 오늘 인스타 스토리 디엠 반응 대박임 ㅋㅋㅋ", pos: "은근한 자랑", risk: "🟢 안전", category: "SNS/인스타", direct: "게시물 관련 개인 메시지 폭주 제보.", contextual: "오늘 내 착장이나 외모가 수많은 사람들에게 인정받았으니 남친인 너도 격하게 자부심 느껴라.", example: "여: '스토리 DM 반응 폭발함 ㅋㅋㅋ' ➔ 남: '누가 뭐라고 하는데?' (결과: 반응 미지근)", solution: "'대박! 자기가 오늘 유독 모델 같긴 했어, 역시 내 여친 예쁜 건 남들도 다 알아보네!'라며 자부심 표출." },
-            { word: "너는 나랑 있을 때가 제일 편하지?", pos: "확신 안도 질문", risk: "🟢 안전", category: "연애 중반/일상", direct: "동석 시 편안함 유무 질문.", contextual: "편하다는 말과 동시에 '편하지만 여전히 설레고 사랑스럽다'는 오글거리는 정답을 제출해라.", example: "여: '나랑 있을 때 제일 편하지?' ➔ 남: '어 완전 편해서 쌩얼도 상관없음' (결과: '나 여자로 안 보이냐?')", solution: "'편해서 너무 좋은데, 그러면서도 매일 봐도 늘 설레고 예뻐서 미치겠어'라며 정답 제출." },
-            { word: "나 요즘 인스타 알고리즘에 커플 릴스만 떠", pos: "은근한 데이트 요구", risk: "🟢 안전", category: "SNS/유튜브", direct: "추천 연애 콘텐츠 범람 보고.", contextual: "영상 속 달달한 커플들처럼 우리도 예쁜 데 데이트 가고 꽁냥꽁냥 로맨스 찍자는 판 깔기다.", example: "여: '알고리즘에 커플 릴스만 나옴' ➔ 남: '어 나도 그래' (결과: 눈치 제로)", solution: "'우와 진짜? 재밌어 보이는 거 있으면 나한테 공유해줘, 우리도 주말에 똑같이 따라 하러 가자!'라며 호응." },
-            { word: "나 오늘 옷 살짝 과한가?", pos: "의상 점검 질문", risk: "🟢 안전 ~ 🟡 주의", category: "데이트/패션", direct: "복장 화려함 정도 질문.", contextual: "과하긴커녕 오늘 너무 세련되고 여신 같다고 폭풍 칭찬해서 자존감 채워라.", example: "여: '나 오늘 너무 과한가?' ➔ 남: '어 약간 시상식 드레스 같음' (결과: 데이트 내내 시무룩)", solution: "'과하긴 뭐가 과해! 오늘 스타일 완전 고급스럽고 예뻐서 눈을 못 떼겠는데?'라며 호들갑." },
-            { word: "너 원래 기념일 챙기는 거 귀찮아하지?", pos: "서운함 밑밥 질문", risk: "🔴 경보", category: "기념일/선물", direct: "특수 기념일 이행 의욕 파악 질문.", contextual: "기념일 소홀히 넘어가면 서운할 준비 하고 있으니까 정성 어린 선물과 이벤트를 기획해라.", example: "여: '너 원래 기념일 안 챙기는 타입이지?' ➔ 남: '어 나 상술 같아서 별로 안 좋아함' (결과: 대참사)", solution: "'무슨 소리야! 너랑 만난 특별한 날인데 당연히 챙겨야지, 이번 기념일 엄청 기대해!'라며 자신감 어필." },
-            { word: "오빠, 내 프로필 사진 언제 바꾼 건지 알아?", pos: "관심도 테스트", risk: "💣 지뢰", category: "카톡/SNS", direct: "메신저 프사 교체 시점 지식 확인.", contextual: "너 나한테 늘 관심 집중하고 있는지 테스트하겠다. 틀리면 서운함 폭발한다.", example: "여: '내 프사 언제 바꿨게?' ➔ 남: '어제 아니야?' (정답은 지난주) (결과: '관심도 없지?')", solution: "'지난주 목요일에 찍은 사진으로 바꿨잖아! 내가 자기 프사는 바꾸자마자 다 캡처해 두는데 몰랐어?'라며 정답 제출." },
-            { word: "나 오늘 그냥 아무 생각 없이 쉬고 싶다", pos: "에너지 방전 신호", risk: "🟢 안전", category: "일상/휴식", direct: "무념무상 휴식 희망.", contextual: "잔소리나 잔업 시키지 말고, 편하게 쉴 수 있게 배달 음식 사주거나 따뜻하게 케어해 달라.", example: "여: '오늘 아무 생각 없이 누워만 있고 싶어' ➔ 남: '사람이 의욕이 없냐' (결과: 감성 파괴)", solution: "'그동안 고생 많아서 그래! 오늘은 아무 생각 말고 푹 쉬어, 내가 맛있는 거 주문해 줄게'라며 케어." },
-            { word: "너는 내가 사준 옷 왜 자주 안 입어?", pos: "성의 추궁문", risk: "🟡 주의", category: "선물/패션", direct: "증정 의상 착용 빈도 미흡 지적.", contextual: "내 선물 마음에 안 드는 거냐? 내 정성을 생각해서 다음 데이트 때 꼭 입고 나와라.", example: "여: '내가 사준 옷 왜 안 입어?' ➔ 남: '어 그거 색감이 좀 내 스타일 아니라서' (결과: '정성 무시하냐?')", solution: "'아껴 입으려고 보관해 둔 거지! 자기가 사준 소중한 옷인데 다음 데이트 때 예쁘게 입고 나갈게!'라며 수습." },
-            { word: "오빠, 요즘 나한테 연애 초기만큼 설레?", pos: "애정 확인 질문", risk: "🟢 안전 ~ 🟡 주의", category: "연애 중반/애정", direct: "초기 대비 설렘 감정 유지도 질문.", contextual: "'설렘을 넘어서 이제는 더 깊은 사랑과 확신이 느껴진다'는 완벽한 서사형 정답을 제출해라.", example: "여: '요즘도 나한테 설레?' ➔ 남: '오래 만나서 익숙하지~' (결과: 감성 파괴 및 시무룩)", solution: "'설레는 걸 넘어서 자기는 보면 볼수록 매일매일 더 사랑스러워져!'라며 달콤한 정답." },
-            { word: "나 오늘 괜히 서러워서 눈물 나네", pos: "감정 수위 보고", risk: "🔴 경보", category: "일상/공감", direct: "서운함/비애감 촉발로 인한 눈물 고임.", contextual: "원인 분석이나 잘잘못 따지지 말고 무조건 날 끌어안아 주고 내 편이 되어 달래줘라.", example: "여: '나 오늘 너무 서러워서 울었어...' ➔ 남: '왜? 네가 뭘 잘못했는데?' (결과: T형 남성의 극악 오답)", solution: "'아이구 세상에... 누가 우리 자기 마음 아프게 했어? 너무 고생했어'라며 무조건 안아주기." },
-            { word: "이 음식점 리뷰 평점이 되게 높네?", pos: "간보기형 장소 추천", risk: "🟢 안전", category: "식사/데이트", direct: "특정 식당 평가 점수 우수성 알림.", contextual: "여기 맛집 같은데 기억해 뒀다가 다음 데이트 때 리드해서 데려가라.", example: "여: '여기 리뷰 평점 대박 높다!' ➔ 남: '어 요즘 리뷰 다 돈 주고 쓰는 거임' (결과: T 남성의 분위기 초쳤음)", solution: "'우와 진짜? 평점 높으면 검증된 데네! 이번 주 데이트 때 여기로 예약해서 가볼까?'라며 즉시 반응." },
-            { word: "너는 왜 내가 말할 때 딴데 봐?", pos: "태도 지적문", risk: "🔴 경보", category: "갈등/대화", direct: "대화 중 시선 회피 지적.", contextual: "내 말에 집중 안 하고 성의 없이 대하는 게 느껴져서 화나기 직전이니까 핸드폰 치우고 눈 맞춰라.", example: "여: '너 왜 딴데 봐?' ➔ 남: '듣고 있어~ 말해~' (결과: 폰 뺏기고 폭풍전야)", solution: "즉시 휴대폰을 치우고 눈을 정면으로 맞추며 '미안해! 자기 말에 100% 집중할게, 계속 말해줘'라며 정성 표출." },
-            { word: "나 오늘 인스타 스토리 디톡스 성공함!", pos: "일상 보고문", risk: "🟢 안전", category: "SNS/일상", direct: "소셜 미디어 게시물 절제 성공 보고.", contextual: "SNS 안 하고 너한테 집중했으니까 나한테 다정하게 애정 표현 많이 해달라.", example: "여: '나 오늘 스토리 안 올리고 참음 ㅋ' ➔ 남: '어 잘했어~' (결과: 밋밋한 반응)", solution: "'오 대단한데! SNS 안 본 만큼 나한테 집중해 줘서 기분 좋다, 오늘 전화 길게 할까?'라며 다정하게 응수." },
-            { word: "그 남사친이 나한테 선물 기프티콘 보냈더라", pos: "질투 유도 알림", risk: "💣 지뢰", category: "갈등/질투", direct: "이성 친구로부터의 모바일 쿠폰 수령 보고.", contextual: "나 여전히 밖에서 인기 많으니까 방심하지 말고 귀여운 질투와 함께 나 더 챙겨라.", example: "여: '남사친이 기프티콘 보냄' ➔ 남: '오 공짜 커피 개이득' (결과: Cool한 척하다 정색 당함)", solution: "'뭐야? 그 녀석이 왜 뜬금없이 선물을 보내? 나 질투 나니까 커피는 나랑 마시러 가자!'라며 질투 표출." },
-            { word: "오빠, 요즘 주말마다 피곤하다고만 하네", pos: "서운함 추궁문", risk: "🔴 경보", category: "갈등/데이트", direct: "휴일 피로감 호소 상습성 지적.", contextual: "피곤하다는 이유로 데이트 성의 없게 하고 대충 때우는 거 서운하니까 긴장해라.", example: "여: '오빠는 주말마다 피곤해하네' ➔ 남: '평일에 열심히 일하니까 그렇지!' (결과: '나 만나는 게 일이냐?')", solution: "'내가 피곤함 관리를 못해서 자기한테 소홀했네 미안해! 이번 주말엔 기운 차려서 풀코스로 데이트하자'라며 리드." },
-            { word: "나 오늘 머리 새로 했는데 티 안 나?", pos: "외모 점검 질문", risk: "💣 지뢰", category: "데이트/헤어", direct: "헤어 스타일링 시술 미학 변화 확인.", contextual: "돈 들여서 머리 새로 하고 나왔으니까 빛의 속도로 스캔해서 구체적 칭찬을 쏟아부어라.", example: "여: '나 머리 새로 했는데 티 안 나?' ➔ 남: '어 똑같은데 뭐가 다름?' (결과: 그날 데이트 종료)", solution: "'어쩐지 오늘따라 컬이 완전 고급스럽고 분위기 미쳤다 했어! 너무 잘 어울려 여신이다'라며 극찬." },
-            { word: "오늘 하루도 고생 많았어, 내꿈꿔! ❤️", pos: "따뜻한 심야 인사", risk: "🟢 안전", category: "카톡/애정", direct: "일과 노고 격려 및 길몽 기원.", contextual: "너를 너무 많이 사랑하고 있으니 너도 달콤한 애정 표현 쏟아붓고 기분 좋게 자라.", example: "여: '오늘 고생했어 내꿈꿔 ❤️' ➔ 남: '응 너도 잘 자' (결과: 밋밋한 반응에 서운)", solution: "'자기 응원 덕분에 오늘 피로가 싹 풀린다! 나도 꿈에서 자기 만나러 갈게, 사랑해 ❤️'라며 애정 보답." },
-            { word: "나 당분간 좀 혼자만의 시간이 필요한 것 같아", pos: "동굴 진입 선언문", risk: "💣 지뢰", category: "권태기/위기", direct: "독립적인 개인 시간 확보 요청.", contextual: "너의 지속된 소홀함과 성의 없는 태도에 정이 다 떨어져서 이별을 심각하게 고민 중이다. 제발 진심을 보여라.", example: "여: '나 혼자만의 시간이 필요해' ➔ 남: '어 그래 푹 쉬다 연락해~' (결과: 일주일 뒤 이별 통보)", solution: "'내가 자기를 얼마나 불안하고 외롭게 만들었으면 이런 말을 하게 했을까... 떠나지 말고 내 얘기 좀 들어줄래?'라며 잡기." },
-            { word: "오빠, 오늘 집에 늦게 들어갈 수 있어?", pos: "데이트 연장 밑밥", risk: "🟢 안전 (기회)", category: "데이트/스킨십", direct: "귀가 시간 지연 가능 여부 질문.", contextual: "오늘 너랑 헤어지기 아쉬우니까 2차로 술 마시러 가거나 밤샘 데이트를 제안해라.", example: "여: '오늘 늦게 들어가도 돼?' ➔ 남: '너 내일 출근인데 빨리 드가라' (결과: T 남성의 분위기 파괴)", solution: "'당연하지! 나도 오늘 자기랑 헤어지기 싫었는데, 근처 예쁜 칵테일바 갈까?'라며 즉시 반응." },
-            { word: "내 친구 동창회 갔다가 남친한테 명품 가방 받았다더라", pos: "은근한 타인 비교문", risk: "💣 지뢰", category: "선물/비교", direct: "지인의 모임 참석 및 선물 수령 제보.", contextual: "가방 자체가 부러운 것도 있지만, 그 남친의 '정성과 애정'이 부럽다. 너도 나한테 정성을 내보여라.", example: "여: '내 친구 남친한테 백 선물 받았대~' ➔ 남: '걔 남친 돈 잘 버나 보네' (결과: '넌 성의가 없다')", solution: "'우와 부럽다! 난 가방은 당장 못 사주더라도 세상에서 제일 예쁜 데 데려가서 공주 대접 해줄게!'라며 기 살려주기." },
-            { word: "오빠는 나랑 어디까지 생각하고 있어?", pos: "미래 진정성 테스트", risk: "🔴 경보", category: "연애 중반/결혼", direct: "관계 발전의 최종 목표 지점 질의.", contextual: "그냥 연애만 가볍게 하는 거냐, 아니면 나와의 결혼과 구체적인 미래 계획을 세우고 있냐?", example: "여: '나랑 어디까지 생각하는데?' ➔ 남: '음... 일단 즐겁게 만나야지?' (결과: 가벼운 남자 낙인)", solution: "'단순히 연애가 아니라 너랑 평생 함께할 미래까지 진지하게 생각하고 있어'라며 확실한 정답 제출." },
-            { word: "나 오늘 택시 타고 집에 가야겠다", pos: "귀가 케어 요망문", risk: "🟡 주의", category: "일상/야간", direct: "택시를 이용한 귀가 계획 통보.", contextual: "밤길 무서우니까 택시 번호판 캡처해서 보내라고 하거나, 택시비 쥐여주거나 데리러 와라.", example: "여: '늦어서 택시 탐!' ➔ 남: '어 카카오T 잘 잡히냐?' (결과: 무심함 판정)", solution: "'밤늦게 택시 타서 걱정되네... 타고 나서 차 번호 톡으로 보내주고, 집 도착할 때까지 톡 연결해 줘!'라며 케어." },
-            { word: "나 이 챌린지 릴스 찍어보고 싶어!", pos: "SNS 동참 요구문", risk: "🟢 안전", category: "SNS/인스타", direct: "특정 숏폼 챌린지 촬영 희망.", contextual: "부끄러워하지 말고 나랑 인스타에 오붓하게 커플 릴스 올려서 럽스타그램 자랑하자.", example: "여: '이 챌린지 오빠랑 찍을래!' ➔ 남: '아 귀찮게 남들이 보는 걸 왜 찍어' (결과: 즉시 시무룩)", solution: "'나 약간 뚝딱이인데 자기가 가르쳐 주면 찍어볼게! 몇 번 연습할까?'라며 기쁘게 수긍." },
-            { word: "오빠, 혹시 나 만나는 거 지루해?", pos: "권태기 확인 질문", risk: "💣 지뢰", category: "갈등/권태기", direct: "데이트 만족도 저하 관찰 질문.", contextual: "최근 네 반응이 미지근하고 성의가 없다. 당장 눈빛 살리고 로맨틱함 복구해라.", example: "여: '나 만나는데 지루해?' ➔ 남: '오래 만났으니까 편해서 그렇지~' (결과: '마음 식었네' 대폭발)", solution: "'지루하긴 무슨! 너 보는 시간이 하루 중 제일 행복한데, 내가 요즘 피곤해 보여서 불안하게 했구나 미안해'라며 안아주기." },
-            { word: "그 남사친이 오늘 나한테 상담할 거 있다더라", pos: "질투 유도 밑밥", risk: "💣 지뢰", category: "갈등/질투", direct: "이성 친구와의 고민 상담 약속 제보.", contextual: "단둘이 만나는 거 질투 난다고 딱 잘라 말하고, 나한테만 집중하게 만들어라.", example: "여: '남사친이 고민 상담해달래' ➔ 남: '어 그래 잘 들어줘라' (결과: Cool한 척하다가 정색 당함)", solution: "'남사친 고민을 왜 네가 들어줘? 둘이 만나는 거 질투 나니까 전화로 짧게 하고 만나지 마!'라며 단호함." },
-            { word: "나 오늘 인스타 피드 사진 다 정화했어", pos: "SNS 정리 통보", risk: "💣 지뢰", category: "SNS/싸움", direct: "게시물 삭제 및 비공개 처리 알림.", contextual: "너한테 존나 화났거나 심각하게 관계 회의감이 들었으니 당장 달려와서 석고대죄해라.", example: "여: '나 피드 다 지웠음' ➔ 남: '어 그래 기분 전환하게 냅둬' (결과: 즉시 블록 및 차단)", solution: "'내가 얼마나 마음 아프게 했으면 피드까지 지웠을까 미안해... 당장 네 앞으로 달려갈게'라며 수습." },
-            { word: "오빠는 친구 결혼식 축의금 얼마 내?", pos: "결혼 관념 질문", risk: "🟡 주의", category: "일상/결혼", direct: "경조사비 집행 기준 질의.", contextual: "너의 사회적 관계망과 경제적 관념, 그리고 은근히 우리의 결혼 준비 관념을 떠보는 거다.", example: "여: '축의금 보통 얼마 내?' ➔ 남: '난 아까워서 안 친하면 5만 원만 냄' (결과: 짠돌이 낙인)", solution: "'친한 정도에 따라 다른데, 내 사람한테는 아낌없이 챙겨주는 편이지!'라며 스윗하고 듬직한 답변." },
-            { word: "나 오늘 술 한잔 마셨는데 취하네...", pos: "심야 호감 신호", risk: "🟢 안전", category: "유흥/카톡", direct: "약간의 알코올 섭취 및 취기 보고.", contextual: "술 마시니까 네 생각이 제일 먼저 났다. 다정한 목소리로 전화해 주고 챙겨달라.", example: "여: '나 오늘 조금 취한다...' ➔ 남: '물 많이 마시고 일찍 자라' (결과: T형 남성의 감성 파괴)", solution: "'어디서 마셨어? 위험하게 취하면 안 되는데... 전화 통화하면서 집에 안전하게 가자!'라며 챙기기." },
-            { word: "나 오늘 스토크/플러팅 당했잖아 ㅋㅋㅋ", pos: "가치 입증 자랑", risk: "🟡 주의", category: "일상/질투", direct: "타인으로부터의 번호 요구/관심 수령 제보.", contextual: "나 밖에서 아직 죽지 않았다. 방심하지 말고 긴장감 갖고 나 더 예뻐해라.", example: "여: '나 아까 어떤 애가 번호 달라고 함 ㅋ' ➔ 남: '어 진짜? 줬어?' (결과: '질투도 안 하냐?')", solution: "'뭐라구?! 어떤 놈이야! 당연히 거절했겠지만, 내 여친이 너무 예뻐서 딴 놈들이 눈독 들이니까 불안하네'라며 질투." },
-            { word: "너는 왜 내가 슬플 때 논리적으로 따져?", pos: "T형 감정 규탄문", risk: "💣 지뢰", category: "갈등/공감", direct: "상대방의 이성적/논리적 태도 비판.", contextual: "잘잘못 팩트 판단하지 말고 내 우울함과 서운한 감정에 무조건 맞장구치고 공감해라.", example: "여: '슬픈데 왜 논리적으로 따져?' ➔ 남: '상황을 알아야 해결하지!' (결과: 공감 능력 0점 판정)", solution: "'미안해! 내가 멍청하게 해결책만 제시하느라 자기 마음을 못 다독였네. 얼마나 속상했어'라며 꼭 안아주기." },
-            { word: "오빠, 내 카톡 프사 음악 가사 들어봤어?", pos: "감성 공유 질문", risk: "🟡 주의", category: "SNS/카톡", direct: "메신저 프로필 BGM 노랫말 시청 여부 확인.", contextual: "지금 내가 서운하거나 너한테 하고 싶은 애정의 메시지가 가사에 담겨있으니 센스 있게 캐치해라.", example: "여: '프사 음악 들음?' ➔ 남: '아니 멜론 안 써서 안 들음' (결과: 감성 파괴)", solution: "당장 가사 검색 후 '가사 들어봤는데 완전 우리 얘기더라/서운한 가사던데 혹시 내가 실수했어?'라며 반응." },
-            { word: "나 오늘 인스타 디엠으로 협찬 제안 들어옴!", pos: "은근한 자기 자랑", risk: "🟢 안전", category: "SNS/일상", direct: "소셜 미디어 브랜드 제공 문의 수신 보고.", contextual: "내 스타일과 인플루언서급 감성이 인정받았으니 남친인 너도 격하게 호응하고 칭찬해라.", example: "여: '나 오늘 협찬 디엠 받음!' ➔ 남: '요즘 그거 다 사기임 조심하셈' (결과: T 남성의 찬물)", solution: "'대박! 역시 내 여친 감성이랑 착장이 모델 같더니 남들도 다 알아채네, 대단하다!'라며 폭풍 칭찬." },
-            { word: "너는 나랑 있을 때 내 눈을 잘 안 본다?", pos: "시선 집약 요구", risk: "🔴 경보", category: "갈등/대화", direct: "동석 시 아이컨택 빈도 미흡 지적.", contextual: "나랑 대화하는 게 지루하거나 딴생각하는 것처럼 느껴져서 서운하니까 내 눈에 집중해라.", example: "여: '너 내 눈 안 봐?' ➔ 남: '보고 있는데 왜 그러냐' (결과: 정색)", solution: "즉시 눈을 정면으로 달콤하게 맞추며 '네 눈이 너무 예뻐서 뚫어지게 보려면 부끄러워서 그랬지! 미안해 계속 볼게'라며 응수." },
-            { word: "오늘따라 퇴근하는 도로가 너무 막히네...", pos: "퇴근길 투정문", risk: "🟢 안전", category: "일상/퇴근", direct: "교통 정체 상태 보고.", contextual: "차 안에서 답답하고 심심하니까 통화 길게 해주거나 다정한 음성 메시지를 남겨달라.", example: "여: '차가 너무 막힌다 ㅠㅠ' ➔ 남: '퇴근시간이라 그렇지 조심히 와' (결과: 밋밋함)", solution: "'답답하겠다... 심심하지 않게 내가 도착할 때까지 전화로 같이 놀아줄까?'라며 즉시 통화 연결." },
-            { word: "나 오늘 그냥 아무 데나 떠나고 싶다", pos: "번아웃 토로문", risk: "🟢 안전 ~ 🟡 주의", category: "일상/여행", direct: "일상 탈출 희망 표출.", contextual: "일상과 회사 일에 지쳤으니 주말에 드라이브나 여행 데이트 코스를 네가 알아서 짜와라.", example: "여: '어디론가 떠나고 싶다~' ➔ 남: '퇴사하면 떠나든가' (결과: T 남성의 극악 오답)", solution: "'일 때문에 스트레스 많이 받았구나... 이번 주말에 나랑 기분 전환 겸 바다 보러 드라이브 갈까?'라며 리드." },
-            { word: "오빠, 요즘 나한테 돈 아끼는 느낌이야", pos: "성의 추궁문", risk: "💣 지뢰", category: "갈등/데이트", direct: "데이트 비용 지출 적극성 감소 지적.", contextual: "돈 액수 자체보다 나한테 투자하는 정성과 마음이 식은 것 같아 서운하니까 긴장해라.", example: "여: '요즘 나한테 돈 아껴?' ➔ 남: '나 요즘 적금 때문에 아끼는 거 알잖아!' (결과: '나한테 쓰는 게 아깝냐?')", solution: "'절대 아니야! 내가 요즘 세심하게 챙기지 못해서 자기를 서운하게 했네 미안해, 이번 데이트는 내가 근사하게 쏠게!'라며 수습." },
-            { word: "그 카페 조명이 되게 예쁘더라!", pos: "간보기형 사진 장소 추천", risk: "🟢 안전", category: "데이트/SNS", direct: "특정 매장 조명 미학 찬사.", contextual: "거기 가면 내 인생샷 예쁘게 찍힐 것 같으니 다음 데이트 때 거기 가자고 해라.", example: "여: '이 카페 조명 대박이래!' ➔ 남: '어 그래 조명 좋은 데 많지' (결과: 눈치 제로)", solution: "'우와 진짜? 거기서 사진 찍으면 자기가 인형처럼 나오겠네! 이번 주 데이트는 거기로 정하자'라며 반응." },
-            { word: "나 오늘 집에서 혼자 혼술 하는 중 ㅋ", pos: "외로움 암시문", risk: "🟢 안전", category: "일상/유흥", direct: "자택 내 단독 음주 행위 보고.", contextual: "혼자 술 마시니까 적적하고 너 생각난다. 다정하게 연락해 주거나 배달 디저트 사 보내라.", example: "여: '나 지금 혼술 함 ㅋ' ➔ 남: '알코올 중독이다 적당히 마셔' (결과: 감성 파괴)", solution: "'외롭게 왜 혼자 마셔 ㅠㅠ 안주는 맛있는 거 먹고 있어? 내가 안주 기프티콘 사줄 테니까 전화할까?'라며 챙기기." },
-            { word: "너 원래 연애할 때 프사 잘 안 바꿔?", pos: "SNS 성의 추궁", risk: "🟡 주의", category: "SNS/카톡", direct: "메신저 프로필 교체 주기 질문.", contextual: "우리 커플 사진이나 내가 찍어준 사진으로 프사 안 바꿔서 서운하다. 센스 있게 바꿔라.", example: "여: '너 프사 원래 안 바꿔?' ➔ 남: '어 나 귀찮아서 몇 년째 이대로 둠' (결과: '나랑 찍은 건 왜 안 함?')", solution: "'아! 자기가 찍어준 예쁜 사진으로 당장 바꿔야겠다! 어떤 사진이 제일 마음에 들어?'라며 즉시 반영." },
-            { word: "오빠, 나 머리 자르면 손해인가?", pos: "결정 장애 자문", risk: "🟢 안전", category: "일상/스타일", direct: "모발 단축 시 손실 여부 질의.", contextual: "'손해는 무슨, 넌 긴 머리든 단발이든 다 완벽하니까 하고 싶은 대로 해'라는 오글 칭찬을 해라.", example: "여: '머리 자르면 손해인가?' ➔ 남: '어 자르면 다시 기르기 힘듦' (결과: T형 남성의 팩트)", solution: "'손해는 무슨! 이목구비가 예뻐서 단발 하면 완전 도도해 보이고 최고일 듯, 하고 싶은 거 다 해봐!'라며 호들갑." },
-            { word: "나 오늘 인스타 스토리 디톡스 하려고 인스타 끔", pos: "관심 요구 선언", risk: "🟢 안전", category: "SNS/일상", direct: "소셜 미디어 사용 일시 중단 보고.", contextual: "SNS 세상보다 너와의 연락과 관심이 훨씬 더 중요하다. 다정하게 카톡/전화해라.", example: "여: '나 오늘 인스타 끔' ➔ 남: '어 그래 잘 생각했네~' (결과: 무심함 판정)", solution: "'잘했어! 눈도 쉬고 마음도 쉬자. 인스타 안 보는 동안 나랑 전화로 달달하게 대화할까?'라며 스윗 응수." },
-            { word: "오늘따라 지하철 환승 길 너무 멀다...", pos: "퇴근길 투정문", risk: "🟢 안전", category: "일상/퇴근", direct: "대중교통 이동 동선 고단함 호소.", contextual: "퇴근길 지치고 힘드니까 따뜻하게 위로해 주고 나 도착할 때까지 내 기분 맞춰라.", example: "여: '환승 구간 진짜 길다 ㅠㅠ' ➔ 남: '노원역이나 신도림역임?' (결과: T형 남성의 정체성)", solution: "'아이구 사람도 많은데 환승하느라 고생 많네... 도착하면 맛있는 거 먹고 푹 쉬게 내가 토닥여줄게!'라며 케어." },
-            { word: "너는 내가 사준 선물 어디에 뒀어?", pos: "보관 상태 추궁문", risk: "💣 지뢰", category: "선물/성의", direct: "증정 물품 배치 장소 질의.", contextual: "내가 준 정성을 방치하거나 소홀히 다루고 있는지 감시 중이다. 소중히 잘 쓰고 있다고 증명해라.", example: "여: '내가 사준 지갑 어디 뒀어?' ➔ 남: '어 서랍 어딘가에 있겠지?' (결과: 대폭발 및 서운함)", solution: "'당연히 내 매일 들고 다니는 가방 안에 제일 소중하게 모셔뒀지! 자기 정성인데 늘 고마워'라며 증거 제시." },
-            { word: "오빠, 요즘 주말 데이트 코스가 다 비슷하다?", pos: "매너리즘 지적문", risk: "🔴 경보", category: "갈등/데이트", direct: "휴일 여가 일정 정체성 관찰 지적.", contextual: "데이트가 성의 없어지고 지루해졌으니까 네가 먼저 신선하고 예쁜 코스를 짜서 리드해라.", example: "여: '요즘 데이트 다 똑같네~' ➔ 남: '밥 먹고 카페 가는 게 다 그렇지 뭐' (결과: '성의 진짜 없다')", solution: "'내가 요즘 유행하는 신상 맛집이랑 야외 데이트 코스를 못 찾았네 미안해! 이번 주말은 내가 대박 코스 짜올게'라며 리드." },
-            { word: "나 오늘 회사 상사가 진짜 몰상식하게 굴었잖아", pos: "100% 공감 요구 인트로", risk: "🟢 안전", category: "일상/직장", direct: "상급자의 부당 언행 제보 시작.", contextual: "상황 객관적으로 분석하지 말고, 무조건 상사 욕해 주고 내 기분 맞춰라.", example: "여: '상사가 진짜 몰상식해!' ➔ 남: '너도 회사업무 지침을 잘 지켰어야지' (결과: T 남성의 극악 오답으로 이별각)", solution: "'뭐?! 어떤 미친 상사가 우리 자기를 괴롭혔어! 진짜 너무하네, 내가 가서 사표 던져주고 싶다'라며 200% 편들기." },
-            { word: "너 나한테 뭐 서운한 거라도 있어?", pos: "역공형 청문회 문장", risk: "💣 지뢰", category: "갈등/소통", direct: "상대의 불만 사안 유무 질의.", contextual: "서운한 거 말하는 순간 '너는 나한테 이 정도밖에 안 되냐'며 폭풍 역공이 들어갈 테니 절대 없다고 해라.", example: "여: '너 서운한 거 있어?' ➔ 남: '어 너 요즘 답장 늦는 거' (결과: '내가 바쁜데 그것도 이해 못 해?')", solution: "'서운하긴 무슨! 자기가 나한테 얼마나 잘하는데, 늘 고맙고 내 부족함만 느끼지'라며 철벽 방어." },
-            { word: "오늘 하루도 너무 수고했어, 내 꿈꿔! ❤️", pos: "달콤한 심야 인사", risk: "🟢 안전", category: "카톡/애정", direct: "일과 노고 치하 및 쾌면 기원.", contextual: "너를 너무 많이 사랑하고 있으니 너도 오글거리는 애정 표현 쏟아붓고 기분 좋게 자라.", example: "여: '수고했어 내 꿈꿔! ❤️' ➔ 남: '응 너도 수고했어' (결과: 밋밋함에 서운)", solution: "'자기 응원 덕분에 오늘 피로가 싹 풀린다! 나도 꿈에서 자기 만나러 갈게, 세상에서 제일 사랑해 ❤️'라며 애정 표현." },
-            { word: "우리 이번 명절에 각자 집으로 가는 거지?", pos: "명절/가족 눈치 질문", risk: "🟡 주의", category: "명절/결혼", direct: "명절 연휴 개별 귀가 여부 확인.", contextual: "결혼/진지한 단계라면 내 가족이나 본가에 인사 드리러 오겠다는 정성과 성의를 비춰라.", example: "여: '명절에 각자 집에 가나?' ➔ 남: '어 당연히 각자 가야지!' (결과: 서운함 스택)", solution: "'당연히 본가 가야지! 근데 그전에 자기 부모님께 인사나 명절 선물 꼭 전해드리고 싶어'라며 스윗함 어필." },
-            { word: "나 이번 주말에 서울(지방) 올라갈까?", pos: "장거리 번개 신호", risk: "🟢 안전 (기회)", category: "장거리/주말커플", direct: "주말 이동 방문 의사 질의.", contextual: "너 너무 보고 싶어서 기꺼이 이동하려는 거니까 '오지 마 피곤해' 하지 말고 격하게 환영해라.", example: "여: '나 이번 주 올라갈까?' ➔ 남: '너 차 막히고 피곤할 텐데 오지 마~' (결과: '보고 싶지도 않냐?')", solution: "'진짜?! 난 너 오면 너무 좋지! 피곤하지 않게 내가 기차역으로 마중 나가고 다 챙겨줄게!'라며 환영." },
-            { word: "너 원래 자취방에서 옷 이렇게 아무 데나 둬?", pos: "실생활 정돈 지적문", risk: "🔴 경보", category: "자취/동거", direct: "의류 방치 수거 미이행 지적.", contextual: "위생과 정돈 개념 없는 모습에 환상이 깨지고 있으니 핑계 대지 말고 즉시 치워라.", example: "여: '옷 왜 아무 데나 둬?' ➔ 남: '어차피 내일 또 입을 건데 뭐' (결과: 정떨어짐)", solution: "'아 미안해! 자기가 오는데 깔끔하게 정리해 뒀어야 했는데 바로 치울게!'라며 몸 움직이기." },
-            { word: "오빠, 내 친구들은 다 인스타 스토리 하이라이트 해두던데", pos: "공개 박제 요구문", risk: "🟢 안전 ~ 🟡 주의", category: "SNS/럽스타그램", direct: "지인들의 프로필 상단 고정 모음집 언급.", contextual: "나와의 데이트/추억 사진을 인스타 상단 하이라이트에 남들 보란 듯이 고정 박제해라.", example: "여: '친구들은 하이라이트 해놓던데~' ➔ 남: '난 인스타 하이라이트 쓰는 법 모름' (결과: 성의 부족 판정)", solution: "'오 신기하다! 우리 데이트 사진 모아서 당장 예쁜 하이라이트 폴더 만들어 둘게!'라며 즉시 실행." },
-            { word: "우리 나중에 아기 낳으면 누구 닮았으면 좋겠어?", pos: "가정 형성 밑밥 질문", risk: "🟢 안전", category: "미래/결혼", direct: "자녀 출생 시 외모 유전 희망 질의.", contextual: "너와 가정을 이루는 상상을 하고 있으니 '널 닮아 사랑스러웠으면 좋겠다'고 답해라.", example: "여: '아기 낳으면 누구 닮으면 좋겠어?' ➔ 남: '생각해 본 적 없는데' (결과: T 남성의 감성 파괴)", solution: "'당연히 자기 닮아야지! 눈동자랑 웃는 모습이 널 닮으면 세상에서 제일 예쁠 것 같아'라며 낭만 답변." },
-            { word: "나 오늘 인스타 디엠으로 이상한 사람한테 연락 옴 ㅠㅠ", pos: "불안 호소문", risk: "🟢 안전", category: "SNS/보호", direct: "메시지 수신을 통한 불쾌감 제보.", contextual: "나를 보호해 주고, 그 계정을 차단하라고 강력하게 든든한 태도를 보여달라.", example: "여: '이상한 애한테 디엠 옴 ㅠㅠ' ➔ 남: '그냥 차단해~' (결과: 무심함 판정)", solution: "'뭐야?! 어떤 놈이야, 아이디 대봐! 이상한 놈들 접근 못하게 내가 든든하게 지켜줄 테니까 바로 차단해'라며 든든함 어필." },
-            { word: "너는 나랑 있을 때 왜 이렇게 자주 조냐?", pos: "피로감 비판문", risk: "🔴 경보", category: "데이트/컨디션", direct: "동석 중 수면/졸음 반복 지적.", contextual: "나랑 있는 데이트가 지루하거나 성의 없게 느껴져서 기분 상했으니까 컨디션 케어해라.", example: "여: '너 왜 자꾸 졸아?' ➔ 남: '나 일하느라 피곤해서 그렇지!' (결과: '나 만나는 게 일이냐?')", solution: "'내가 체력 관리를 못해서 자기한테 미안해... 잠깐 커피 마시고 눈 맑게 띄워서 제대로 데이트하자!'라며 리드." },
-            { word: "너 내가 준 선물 솔직히 어디 있는지 모르지?", pos: "기억력 추궁문", risk: "💣 지뢰", category: "선물/기억", direct: "증정품 보관 위치 인지 여부 질의.", contextual: "너 내가 준 정성을 잊고 방치했지? 내 정성을 얼마나 소중히 여기는지 증명해라.", example: "여: '내가 준 선물 어디 있는지 알아?' ➔ 남: '어? 집에 있겠지?' (결과: 감정 대폭발)", solution: "'무슨 소리야! 내 방 책상 가장 잘 보이는 자리에 소중하게 모셔뒀지, 사진 찍어서 보여줄까?'라며 완벽 방어." },
-            { word: "오빠, 요즘 나한테 쓰는 말씨가 좀 딱딱해진 것 같아", pos: "어조 서운함 표출", risk: "🔴 경보", category: "카톡/소통", direct: "말투의 낭만성/부드러움 감소 지적.", contextual: "연애 초기만큼 달콤하고 상스런 말투로 나를 공주 대접해라.", example: "여: '요즘 말투가 왜 그래?' ➔ 남: '나 원래 말투 이런데?' (결과: '마음 식었네')", solution: "'아 차갑게 느껴졌구나 미안해! 자기를 너무 사랑하는데 내가 정신이 없었네, 달콤하게 말할게 ❤️'라며 애교 수습." },
-            { word: "나 오늘 인스타에 올릴 사진 후보 5개 골라줘!", pos: "답정너 사진 선택", risk: "🟢 안전 ~ 🟡 주의", category: "SNS/사진", direct: "복수 촬영물 중 최상위 평가물 선택 요청.", contextual: "대충 아무거나 고르지 말고, 이유(얼굴 구도, 웃는 모습)를 대며 가장 감성적인 사진을 엄선해라.", example: "여: '어떤 게 나아?' ➔ 남: '다 똑같은데 1번 올려' (결과: 성의 부족에 삐짐)", solution: "'3번 사진이 웃는 눈빛이 제일 예쁘고, 5번 사진은 분위기 미쳤다! 둘 다 너무 예쁜데 3번 강추!'라며 구체적 피드백." },
-            { word: "우리 주말에 집에서 데이트할 때 배달 뭐 시켜 먹을까?", pos: "실내 데이트 메뉴 선택", risk: "🟢 안전", category: "식사/데이트", direct: "자택 데이트 시 음식 종류 질의.", contextual: "느끼하거나 기름진 것보다 깔끔하고 내가 좋아하는 메뉴 2~3개를 센스 있게 대라.", example: "여: '배달 뭐 먹지?' ➔ 남: '그냥 족발이나 시켜' (결과: '이 더운 날 족발?')", solution: "'자기가 좋아하는 일식 초밥이나 깔끔한 떡볶이 로제 세트 어때? 디저트도 내가 쏠게!'라며 센스 제안." },
-            { word: "너는 왜 내가 힘든 일 말하면 '너도 잘못했네'라고 해?", pos: "T형 비판 규탄문", risk: "💣 지뢰", category: "갈등/공감", direct: "상대방의 양측 과실 지적 태도 비판.", contextual: "판사처럼 재판하지 말고, 억울한 내 편이 되어 상대방을 사정없이 비난해라.", example: "여: '왜 나한테 뭐라 그래?' ➔ 남: '객관적으로 네 잘못도 있으니까!' (결과: T 남성의 극악 오답)", solution: "'미안해! 내가 멍청하게 객관적인 척하느라 자기 마음을 더 아프게 했네... 자기 편만 들어줬어야 했는데 미안해'라며 안아주기." },
-            { word: "오빠, 나 나중에 주름 생기고 늙어도 지금처럼 사랑해 줄 거야?", pos: "영원성 확인 질문", risk: "🟢 안전", category: "애정/미래", direct: "노화 진행 시 애정도 유지 여부 질의.", contextual: "시간이 지나도 나를 향한 사랑과 진정성이 변함없다는 확신과 오글거리는 정답을 내놓아라.", example: "여: '나 늙어도 사랑할 거임?' ➔ 남: '사람이 늙는 건 당연하지~' (결과: T형 남성의 감성 파괴)", solution: "'늙긴 뭐가 늙어! 나이 들어도 내 눈엔 세상에서 제일 예쁠 거고, 매일 더 사랑해 줄 건데?'라며 영혼의 정답." },
-            { word: "나 오늘 인스타 스토리 디엠 안 보는 중 ㅋ", pos: "은근한 도도함 어필", risk: "🟢 안전", category: "SNS/일상", direct: "메시지 열람 절제 행위 보고.", contextual: "남들의 관심보다 너와의 대화가 훨씬 소중하니까 다정하게 카톡 해라.", example: "여: '나 디엠 안 봄 ㅋ' ➔ 남: '어 그래 읽씹 하지 마라' (결과: 밋밋함)", solution: "'역시 도도한 내 여친! 남들 디엠 보지 말고 나랑 하루 종일 달달하게 톡 놀자'라며 응수." },
-            { word: "오빠, 혹시 내 친구 누구누구 예쁘다고 생각해?", pos: "지인 외모 함정 질문", risk: "💣 지뢰", category: "갈등/함정", direct: "동성 지인의 외모적 평가 질의.", contextual: "칭찬하는 순간 유혈사태다. 관심조차 없으며 오직 너만 보인다고 답변해라.", example: "여: '내 친구 OO이 예쁘지 않아?' ➔ 남: '어 키도 크고 예쁘더라' (결과: 3차 세계대전 발발)", solution: "0.1초 만에 '어? 누구? 관심 없어서 얼굴 기억도 안 나는데... 내 눈엔 자기밖에 안 보여'라며 철벽." },
-            { word: "나 오늘 칼퇴하고 집 가서 넷플릭스나 봐야겠다", pos: "일상 휴식 보고", risk: "🟢 안전", category: "일상/퇴근", direct: "퇴근 후 미디어 시청 계획 통보.", contextual: "같이 넷플릭스 추천작 이야기하거나, 맛있는 디저트 기프티콘 사 보내서 달래라.", example: "여: '퇴근하고 넷플 봐야지~' ➔ 남: '어 무슨 영화 봄?' (결과: 평범)", solution: "'고생 많았어! 맛있는 거 먹으면서 편하게 쉬어, 내가 맛있는 배달 디저트 사줄까?'라며 챙기기." },
-            { word: "너는 왜 내가 사준 커플 티 안 입어?", pos: "성의/애정 추궁문", risk: "🟡 주의", category: "선물/패션", direct: "커플 의류 착용 미실행 지적.", contextual: "나랑 커플 입고 데이트하기 창피한 거냐? 다음 데이트 때 당장 입고 나와라.", example: "여: '커플 티 왜 안 입어?' ➔ 남: '아 오글거리게 커플 티를 왜 입냐' (결과: '나랑 만나는 게 창피하냐?')", solution: "'아껴 입으려고 모셔뒀지! 다음 데이트 때 맞춰 입고 인생샷 찍자!'라며 완벽 수습." },
-            { word: "오빠, 요즘 주말에 약속 잡는 게 좀 성의 없어졌다?", pos: "매너리즘 규탄문", risk: "🔴 경보", category: "갈등/데이트", direct: "주말 약속 추진 성의 부족 지적.", contextual: "내가 먼저 데이트 가자고 하기 전에 네가 선제적으로 예쁜 코스 잡아서 리드해라.", example: "여: '데이트 잡는 게 성의 없네' ➔ 남: '네가 가고 싶은 데 말해~' (결과: '내가 다 짜냐?')", solution: "'내가 요즘 세심하지 못했네 미안해! 이번 주말은 내가 인스타 핫플 예약 다 해뒀으니까 몸만 와!'라며 리드." },
-            { word: "나 오늘 회사에서 진짜 억울해서 미치는 줄 알았잖아", pos: "격한 감정 토로문", risk: "🟢 안전", category: "일상/직장", direct: "부당 사건 경험으로 인한 분노 보고.", contextual: "원인 분석이나 해결책 주지 말고, 내 편이 되어 상대방을 강력하게 씹어라.", example: "여: '진짜 억울해서 미치는 줄!' ➔ 남: '회사 일에 너무 감정 소비하지 마' (결과: T 남성의 찬물)", solution: "'뭐라고?! 어떤 몰상식한 놈이 우리 자기를 억울하게 했어?! 내가 가서 혼내줄 테니까 다 털어놔!'라며 200% 공감." },
-            { word: "너 나한테 요즘 마음 식은 거 아니지?", pos: "애정 확인 직구 질문", risk: "💣 지뢰", category: "갈등/위기", direct: "상대방의 애정도 저하 여부 직선 질문.", contextual: "네 무심한 행동 때문에 불안해 죽겠으니까 당장 진심을 다해 사랑을 증명하고 안아줘라.", example: "여: '너 마음 식었어?' ➔ 남: '아니 편해져서 그렇다니까 왜 자꾸 물어봐!' (결과: 정색 및 이별 수순)", solution: "'식긴 무슨! 내가 요즘 표현이 부족해서 자기를 불안하게 했구나 정말 미안해... 매일매일 더 사랑해'라며 안아주기." },
-            { word: "나 오늘 인스타 스토리 구도 마음에 드네", pos: "미학 만족 감탄문", risk: "🟢 안전", category: "SNS/인스타", direct: "게시물 레이아웃 만족 표출.", contextual: "오늘 내 감성과 스타일 완벽하니까 '인스타 감성 미쳤다'라며 폭풍 칭찬해라.", example: "여: '오늘 스토리 구도 마음에 듦!' ➔ 남: '어 그래 잘 찍었네' (결과: 반응 부족)", solution: "'대박 완전 핀터레스트 감성이다! 사진 구도를 어쩜 이렇게 잘 잡아? 여신이다'라며 오버 칭찬." },
-            { word: "오늘따라 퇴근길 지옥철 사람 진짜 엄청나네...", pos: "퇴근길 고단함 호소", risk: "🟢 안전", category: "일상/퇴근", direct: "대중교통 혼잡도 고백.", contextual: "퇴근길 사람 치여서 힘들었으니 따뜻하게 위로해 주고 도착하면 다정하게 케어해라.", example: "여: '오늘 지옥철 사람 대박 ㅠㅠ' ➔ 남: '퇴근 시간이 다 그렇지' (결과: T형 남성의 찬물)", solution: "'아이구 사람 많아서 답답하겠다... 고생 많았어, 도착하면 맛있는 거 먹고 푹 쉬게 해줄게!'라며 케어." },
-            { word: "너 원래 나 만날 때 이렇게 옷 대충 입었었나?", pos: "복장 성의 지적문", risk: "🔴 경보", category: "갈등/패션", direct: "동석 시 착장 성의 미흡 비판.", contextual: "나를 만나는 거에 긴장감도 없고 잡은 물고기 취급하는 것 같아 서운하니까 차려입어라.", example: "여: '옷 원래 이렇게 대충 입었냐?' ➔ 남: '편하게 입는 게 좋은 거지!' (결과: '나한테 잘 보일 생각이 없네')", solution: "'내가 너무 편하게 생각해서 차려입지 못했네 미안해! 다음 데이트 땐 완전 멋있게 차려입고 나올게!'라며 수습." },
-            { word: "오빠, 우리 연애 초반에 자주 가던 카페 기억나?", pos: "추억 회상 밑밥", risk: "🟢 안전", category: "연애중반/추억", direct: "과거 데이트 장소 인지 여부 질의.", contextual: "그때의 로맨틱함과 초심을 기억해 내고 이번 주 데이트 때 그 카페로 날 데려가라.", example: "여: '우리 초반에 가던 카페 기억나?' ➔ 남: '아니 카페가 한두 개냐?' (결과: 감성 파괴 대참사)", solution: "'당연히 기억나지! 너랑 손잡고 커플 커피 마시던 거기잖아, 이번 주말에 추억 여행 겸 거기 가볼까?'라며 정답." },
-            { word: "나 오늘 인스타 스토리 디톡스 하려고 앱 지움 ㅋ", pos: "관심 요구 통보", risk: "🟢 안전", category: "SNS/일상", direct: "소셜 미디어 애플리케이션 삭제 보고.", contextual: "SNS 세상보다 너와의 연락과 관심이 훨씬 더 중요하다. 다정하게 카톡/전화해라.", example: "여: '나 인스타 앱 지움 ㅋ' ➔ 남: '어 그래 잘 생각함~' (결과: 무심함 판정)", solution: "'잘했어! 눈도 쉬고 마음도 쉬자. 인스타 안 보는 동안 나랑 전화로 달달하게 대화할까?'라며 스윗 응수." },
-            { word: "오늘따라 도로 정체가 너무 심해서 지친다...", pos: "퇴근길 투정문", risk: "🟢 안전", category: "일상/퇴근", direct: "교통 정체로 인한 피로 호소.", contextual: "차 안에서 답답하고 피곤하니까 통화 길게 해주거나 다정한 음성 메시지를 남겨달라.", example: "여: '차 막혀서 지친다 ㅠㅠ' ➔ 남: '운전 조심히 해~' (결과: 밋밋함)", solution: "'운전하느라 답답하겠다... 심심하지 않게 내가 집도착할 때까지 전화로 같이 놀아줄까?'라며 즉시 통화 연결." },
-            { word: "너는 내가 사준 선물 아무 데나 던져두지 마", pos: "보관 관리 지적문", risk: "🔴 경보", category: "선물/관리", direct: "증정 물품 방치 행위 비판.", contextual: "내 정성을 무시하는 것처럼 느껴져서 화나니까 소중하게 다루고 쓰는 모습을 보여라.", example: "여: '선물 아무 데나 두지 마!' ➔ 남: '어차피 내 건데 어디 두든 무슨 상관이야' (결과: '정성 무시하냐?')", solution: "'미안해! 네 소중한 선물인데 내가 칠칠치 못하게 뒀네, 내 보물 1호로 제일 잘 보이는 데 모셔둘게'라며 수습." },
-            { word: "오빠, 요즘 데이트할 때 폰 보는 시간이 너무 길다?", pos: "스마트폰 사용 경고", risk: "🔴 경보", category: "갈등/데이트", direct: "동석 중 모바일 기기 몰입 시간 과다 지적.", contextual: "나한테 집중 안 하고 성의 없이 대하는 게 느껴져서 화나기 직전이니까 폰 끄고 눈 맞춰라.", example: "여: '요즘 데이트 때 폰 너무 보네' ➔ 남: '급한 연락이라 그렇지!' (결과: 폰 뺏기고 냉전)", solution: "즉시 휴대폰을 주머니에 넣으며 '미안해! 자기가 앞에 있는데 내가 딴짓했네, 자기 얼굴 보는 게 제일 재밌지'라며 손잡기." },
-            { word: "나 오늘 회사 상사 때문에 울컥했잖아 ㅠㅠ", pos: "감정 수위 토로문", risk: "🟢 안전", category: "일상/직장", direct: "상급자 언행으로 인한 비애감 발생 보고.", contextual: "상황 객관적으로 분석하지 말고, 무조건 상사 욕해 주고 내 기분 맞춰라.", example: "여: '오늘 상사 때문에 울컥함 ㅠㅠ' ➔ 남: '사회생활이 다 그렇지 뭐' (결과: T 남성의 찬물)", solution: "'뭐?! 어떤 미친 상사가 우리 자기를 마음 아프게 했어?! 너무하네 진짜, 내가 가서 혼내줄까?'라며 200% 편들기." },
-            { word: "오늘 하루도 너무 수고했어, 내 꿈꿔! 세상에서 제일 사랑해 ❤️", pos: "대단원 달콤한 심야 인사", risk: "🟢 안전 (완벽)", category: "카톡/애정", direct: "일과 노고 치하, 길몽 기원 및 최상위 애정 표출.", contextual: "너를 너무 많이 사랑하고 있으니 너도 내 존재에 감사해하고 오글거리는 사랑을 퍼부어라.", example: "여: '수고했어 내 꿈꿔 사랑해 ❤️' ➔ 남: '응 너도 수고했고 잘 자~' (결과: 밋밋함에 서운)", solution: "'자기 사랑 덕분에 오늘 피로가 싹 풀린다! 나도 꿈에서 자기 만나러 갈게, 마이 공주님 세상에서 제일 사랑해 ❤️'라며 애정 표현." }
+            {
+                risk: "🔴 경보",
+                riskKey: "DANGER",
+                category: { KR: "갈등/싸움", EN: "Conflict", JP: "喧嘩/葛藤" },
+                word: { KR: "가도 돼? / 다녀와", EN: "You can go / Have fun", JP: "行っていいよ / 行ってらっしゃい" },
+                pos: { KR: "허락형 구어체", EN: "Permission phrase", JP: "許可型の口語" },
+                direct: { KR: "너의 외출이나 활동을 허가하겠다.", EN: "I permit your outing or activity.", JP: "あなたの外出や活動を許可する。" },
+                contextual: { KR: "가면 진짜 뒤진다. 눈치껏 취소하거나 귀가 시간을 대폭 앞당겨라.", EN: "If you go, you're dead. Cancel it or come home super early.", JP: "行ったらマジで怒る。空気を読んでキャンセルするか早く帰ってきて。" },
+                example: { KR: "여: '응, 다녀와~' ➔ 남: '오예 고마워!' (결과: 자정 이후 폭풍전야)", EN: "Her: 'Sure, go~' ➔ Him: 'Awesome thanks!' (Result: Huge Fight Later)", JP: "女:「うん、行ってきて〜」➔ 男:「サンキュー！」(結果: 深夜に大喧嘩)" },
+                solution: { KR: "'아니다, 네가 더 중요하지. 일찍 들어가서 통화하자'로 타협.", EN: "Say 'No, spending time with you is more important. I'll stay home or come back early.'", JP: "「ううん、君の方が大事だから早く帰って電話するね」と返す。" }
+            },
+            {
+                risk: "💣 지뢰",
+                riskKey: "BOMB",
+                category: { KR: "갈등/싸움", EN: "Conflict", JP: "喧嘩/葛藤" },
+                word: { KR: "괜찮아", EN: "I'm fine", JP: "大丈夫" },
+                pos: { KR: "형용사적 구어체", EN: "Adjective phrase", JP: "形容詞的口語" },
+                direct: { KR: "상태가 양호함.", EN: "Condition is completely okay.", JP: "状態が良好である。" },
+                contextual: { KR: "전혀 안 괜찮고 서운함. 지금 네가 뭘 잘못했는지 스스로 생각해보길 바라는 중.", EN: "Not fine at all. I want you to figure out what you did wrong.", JP: "全く大丈夫じゃない。自分が何をしたか自分で考えて反省してほしい。" },
+                example: { KR: "남: '나 오늘 조금 늦을 것 같은데 괜찮아?' ➔ 여: '응, 괜찮아.' (결과: 도착 후 썰렁함)", EN: "Him: 'I'll be a bit late, okay?' ➔ Her: 'Yeah, I'm fine.' (Result: Ice-cold atmosphere)", JP: "男:「今日少し遅れそうだけど大丈夫？」➔ 女:「うん、大丈夫。」(結果: 会った瞬間激冷え)" },
+                solution: { KR: "'안 괜찮을 텐데 미안해. 최대한 서둘러서 갈게!'라며 미안함 표출.", EN: "Say 'I know you're not fine. I'm so sorry, I'll hurry as fast as I can!'", JP: "「大丈夫じゃないよね、ごめんね！急いで向かうから！」と謝意を示す。" }
+            },
+            {
+                risk: "💣 지뢰",
+                riskKey: "BOMB",
+                category: { KR: "데이트/식사", EN: "Dating/Food", JP: "デート/食事" },
+                word: { KR: "뭐 먹을까? (아무거나)", EN: "What should we eat? (Anything)", JP: "何食べる？ (なんでもいい)" },
+                pos: { KR: "의문문/위임", EN: "Question/Delegation", JP: "質問/委任" },
+                direct: { KR: "메뉴 선정을 상대방에게 위임함.", EN: "Leaving the menu choice to you.", JP: "メニュー選びを相手に 일임함." },
+                contextual: { KR: "내 머릿속에 있는 3가지 분위기 좋은 후보 중 하나를 눈치껏 맞춰라.", EN: "Guess one of the 3 nice places I already have in mind.", JP: "私の頭の中にある雰囲気の良い候補3つのうち、センスよく当てて。" },
+                example: { KR: "여: '난 아무거나!' ➔ 남: '그럼 국밥 콜?' (결과: '이 더운 날 무슨 국밥이야...')", EN: "Her: 'Anything!' ➔ Him: 'Fast food then?' (Result: 'Are you serious?')", JP: "女:「なんでもいい！」➔ 男:「じゃあ牛丼でいい？」(結果: 「は？気分じゃないんだけど」)" },
+                solution: { KR: "파스타, 깔끔한 일식, 분위기 좋은 카페/식당 2~3개 옵션 제안.", EN: "Offer 2-3 nice options like Italian, Japanese, or a cozy bistro.", JP: "パスタ、小綺麗な和食、雰囲気の良いカフェなど2〜3つの選択肢を提案。" }
+            },
+            {
+                risk: "🟢 안전",
+                riskKey: "SAFE",
+                category: { KR: "일상/애정확인", EN: "Daily/Affection", JP: "日常/愛情確認" },
+                word: { KR: "나 예뻐?", EN: "Do I look pretty?", JP: "私可愛い？" },
+                pos: { KR: "확인형 질문", EN: "Confirmation question", JP: "確認型質問" },
+                direct: { KR: "외모적 매력에 대한 질문.", EN: "Asking if I look attractive right now.", JP: "外見の魅力についての質問。" },
+                contextual: { KR: "사랑받고 있다는 느낌을 느껴보고 싶다. 칭찬을 듬뿍 해라.", EN: "I want to feel loved. Shower me with compliments!", JP: "愛されていると実感したい。褒め言葉をたくさんくれて。" },
+                example: { KR: "여: '나 오늘 예뻐?' ➔ 남: '음, 평소랑 똑같은데?' (결과: 감성 파괴)", EN: "Her: 'Do I look pretty?' ➔ Him: 'Same as usual.' (Result: Romance ruined)", JP: "女:「私今日可愛い？」➔ 男:「え、いつもと同じじゃない？」(결과: テン션爆下げ)" },
+                solution: { KR: "눈을 맞추며 '매일 예쁜데 오늘은 유독 더 예쁜데?'라며 즉시 애정 표현.", EN: "Look into her eyes and say 'You're always pretty, but today you look stunning!'", JP: "目を合わせて「毎日可愛いけど、今日は特に可愛いよ！」と即答。" }
+            }
         ];
 
+        let currentLang = 'KR';
         let currentRisk = 'ALL';
 
-        function getBadgeClass(risk) {
-            if (risk.includes('주의')) return 'badge-warn';
-            if (risk.includes('경보')) return 'badge-danger';
-            if (risk.includes('지뢰')) return 'badge-bomb';
+        function switchLanguage(lang) {
+            currentLang = lang;
+            
+            // 언어 버튼 활성화 표시
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.includes(lang)) btn.classList.add('active');
+            });
+
+            // UI 텍스트 업데이트
+            const t = uiI18n[lang];
+            document.getElementById('uiTitle').innerText = t.title;
+            document.getElementById('btnRandom').innerText = t.randomBtn;
+            document.getElementById('btnQuiz').innerText = t.quizBtn;
+            document.getElementById('searchInput').placeholder = t.placeholder;
+            
+            document.getElementById('filterAll').innerText = t.filterAll;
+            document.getElementById('filterSafe').innerText = t.filterSafe;
+            document.getElementById('filterWarn').innerText = t.filterWarn;
+            document.getElementById('filterDanger').innerText = t.filterDanger;
+            document.getElementById('filterBomb').innerText = t.filterBomb;
+
+            document.getElementById('quizHeaderTitle').innerText = t.quizTitle;
+            document.getElementById('randomModalTitle').innerText = t.randomModalTitle;
+            document.getElementById('btnRandomRefresh').innerText = t.randomRefresh;
+
+            // 목록 재렌더링
+            filterData();
+        }
+
+        function getBadgeClass(riskKey) {
+            if (riskKey === 'WARN') return 'badge-warn';
+            if (riskKey === 'DANGER') return 'badge-danger';
+            if (riskKey === 'BOMB') return 'badge-bomb';
             return 'badge-safe';
         }
 
         function createCardHtml(item) {
-            const badgeClass = getBadgeClass(item.risk);
-            const shareText = `[여자어 사전] "${item.word}"\n- 실제 의미: ${item.contextual}\n👉 사전 구경하기: `;
+            const t = uiI18n[currentLang];
+            const badgeClass = getBadgeClass(item.riskKey);
+
+            const word = item.word[currentLang] || item.word['KR'];
+            const pos = item.pos[currentLang] || item.pos['KR'];
+            const category = item.category[currentLang] || item.category['KR'];
+            const direct = item.direct[currentLang] || item.direct['KR'];
+            const contextual = item.contextual[currentLang] || item.contextual['KR'];
+            const example = item.example[currentLang] || item.example['KR'];
+            const solution = item.solution[currentLang] || item.solution['KR'];
+
+            const shareText = `[${t.title}] "${word}"\n- ${t.contextualLabel}: ${contextual}\n👉 `;
 
             return `
                 <div class="card">
                     <div class="card-header">
-                        <span class="word-title">${item.word}</span>
+                        <span class="word-title">${word}</span>
                         <span class="badge ${badgeClass}">${item.risk}</span>
                     </div>
-                    <div class="meta-info">[${item.pos}] | 카테고리: ${item.category}</div>
+                    <div class="meta-info">[${pos}] | Category: ${category}</div>
                     
-                    <div class="section-title">1. 직역 (Direct)</div>
-                    <div class="desc-text">${item.direct}</div>
+                    <div class="section-title">${t.directLabel}</div>
+                    <div class="desc-text">${direct}</div>
 
-                    <div class="section-title">2. 의역 (Contextual)</div>
-                    <div class="desc-text"><strong>${item.contextual}</strong></div>
+                    <div class="section-title">${t.contextualLabel}</div>
+                    <div class="desc-text"><strong>${contextual}</strong></div>
 
                     <div class="example-box">
-                        <strong>💬 실전 용례:</strong> ${item.example}
+                        <strong>${t.exLabel}</strong> ${example}
                     </div>
 
-                    <div class="section-title">💡 권장 대처법</div>
-                    <div class="desc-text">${item.solution}</div>
+                    <div class="section-title">${t.solLabel}</div>
+                    <div class="desc-text">${solution}</div>
 
-                    <button class="share-btn" onclick="shareCard('${encodeURIComponent(shareText)}')">📤 공유하기</button>
+                    <button class="share-btn" onclick="shareCard('${encodeURIComponent(shareText)}')">${t.shareBtn}</button>
                     <div style="clear: both;"></div>
                 </div>
             `;
         }
 
-        /* 📢 [광고 구역 2] 리스트 중간 인피드(In-Feed) 광고 생성 함수 */
         function createInFeedAdHtml() {
             return `
                 <div class="ad-container ad-infeed-banner">
                     <span class="ad-label">ADVERTISEMENT</span>
-                    <!-- 나중에 구글 애드센스 인피드 광고 코드를 여기에 넣으세요 -->
-                    <span>📢 광고 영역 (카드 스크롤 피드 배너)</span>
+                    <span>📢 광고 영역 (카드 피드 배너)</span>
                 </div>
             `;
         }
 
         function renderDictionary(data) {
             const listEl = document.getElementById('dictionaryList');
+            const t = uiI18n[currentLang];
             listEl.innerHTML = '';
 
             if (data.length === 0) {
-                listEl.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">검색 결과가 없습니다. 🤔</div>';
+                listEl.innerHTML = `<div style="text-align:center; padding:40px; color:#888;">${t.noResult}</div>`;
                 return;
             }
 
-            // 10번째 카드마다 인피드 광고를 자연스럽게 끼워 넣음
             data.forEach((item, index) => {
                 listEl.innerHTML += createCardHtml(item);
-                
-                // 10개 카드가 나올 때마다 인피드 광고 구역 추가 (마지막 카드가 아닐 때)
                 if ((index + 1) % 10 === 0 && (index + 1) !== data.length) {
                     listEl.innerHTML += createInFeedAdHtml();
                 }
@@ -670,11 +537,13 @@
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
 
             const filtered = dictionaryData.filter(item => {
-                const matchesRisk = (currentRisk === 'ALL') || item.risk.includes(currentRisk.replace(/🟢|🟡|🔴|💣|\s/g, ''));
-                const matchesQuery = item.word.toLowerCase().includes(query) ||
-                                     item.direct.toLowerCase().includes(query) ||
-                                     item.contextual.toLowerCase().includes(query) ||
-                                     item.category.toLowerCase().includes(query);
+                const matchesRisk = (currentRisk === 'ALL') || (item.riskKey === currentRisk);
+                
+                const word = (item.word[currentLang] || '').toLowerCase();
+                const direct = (item.direct[currentLang] || '').toLowerCase();
+                const contextual = (item.contextual[currentLang] || '').toLowerCase();
+
+                const matchesQuery = word.includes(query) || direct.includes(query) || contextual.includes(query);
 
                 return matchesRisk && matchesQuery;
             });
@@ -682,25 +551,28 @@
             renderDictionary(filtered);
         }
 
-        function filterRisk(risk) {
-            currentRisk = risk;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.innerText.includes(risk) || (risk === 'ALL' && btn.innerText === '전체보기')) {
-                    btn.classList.add('active');
-                }
-            });
+        function filterRisk(riskKey) {
+            currentRisk = riskKey;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if(riskKey === 'ALL') document.getElementById('filterAll').classList.add('active');
+            if(riskKey === 'SAFE') document.getElementById('filterSafe').classList.add('active');
+            if(riskKey === 'WARN') document.getElementById('filterWarn').classList.add('active');
+            if(riskKey === 'DANGER') document.getElementById('filterDanger').classList.add('active');
+            if(riskKey === 'BOMB') document.getElementById('filterBomb').classList.add('active');
+
             filterData();
         }
 
         function shareCard(encodedText) {
+            const t = uiI18n[currentLang];
             const text = decodeURIComponent(encodedText) + window.location.href;
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(text).then(() => {
-                    alert('클립보드에 복사되었습니다! 카톡이나 SNS에 붙여넣어 공유해보세요! 📤');
+                    alert(t.shareAlert);
                 });
             } else {
-                alert('주소: ' + window.location.href);
+                alert('URL: ' + window.location.href);
             }
         }
 
@@ -725,7 +597,7 @@
             document.getElementById('dictionaryList').style.display = 'none';
             document.getElementById('searchBoxArea').style.display = 'none';
             document.getElementById('filterBtnArea').style.display = 'none';
-            document.getElementById('footerAdArea').style.display = 'none'; // 퀴즈 모드에선 하단 광고 숨김
+            document.getElementById('footerAdArea').style.display = 'none';
             document.getElementById('quizView').style.display = 'block';
             generateQuiz();
         }
@@ -738,55 +610,26 @@
             document.getElementById('footerAdArea').style.display = 'flex';
         }
 
-        function extractMaleFailResponse(exampleStr) {
-            const match = exampleStr.match(/남:\s*['"]([^'"]+)['"]/);
-            if (match && match[1]) {
-                return `"(현실 남성 반응)" ${match[1]}`;
-            }
-            return null;
-        }
-
         function generateQuiz() {
+            const t = uiI18n[currentLang];
             document.getElementById('quizResult').innerHTML = "";
             document.getElementById('nextQuizBtn').style.display = "none";
 
             const correctIndex = Math.floor(Math.random() * dictionaryData.length);
             const quizItem = dictionaryData[correctIndex];
-            currentQuizAnswer = quizItem.solution;
+            
+            const wordStr = quizItem.word[currentLang] || quizItem.word['KR'];
+            currentQuizAnswer = quizItem.solution[currentLang] || quizItem.solution['KR'];
 
-            document.getElementById('quizQuestion').innerHTML = `Q. 여친이 <span style="color:var(--primary-color);">"${quizItem.word}"</span> 라고 했을 때 올바른 대처법은?`;
+            document.getElementById('quizQuestion').innerHTML = `Q. "${wordStr}" ➔ ${t.solLabel}?`;
 
-            let options = [quizItem.solution];
-
-            const failResp = extractMaleFailResponse(quizItem.example);
-            if (failResp) {
-                options.push(failResp);
-            }
-
-            const mainCategory = quizItem.category.split(',')[0].trim();
-            const sameCatItems = dictionaryData.filter(d => d.word !== quizItem.word && d.category.includes(mainCategory));
-
-            sameCatItems.sort(() => Math.random() - 0.5);
-
-            for (let item of sameCatItems) {
-                if (options.length >= 4) break;
-
-                if (!options.includes(item.solution)) {
-                    options.push(item.solution);
-                }
-
-                if (options.length < 4) {
-                    const otherFail = extractMaleFailResponse(item.example);
-                    if (otherFail && !options.includes(otherFail)) {
-                        options.push(otherFail);
-                    }
-                }
-            }
+            let options = [currentQuizAnswer];
 
             while (options.length < 4) {
                 const randItem = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
-                if (!options.includes(randItem.solution)) {
-                    options.push(randItem.solution);
+                const randSol = randItem.solution[currentLang] || randItem.solution['KR'];
+                if (!options.includes(randSol)) {
+                    options.push(randSol);
                 }
             }
 
@@ -798,27 +641,30 @@
                 const btn = document.createElement('button');
                 btn.className = 'quiz-opt-btn';
                 btn.innerHTML = `<strong>${i + 1}.</strong> ${optText}`;
-                btn.onclick = () => checkQuizAnswer(optText, quizItem);
+                btn.onclick = () => checkQuizAnswer(optText);
                 optionsEl.appendChild(btn);
             });
         }
 
-        function checkQuizAnswer(selectedOpt, quizItem) {
+        function checkQuizAnswer(selectedOpt) {
+            const t = uiI18n[currentLang];
             const resultEl = document.getElementById('quizResult');
             const btns = document.querySelectorAll('.quiz-opt-btn');
             btns.forEach(b => b.disabled = true);
 
             if (selectedOpt === currentQuizAnswer) {
-                resultEl.innerHTML = "🎉 <span style='color:#137333;'>정답입니다! 완벽한 연애 지능(EQ) 보유자시군요! 생존 확정!</span>";
+                resultEl.innerHTML = `<span style='color:#137333;'>${t.quizSuccess}</span>`;
             } else {
-                resultEl.innerHTML = `❌ <span style='color:#c5221f;'>오답입니다! (경고: 현실 싸움 발발 위험)</span><br><small style='color:#666; font-weight:normal;'>💡 정답: ${quizItem.solution}</small>`;
+                resultEl.innerHTML = `<span style='color:#c5221f;'>${t.quizFail}</span><br><small style='color:#666;'>💡 ${t.solLabel}: ${currentQuizAnswer}</small>`;
             }
 
             document.getElementById('nextQuizBtn').style.display = "block";
         }
 
         document.getElementById('searchInput').addEventListener('input', filterData);
-        renderDictionary(dictionaryData);
+        
+        // 초기 한국어 버전으로 로드
+        switchLanguage('KR');
     </script>
 </body>
 </html>
